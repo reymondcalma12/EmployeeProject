@@ -1,0 +1,74 @@
+﻿.holidayBody {
+    height: 85vh;
+    width: 100%;
+    font-family: 'Montserrat', sans-serif;
+    display: flex;
+    flex-direction: column;
+
+
+}
+
+.holidayBodyDiv1 {
+    height: 15vh;
+    width: 100%;
+    color: #425833;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.holidayBodyDiv2 {
+    height: 70vh;
+    width: 100%;
+    color: #425833;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.holidayBodyDiv2Inner1 {
+    height: 70vh;
+    width: 70%;
+    border: 1px solid gray;
+    border-right: none;
+    border-top: none;
+    border-radius: .2rem;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-width: thin;
+    scrollbar-color: #425833 white;
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.tableHoliday {
+    height: 100%;
+    width: 100%;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.theadHoliday {
+    background: #425833;
+    position: sticky;
+    top: 0;
+    color: white;
+}
+
+.thHoliday {
+    padding: 10px;
+    text-align: center;
+    font-weight: lighter;
+}
+
+
+
+
+
+.tableHoliday td {
+    padding: 15px;
+    border-bottom: 1px solid #425833;
+}
+
+.tbodyHoliday {
+    text-align: center;
+}

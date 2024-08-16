@@ -1,0 +1,517 @@
+﻿@using EmployeeProject.Application.DTOs.Admin
+@model DataSheetDTO
+@{
+    Layout = "_AdminLayout";
+
+    var addedData = TempData["AddDataSheet"] as String;
+    var deleteData = TempData["DeleteDataSheet"] as String;
+    var updateData = TempData["UpdateDataSheet"] as String;
+
+    var addedWorkingHours = TempData["AddWorkingHours"] as String;
+    
+    var updateAllowed = TempData["EditAllowedHours"] as String;
+    var deleteAllowed = TempData["DeleteAllowedHours"] as String;
+    
+
+}
+
+@if (!string.IsNullOrEmpty(addedData) || !string.IsNullOrEmpty(deleteData) || !string.IsNullOrEmpty(updateData) || !string.IsNullOrEmpty(addedWorkingHours) || !string.IsNullOrEmpty(updateAllowed) || !string.IsNullOrEmpty(deleteAllowed))
+{
+    <div class="alert alert-success d-flex justify-content-between align-items-center">
+        @if (!string.IsNullOrEmpty(addedData))
+        {
+            <strong>@addedData</strong>
+        }
+        @if (!string.IsNullOrEmpty(deleteData))
+        {
+            <strong>@deleteData</strong>
+        }
+        @if (!string.IsNullOrEmpty(updateData))
+        {
+            <strong>@updateData</strong>
+        }
+        @if (!string.IsNullOrEmpty(addedWorkingHours))
+        {
+            <strong>@addedWorkingHours</strong>
+        }
+        @if (!string.IsNullOrEmpty(updateAllowed))
+        {
+            <strong>@updateAllowed</strong>
+        }
+        @if (!string.IsNullOrEmpty(deleteAllowed))
+        {
+            <strong>@deleteAllowed</strong>
+        }
+        <button type="button" class="close btn btn-outline-success" data-bs-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+}
+
+
+<div class="dataSheetBody">
+    <div class="dataSheetBodyDiv1">
+        <div class="dataSheetBodyDiv1Inner1">
+            <button class="addData" data-bs-toggle="modal" data-bs-target="#addNewDataModal"><i class="fa fa-plus addDataIcon" aria-hidden="true"></i>ADD DATA</button>
+            <input type="text" class="dashboardSearch" style="box-shadow:none;" id="dataSheetSearch" placeholder="Search Resource Name..." autocomplete="off"/>
+
+            <div class="autoFillSearchUsersDataSheetBody">
+
+                <div class="autoFillSearchUsersDataSheet">
+
+
+                </div>
+            </div>
+
+            <div class="dashboardSearchBtn"><i class="fa fa-search" aria-hidden="true"></i></div>
+            <div class="dataSheetYearClass">
+                <h4 style="margin-top:3%; color:#425833;">SELECT YEAR</h4>
+                <select class="year" id="dataSheetYear">
+
+                </select>
+            </div>
+
+        </div>
+
+    </div>
+    <div class="dataSheetBodyDiv2">
+
+        <div class="dataSheetBodyDiv2Inner">
+
+            <table class="tableDataSheet">
+
+                <thead class="theadDataSheet">
+
+                    <tr class="trDataSheet">
+
+                        <th class="thDataSheet">SECTION</th>
+                        <th class="thDataSheet">RESOURCE NAME</th>
+                        <th class="thDataSheet">PROJECT NAME</th>
+                        <th class="thDataSheet">ACTIVITY</th>
+                        <th class="thDataSheet">BUSINESS/IT</th>
+                        <th class="thDataSheet">START DATE</th>
+                        <th class="thDataSheet">END DATE</th>
+                        <th class="thDataSheet">HOURS/DAY</th>
+                        <th class="thDataSheet">TOTAL HOURS</th>
+                        <th class="thDataSheet">ACTIONS</th>
+                    </tr>
+                </thead>
+                <tbody class="tbodyDataSheet">
+                        @*SIGNALR*@
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+                                    @*ADD DATA MODAL*@
+
+<form asp-action="AddDataSheet" method="post">
+    <div class="modal fade addDataModal" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="staticBackdropLabel" id="addNewDataModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    
+            <div class="modal-content " style="width:800px; height:520px;  font-family: 'Montserrat', sans-serif; border-radius:1.5rem;">
+
+                <div class="modal-header" style="height:60px; background:#425833; display:flex; border-radius:1rem 1rem 0 0 ;">
+
+                    <div class="modal-headerDiv1" style="width:95%; display:flex;justify-content:center;align-items:center;">
+                        <h4 style="color:white;">ADD NEW DATA</h4>
+                    </div>
+                    <div class="modal-headerDiv2">
+                        <i class="fa fa-times closeAddNewData" aria-hidden="true" data-bs-dismiss="modal" aria-label="Close"></i>
+                    </div>
+        
+                </div>
+                <div class="modal-body addNewDataModalBody">
+    
+                    <div class="addNewDataModalBodyDiv1" style="flex-direction:column;">
+
+                        <input type="text" class="form-control addNewDataInput" placeholder="Resource Name:"  asp-for="DataSheetBusDTO.UserName" id="addDataSheetResourceName" autocomplete="off"/>
+                       
+                        <div class="autoFillSearchDataSheetBody">
+
+                            <div class="autoFillSearchDataSheet">
+
+                               @*  SIGNALR *@
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                        <div class="" style="height:10px; width:100%; display:flex; justify-content:space-evenly; align-items:center; ">
+                            <span asp-validation-for="DataSheetBusDTO.UserName" class="text-danger"></span>
+                        </div>
+
+                    <div class="addNewDataModalBodyDiv2" style="flex-wrap:wrap;">
+                         <input type="text" class="form-control addNewDataInput" placeholder="Project Name:" asp-for="DataSheetBusDTO.ProjectName" />            
+                        <input type="text" class="form-control addNewDataInput" placeholder="Activity Name:" asp-for="DataSheetBusDTO.ActivityName"/>
+  
+                    </div>
+
+                        <div class="" style="height:10px; width:100%; display:flex; justify-content:space-evenly; align-items:center; ">
+                            <span asp-validation-for="DataSheetBusDTO.ProjectName" class="text-danger"></span>
+                            <span asp-validation-for="DataSheetBusDTO.ActivityName" class="text-danger"></span>
+                        </div>
+
+                     <div class="addNewDataModalBodyDiv3" style="flex-wrap:wrap;">
+                     
+                        <select  class="form-control addNewDataInput" asp-for="DataSheetBusDTO.BusinessOrIt" id="addDataSheetBusinessDropdown">
+                            <option value="" disabled selected>Business Or IT:</option>
+                        </select>
+
+                        <input type="hidden" id="addDataSheetSection" asp-for="DataSheetBusDTO.SectioName" />
+                        <input type="text" class="form-control addNewDataInput" placeholder="SECTION:" disabled  id="addDataSheetSectionDisplay" />
+
+                    </div>
+
+                        <div class="" style="height:10px; width:100%; display:flex; justify-content:space-evenly; align-items:center; ">
+                            <span asp-validation-for="DataSheetBusDTO.BusinessOrIt" class="text-danger"></span>
+                            <span asp-validation-for="DataSheetBusDTO.SectioName" class="text-danger"></span>
+                        </div>
+
+                    <div class="addNewDataModalBodyDiv4">
+                        <div class="addNewDataModalBodyDiv4Div1">
+                            <span> Start Date</span>
+                            <input type="date" class="form-control addNewDataStartDate" asp-for="DataSheetBusDTO.StartDate" id="startDate"/>
+                         
+                        </div>
+                 
+                        <div class="addNewDataModalBodyDiv4Div2">
+                            <input type="date" class="form-control addNewDataEndDate" asp-for="DataSheetBusDTO.EndDate" id="endDate"/>
+                            <span> End Date</span>
+                        </div>
+                    </div>
+
+                    <div class="" style="height:10px; width:100%; display:flex; justify-content:space-evenly; align-items:center; ">
+                            <span asp-validation-for="DataSheetBusDTO.StartDate" class="text-danger"></span>
+                            <span asp-validation-for="DataSheetBusDTO.EndDate" class="text-danger"></span>
+                    </div>
+          
+                    <div class="addNewDataModalBodyDiv5">
+                        <div class="addNewDataModalBodyDiv5Div1">
+
+                            <button class="addNewDataSettingsBtn" onclick="preventFormSubmit(event)" data-bs-toggle="modal" data-bs-target="#addWorkingHoursPerDay"><i class="fa fa-cog addNewDataSettingsIcon" aria-hidden="true"></i></button>
+                            <span>Hours Per Day</span>
+
+                            <select class="addNewDataSelect" asp-for="DataSheetBusDTO.HoursPerDay" id="hoursperday">
+  
+                              
+                            </select>
+
+                        </div>
+
+                        <div class="addNewDataModalBodyDiv5Div2">
+                            <input type="hidden" class="form-control addNewDataResult" asp-for="DataSheetBusDTO.HoursPerMonth"  id="TotalHoursPerMonth"/>
+                            <input type="number" class="form-control addNewDataResult" disabled  id="TotalHoursPerMonthDisplay" />
+                                <span>Total Hours</span>
+                        </div>
+                    </div>
+         
+                    <div class="addNewDataModalBodyDiv6">
+                        <button class="addNewDataAddBtn" style="border:none;" type="submit" >ADD</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+
+                                                            @*UPDATE DATA MODAL*@
+<form asp-action="UpdateDataSheet" method="post">
+    <div class="modal fade addDataModal" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="staticBackdropLabel" id="updateDataSheetModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+
+            <div class="modal-content " style="width:800px; height:520px;  font-family: 'Montserrat', sans-serif; border-radius:1.5rem;">
+
+                <div class="modal-header" style="height:60px; background:#425833; display:flex; border-radius:1rem 1rem 0 0 ;">
+
+                    <div class="modal-headerDiv1" style="width:95%; display:flex;justify-content:center;align-items:center;">
+                        <h4 style="color:white;">UPDATE DATA</h4>
+                    </div>
+                    <div class="modal-headerDiv2">
+                        <i class="fa fa-times closeAddNewData" aria-hidden="true" data-bs-dismiss="modal" aria-label="Close"></i>
+                    </div>
+
+                </div>
+                <div class="modal-body addNewDataModalBody">
+
+                    <input type="hidden" class="form-control" asp-for="DataSheetBusDTO.BusId" id="updateDataSheetId" />
+                    
+                    <div class="addNewDataModalBodyDiv1" style="flex-direction:column;">
+
+                        <input type="text" class="form-control addNewDataInput" placeholder="Resource Name:" asp-for="DataSheetBusDTO.UserName" id="updateDataSheetResourceName" autocomplete="off"/>
+
+                        <div class="autoFillSearchDataSheetBody">
+
+                            <div class="autoFillSearchDataSheetUpdate">
+
+                                @*  SIGNALR *@
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="" style="height:10px; width:100%; display:flex; justify-content:space-evenly; align-items:center; ">
+                        <span asp-validation-for="DataSheetBusDTO.UserName" class="text-danger"></span>
+                    </div>
+
+                    <div class="addNewDataModalBodyDiv2" style="flex-wrap:wrap;">
+                        <input type="text" class="form-control addNewDataInput" placeholder="Project Name:" asp-for="DataSheetBusDTO.ProjectName" id="updateDataSheetProjectName" />
+                        <input type="text" class="form-control addNewDataInput" placeholder="Activity Name:" asp-for="DataSheetBusDTO.ActivityName" id="updateDataSheetActivityName" />
+
+                    </div>
+
+                    <div class="" style="height:10px; width:100%; display:flex; justify-content:space-evenly; align-items:center; ">
+                        <span asp-validation-for="DataSheetBusDTO.ProjectName" class="text-danger"></span>
+                        <span asp-validation-for="DataSheetBusDTO.ActivityName" class="text-danger"></span>
+                    </div>
+
+                    <div class="addNewDataModalBodyDiv3" style="flex-wrap:wrap;">
+                  
+                        <input type="text" class="form-control addNewDataInput" placeholder="Business/IT:" asp-for="DataSheetBusDTO.BusinessOrIt" id="updateDataSheetBusinessOrIT"/>
+                        <input type="hidden" id="updateDataSheetSection" asp-for="DataSheetBusDTO.SectioName" />
+                        <input type="text" class="form-control addNewDataInput" placeholder="SECTION:" disabled  id="updateDataSheetSectionDisplay" />
+                  
+                    </div>
+
+                    <div class="" style="height:10px; width:100%; display:flex; justify-content:space-evenly; align-items:center; ">
+                        <span asp-validation-for="DataSheetBusDTO.BusinessOrIt" class="text-danger"></span>
+                        <span asp-validation-for="DataSheetBusDTO.SectioName" class="text-danger"></span>
+                    </div>
+
+                    <div class="addNewDataModalBodyDiv4">
+                        <div class="addNewDataModalBodyDiv4Div1">
+                            <span> Start Date</span>
+                            <input type="date" class="form-control addNewDataStartDate" asp-for="DataSheetBusDTO.StartDate" id="updateDataSheetStartDate" />
+
+                        </div>
+
+                        <div class="addNewDataModalBodyDiv4Div2">
+                            <input type="date" class="form-control addNewDataEndDate" asp-for="DataSheetBusDTO.EndDate" id="updateDataSheetEndDate" />
+                            <span> End Date</span>
+                        </div>
+                    </div>
+
+                    <div class="" style="height:10px; width:100%; display:flex; justify-content:space-evenly; align-items:center; ">
+                        <span asp-validation-for="DataSheetBusDTO.StartDate" class="text-danger"></span>
+                        <span asp-validation-for="DataSheetBusDTO.EndDate" class="text-danger"></span>
+                    </div>
+
+                    <div class="addNewDataModalBodyDiv5">
+                        <div class="addNewDataModalBodyDiv5Div1">
+
+                            <button class="addNewDataSettingsBtn" onclick="preventFormSubmit(event)" data-bs-toggle="modal" data-bs-target="#addWorkingHoursPerDay"><i class="fa fa-cog addNewDataSettingsIcon" aria-hidden="true"></i></button>
+                            <span>Hours Per Day</span>
+
+                            <select class="addNewDataSelect" asp-for="DataSheetBusDTO.HoursPerDay" id="updateDataSheetWorkingHours">
+          
+                            </select>
+
+                        </div>
+
+                        <div class="addNewDataModalBodyDiv5Div2">
+                            <input type="hidden" class="form-control addNewDataResult" asp-for="DataSheetBusDTO.HoursPerMonth" id="updateDataSheetTotalHours" />
+                            <input type="number" class="form-control addNewDataResult" disabled id="updateDataSheetTotalHoursDisplay" />
+                            <span>Total Hours</span>
+                        </div>
+                    </div>
+
+                    <div class="addNewDataModalBodyDiv6">
+                        <button class="addNewDataAddBtn" style="border:none;" type="submit">ADD</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+
+
+                    @*DELETE DATA*@
+<form method="post" asp-action="DeleteData"> 
+    <div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="staticBackdropLabel" id="deleteDataSheetModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document" style="height:50vh;">
+            <div class="modal-content" style="height: 240px;">
+                <div class="modal-body logoutModalBody">
+                    <div class="logoutModalBody1" style="text-align:center;">
+                        <h3>Are you sure you want to Delete this Data ?</h3>
+                        <input type="hidden" name="dataSheetId" id="dataSheetIdDelete"/>
+                    </div>
+                    <div class="logoutModalBody2">
+                        <button class="btn btn-danger logoutYes" type="submit">Yes</button>
+                        <button type="button" class="close btn btn-success logoutNo" data-bs-dismiss="modal" aria-label="Close">
+                            No
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+
+
+
+                    @*ADD WORKING HOURS*@
+<form asp-action="AddWorkingHours" method="post">
+    <div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="staticBackdropLabel" id="addWorkingHoursPerDay" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document" style="height:50vh;">
+
+            <div class="modal-content" style="height: 340px; border-radius:.5rem;">
+
+                <div class="modal-header" style="height:50px; background:#425833; display:flex; border-radius:.5rem .5rem 0 0 ;">
+
+                    <div class="modal-headerDiv1" style="width:95%; display:flex;justify-content:center;align-items:center;">
+                        <h4 style="color:white;">ADD WORKING HOURS PER DAY</h4>
+                    </div>
+                    <div class="modal-headerDiv2">
+                        <i class="fa fa-times closeAddNewData" aria-hidden="true" data-bs-dismiss="modal" aria-label="Close"></i>
+                    </div>
+
+                </div>
+                <div class="modal-body addSectionBody" style="border-radius:0 0 .5rem .5rem; display:flex;flex-direction:column; border:1px solid gray; border-top:none;">
+
+                    <div class="addSectionBodyDiv1">
+                        <input type="number" class="form-control-lg addNewUserInput" placeholder="Working Hours:" autocomplete="off" asp-for="AllowedHours.Number" id="workingHoursinput"/>
+                        <i class="fa fa-cog" aria-hidden="true" data-bs-toggle="modal" data-bs-target="#workingHoursSettings"></i>
+                    </div>
+                    <div class="addSectionBodyDiv2" style="justify-content:center;">
+                        <span asp-validation-for="AllowedHours.Number" class="text-danger"></span>
+                    </div>
+                    <div class="addSectionBodyDiv3">
+
+                        <button type="submit" class="addWorkingHoursPerDay" style="border:none;"><span style="font-size:20px">ADD</span></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+
+
+@*ALL WORKING HOURS SETTINGS*@
+
+<div class="modal fade" id="workingHoursSettings" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog " role="document">
+        <div class="modal-content" style="border-radius:.5rem; border-bottom:1px solid gray">
+
+            <div class="modal-header" style="height:50px; background:#425833; display:flex; border-radius:.5rem .5rem 0 0 ;">
+                <div class="modal-headerDiv1" style="width:95%; display:flex;justify-content:center;align-items:center;">
+                    <h4 style="color:white;">ALL WORKING HOURS PER DAY</h4>
+                </div>
+                <div class="modal-headerDiv2">
+                    <i class="fa fa-times closeAddNewData" aria-hidden="true" data-bs-dismiss="modal" aria-label="Close"></i>
+                </div>
+            </div>
+            <div class="modal-body allworkingHoursModalBody" style="border-radius:0 0 .5rem .5rem; display:flex;flex-direction:column; display:flex; flex-direction:column; gap:10px;         ">
+
+                <div class="allworkingHoursModalBodyDiv1" style="display: flex;height: 100%;width: 100%;flex-direction: column; gap:10px;align-items: center;justify-content: space-evenly;" id="allowedSettings">
+
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+
+
+@*DELETE WORKING HOURS*@
+<form asp-action="DeleteAllowed" method="post">
+    <div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="staticBackdropLabel" id="deleteWrokingHoursModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document" style="height:50vh;">
+            <div class="modal-content" style="height: 240px; font-family: 'Montserrat', sans-serif; background-color:#DFEFD8;">
+                <div class="modal-body logoutModalBody">
+
+                    <div class="logoutModalBody1" style="flex-direction:column">
+
+                        <h5 style="text-align:center;">Are you sure you want to Delete </h5>
+                        <h4 id="allowedHoursNameToDelete" style="text-align:center;"></h4>
+                    </div>
+                    <input type="hidden" name="sectionId" class="allowedHoursIdToDelete" />
+
+                    <div class="logoutModalBody2">
+                        <button type="submit" class="btn btn-danger logoutYes"> Yes</button>
+                        <button type="button" class="close btn btn-success logoutNo" data-bs-dismiss="modal" aria-label="Close">
+                            No
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+
+
+@*Update WORKING HOURS*@
+<form asp-action="UpdateAllowed" method="post">
+    <div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="staticBackdropLabel" id="editworkingHoursModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document" style="height:50vh;">
+            <div class="modal-content" style="height: 240px; font-family: 'Montserrat', sans-serif; background-color:#DFEFD8;">
+                <div class="modal-body logoutModalBody">
+
+                    <div class="logoutModalBody1" style="flex-direction:column">
+
+                        <input type="number" name="sectionName" class="allowedHoursNameToEdit addNewUserInput form-control" style="text-align:center; background-color:#425833; color:white;" />
+
+                    </div>
+
+
+                    <div class="logoutModalBody2">
+                        <input type="hidden" name="sectionId" class="allowedHoursIdToEdit addNewUserInput" />
+                        <button type="submit" class="btn btn-success logoutYes updateSectionSave" style="background-color:#425833;"> Save</button>
+                        <button type="button" class="close btn btn-danger logoutNo" data-bs-dismiss="modal" aria-label="Close">
+                            Cancel
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+
+
+
+
+
+<script>
+
+    const currentYear = new Date().getFullYear();
+
+
+    const yearSelect = document.querySelector('.year');
+    for (let i = currentYear; i >= currentYear - 20; i--) {
+        const option = document.createElement('option');
+        option.value = i;
+        option.text = i;
+        yearSelect.add(option);
+    }
+
+    function preventFormSubmit(event) {
+        event.preventDefault();
+        // Open the modal here
+        // ...
+    }
+
+</script>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+

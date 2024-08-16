@@ -1,0 +1,71 @@
+﻿.dataSheetBody {
+    height: 85vh;
+    width: 100%;
+    font-family: 'Montserrat', sans-serif;
+    display: flex;
+    flex-direction: column;
+
+   border-top:none;
+}
+
+.dataSheetBodyDiv1 {
+    height: 15vh;
+    width: 100%;
+    color: #425833;
+    display:flex;
+    justify-content:center;
+    align-items:flex-end;
+}
+
+.dataSheetBodyDiv2 {
+    height: 70vh;
+    width: 100%;
+    color: #425833;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.dataSheetBodyDiv2Inner {
+    height: 95%;
+    width: 98%;
+    overflow-y: auto;
+    overflow-x: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #425833 white;
+}
+
+.tableDataSheet {
+    width: 100%;
+    height: 100%;
+    border: 1px solid #425833;
+    border-top: none;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.theadDataSheet {
+    background: #425833;
+    position: sticky;
+    top: 0;
+    color: white;
+    text-align: center;
+}
+
+.tbodyDataSheet {
+    text-align: center;
+}
+
+.thDataSheet {
+    padding: 10px;
+}
+
+.tbodyDataSheet {
+    text-align: center;
+}
+
+.tbodyDataSheet td {
+    padding: 15px;
+    border-bottom: 1px solid #425833;
+    height: 20px;
+}

@@ -1,0 +1,642 @@
+﻿@using EmployeeProject.Application.DTOs.Admin;
+@model AdminUsersDTO;
+@{
+    Layout = "_AdminLayout";
+
+    var deleted = TempData["DeleteUser"] as String;
+    var added = TempData["AddUser"] as String;
+
+    var sectionAdded = TempData["AddSection"] as String;
+
+    var sectionDeleted = TempData["DeleteSection"] as String;
+
+    var sectionUpdated = TempData["EditSection"] as String;
+
+    var addedLegend = TempData["AddLegend"] as String;
+
+    var updateLegend = TempData["UpdateLegend"] as String;
+
+    
+
+}
+
+@if (!string.IsNullOrEmpty(deleted) || !string.IsNullOrEmpty(added) || !string.IsNullOrEmpty(sectionAdded) || !string.IsNullOrEmpty(sectionDeleted) || !string.IsNullOrEmpty(sectionUpdated) || !string.IsNullOrEmpty(addedLegend) || !string.IsNullOrEmpty(updateLegend))
+{
+    <div class="alert alert-success d-flex justify-content-between align-items-center">
+        @if (!string.IsNullOrEmpty(deleted))
+        {
+            <strong>@deleted</strong>
+        }
+
+        @if (!string.IsNullOrEmpty(added))
+        {
+            <strong>@added</strong>
+        }
+
+        @if (!string.IsNullOrEmpty(sectionAdded))
+        {
+            <strong>@sectionAdded</strong>
+        }
+
+        @if (!string.IsNullOrEmpty(sectionDeleted))
+        {
+            <strong>@sectionDeleted</strong>
+        }
+        @if (!string.IsNullOrEmpty(sectionUpdated))
+        {
+            <strong>@sectionUpdated</strong>
+        }
+        @if (!string.IsNullOrEmpty(addedLegend))
+        {
+            <strong>@addedLegend</strong>
+        }
+        @if (!string.IsNullOrEmpty(updateLegend))
+        {
+            <strong>@updateLegend</strong>
+        }
+        <button type="button" class="close btn btn-outline-success" data-bs-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+
+    </div>
+}
+
+
+<div class="usersBody">
+    <div class="usersBodyDiv1">
+        <div class="usersBodyDiv1Inner1">
+
+            <div class="usersBodyDiv1Inner11">
+
+                <div class="usersBodyDiv1Inner111">
+
+                    <input type="text" class="dashboardSearch" style="box-shadow:none;" id="userSearch" placeholder="Search..." autocomplete="off" />
+
+                    <div class="autoFillSearchUsersBody">
+
+                        <div class="autoFillSearchUsers">
+
+                            @*  SIGNALR *@
+
+ 
+
+                        </div>
+                    </div>
+
+                    <div class="dashboardSearchBtn"><i class="fa fa-search" aria-hidden="true"></i></div>
+                </div>
+                <div class="usersBodyDiv1Inner112">
+                    <select class="section" id="userSection" style="width:40%; margin-left:25%;">
+                        <option value="0" selected>SECTION</option>
+                    </select>       
+
+                </div>
+
+            </div>
+
+            <div class="usersBodyDiv1Inner12">
+
+                <button class="addUser" data-bs-toggle="modal" data-bs-target="#addNewUser"><i class="fa fa-user-plus newEmployeeIcon" aria-hidden="true"></i>ADD EMPLOYEE</button>
+           
+            </div>
+        </div>
+
+        <div class="usersBodyDiv1Inner2">
+
+            <div class="usersBodyDiv1Inner21">
+
+                <button class="addSectionUsers" data-bs-toggle="modal" data-bs-target="#addSection"><i class="fa fa-plus addSectionIcon" aria-hidden="true"></i>ADD SECTION</button>
+
+            </div>   
+
+            <div class="usersBodyDiv1Inner22">
+
+                <div class="usersBodyDiv1Inner121">
+                    <div class="usersBodyDiv1Inner1211">
+                        <i class="fa fa-users totalEmployeeIcon" aria-hidden="true"></i>
+                    </div>
+                    <div class="usersBodyDiv1Inner1212">
+                        <h6>Total Users</h6>
+                        <h3 id="totalUsers"></h3>
+                    </div>
+                </div>
+          </div>
+        </div>
+
+    </div>
+
+    <div class="usersBodyDiv2">
+        <div class="usersBodyDiv2Inner">
+
+            @*SIGNALR*@
+
+
+        </div>
+    </div>
+
+</div>
+
+
+                        @*ADD NEW USER*@
+<form asp-action="AddUser" method="post">
+    <div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="staticBackdropLabel" id="addNewUser" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+
+        <div class="modal-dialog modal-dialog-centered" role="document" style="height:50vh;">
+
+            <div class="modal-content" style="height: 540px; color: #425833;  font-family: 'Montserrat', sans-serif; border-radius:.5rem;">
+
+                <div class="modal-header" style="height:60px; background:#425833; display:flex; border-radius:.5rem .5rem 0 0 ;">
+
+                    <div class="modal-headerDiv1" style="width:95%; display:flex;justify-content:center;align-items:center;">
+                        <h4 style="color:white;">ADD NEW USER</h4>
+                    </div>
+                    <div class="modal-headerDiv2">
+                        <i class="fa fa-times closeAddNewData" aria-hidden="true" data-bs-dismiss="modal" aria-label="Close"></i>
+                    </div>
+
+                </div>
+
+                <div class="modal-body addNewUserModalBody">
+
+                    <div class="addNewUserModalBodyDiv1">
+                        <input type="text" class="form-control addNewUserInput first" placeholder="Resource Name:" asp-for="RegisterDTO.FullName" autocomplete="off" />
+                    </div>
+                    <div class="addNewUserModalBodyDiv2">
+                        <span asp-validation-for="RegisterDTO.FullName" class="text-danger"></span>
+                    </div>
+                    <div class="addNewUserModalBodyDiv3">
+                        <input type="text" class="form-control addNewUserInput" placeholder="User Name:" asp-for="RegisterDTO.UserName" autocomplete="off" />
+                    </div>
+                    <div class="addNewUserModalBodyDiv4">
+                        <span asp-validation-for="RegisterDTO.UserName" class="text-danger"></span>
+                    </div>
+                    <div class="addNewUserModalBodyDiv5">
+                        <input type="hidden" class="form-control addNewUserInput" placeholder="Password:" value="12345678" asp-for="RegisterDTO.Password" autocomplete="off" />
+                        <input type="text" class="form-control addNewUserInput" placeholder="Password:" value="12345678" disabled autocomplete="off" />
+                    </div>
+                    <div class="addNewUserModalBodyDiv6">
+                        <span asp-validation-for="RegisterDTO.Password" class="text-danger"></span>
+                    </div>
+                    <div class="addNewUserModalBodyDiv7">
+                        <input type="hidden" class="form-control addNewUserInput" placeholder="Confirm Password:" value="12345678" asp-for="RegisterDTO.ConfirmPassword" autocomplete="off" />
+                        <input type="text" class="form-control addNewUserInput" placeholder="Confirm Password:" disabled value="12345678" autocomplete="off" />
+                    </div>
+                    <div class="addNewUserModalBodyDiv8">
+                        <span asp-validation-for="RegisterDTO.ConfirmPassword" class="text-danger"></span>
+                    </div>
+                    <div class="addNewUserModalBodyDiv9" style="height:15%; justify-content:space-evenly;">
+
+                        <select class="addNewUserSelect" asp-for="RegisterDTO.SectionId" id="addNewUserSectionDrop" style="width:120px;">
+
+                        </select>
+
+                        <select class="addNewUserSelect" asp-for="RegisterDTO.UserRole">
+                            <option selected disabled> Role </option>
+                            <option value="Employee"> Employee </option>
+                            <option value="Manager"> Manager </option>
+                        </select>
+
+                    </div>
+                    <div class="addNewUserModalBodyDiv10" style="height:10%;">
+                        <span asp-validation-for="RegisterDTO.SectionId" class="text-danger"></span>
+                        <span asp-validation-for="RegisterDTO.UserRole" class="text-danger"></span>
+                    </div>
+                    <div class="addNewUserModalBodyDiv11" style="height:15%; justify-content:space-evenly;">
+                        <button type="submit" class="addNewUserBtn" ><i class="fa fa-plus" aria-hidden="true"></i>ADD</button>
+                    </div>                       
+            
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+
+
+
+                            @*ADD SECTION*@
+<form asp-action="AddSection" method="post">
+    <div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="staticBackdropLabel" id="addSection" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document" style="height:50vh;">
+
+            <div class="modal-content" style="height: 340px; border-radius:.5rem;">
+
+                <div class="modal-header" style="height:50px; background:#425833; display:flex; border-radius:.5rem .5rem 0 0 ;">
+
+                    <div class="modal-headerDiv1" style="width:95%; display:flex;justify-content:center;align-items:center;">
+                        <h4 style="color:white;">ADD SECTION</h4>
+                    </div>
+                    <div class="modal-headerDiv2">
+                        <i class="fa fa-times closeAddNewData" aria-hidden="true" data-bs-dismiss="modal" aria-label="Close"></i>
+                    </div>
+
+                </div>
+                <div class="modal-body addSectionBody" style="border-radius:0 0 .5rem .5rem; display:flex;flex-direction:column;">
+
+                    <div class="addSectionBodyDiv1">
+      
+                        <div style="width:60%; height:60%;">
+                        </div>
+
+                        <div style="width:40%; height:40%; display:flex; justify-content:flex-end;">
+                            <button class="addWorkingHoursPerDay" onclick="preventFormSubmit(event)" data-bs-toggle="modal" data-bs-target="#addLegend" style="border:none; width:80%; height:100%; border-radius:.2rem;"><span style="font-size:15px">ADD LEGEND</span></button>
+                        </div>
+
+                    </div>
+                    <div class="addSectionBodyDiv2">
+                  
+                        <input type="text" class="form-control-lg addNewUserInput" placeholder="Section Name:" autocomplete="off" asp-for="SectionDTO.SectionName" />
+                        <i class="fa fa-cog" aria-hidden="true" data-bs-toggle="modal" data-bs-target="#sectionSettings"></i>
+
+                    </div>
+                    <div class="" style="height:10%;width:100%; text-align:center;">
+                        <span asp-validation-for="SectionDTO.SectionName" class="text-danger"></span>
+                    </div>
+                    <div class="addSectionBodyDiv3">
+                  
+                        <button type="submit" class="addWorkingHoursPerDay" style="border:none;"><span style="font-size:20px">ADD</span></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+
+
+
+                                        @*ADD LEGEND*@
+<form asp-action="AddLegend" method="post">
+    <div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="staticBackdropLabel" id="addLegend" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document" style="height:50vh;">
+
+            <div class="modal-content" style="height: 440px; border-radius:.5rem;">
+
+                <div class="modal-header" style="height:50px; background:#425833; display:flex; border-radius:.5rem .5rem 0 0 ;">
+
+                    <div class="modal-headerDiv1" style="width:95%; display:flex;justify-content:center;align-items:center;">
+                        <h4 style="color:white;">ADD LEGEND</h4>
+                    </div>
+                    <div class="modal-headerDiv2">
+                        <i class="fa fa-times closeAddNewData" aria-hidden="true" data-bs-dismiss="modal" aria-label="Close"></i>
+                    </div>
+
+                </div>
+
+                <div class="modal-body addSectionBody" style="border-radius:0 0 .5rem .5rem; display:flex;flex-direction:column;">
+
+                    <div class="addSectionBodyDiv1" style="height:30%;">         
+                        
+                        <select class="form-control addNewDataInput" id="addLegendSection" style="color:#425833; width:50%; text-align:center;" asp-for="AddLegendDTO.sectionId">
+                            <option disabled="" selected="">SELECT SECTION</option>
+                        </select>
+                        <i class="fa fa-cog" aria-hidden="true" data-bs-toggle="modal" data-bs-target="#legendSettings"></i>
+                    </div>
+
+                    <div class="" style="height:5%; display:flex;justify-content:center;align-items:center;">
+                        <span asp-validation-for="AddLegendDTO.sectionId" class="text-danger"></span>
+
+                    </div>
+                    <div class="" style="height:25%; width:100%;  display:flex;justify-content:space-evenly; align-items:center; flex-direction:row;">
+                        <input type="number" style="width:25%;" class="addNewUserInput form-control" placeholder=" Low: " autocomplete="off" asp-for="AddLegendDTO.LOW" />
+                        <input type="number" style="width:25%;" class="addNewUserInput form-control" placeholder=" Med: " autocomplete="off" asp-for="AddLegendDTO.MED" />
+                        <input type="number" style="width:25%;" class="addNewUserInput form-control" placeholder=" Max: " autocomplete="off" asp-for="AddLegendDTO.MAX" />
+                    </div>
+                    <div class="" style="height:10%; display:flex;justify-content:center;align-items:center; flex-direction:row; text-align:center;">
+                        <span asp-validation-for="AddLegendDTO.LOW" class="text-danger"></span>
+                        <span asp-validation-for="AddLegendDTO.MED" class="text-danger"></span>
+                        <span asp-validation-for="AddLegendDTO.MAX" class="text-danger"></span>
+                    </div>
+                    <div class="addSectionBodyDiv3" style="height:25%; justify-content: flex-end;">
+                        <button type="submit" class="addWorkingHoursPerDay" style="border:none;"><span style="font-size:20px">ADD</span></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+
+
+                        @*LEGEND SETTINGS*@
+
+<div class="modal fade" id="legendSettings" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog " role="document">
+        <div class="modal-content" style="border-radius:.5rem; border-bottom:1px solid gray">
+
+            <div class="modal-header" style="height:50px; background:#425833; display:flex; border-radius:.5rem .5rem 0 0 ;">
+                <div class="modal-headerDiv1" style="width:95%; display:flex;justify-content:center;align-items:center;">
+                    <h4 style="color:white;">LEGEND SETTINGS</h4>
+                </div>
+                <div class="modal-headerDiv2">
+                    <i class="fa fa-times closeAddNewData" aria-hidden="true" data-bs-dismiss="modal" aria-label="Close"></i>
+                </div>
+            </div>
+            <div class="modal-body legendSettingsBody" style="border-radius:0 0 .5rem .5rem; display:flex;flex-direction:column;">
+
+                @*SIGNALR*@
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+                                @*DELETE LEGEND*@
+<form asp-action="DeleteLegend" method="post">
+    <div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="staticBackdropLabel" id="deleteLegendModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document" style="height:50vh;">
+            <div class="modal-content" style="height: 240px; font-family: 'Montserrat', sans-serif; background-color:#DFEFD8;">
+                <div class="modal-body logoutModalBody">
+
+                    <div class="logoutModalBody1" style="flex-direction:column">
+
+                        <h5 style="text-align:center;">Are you sure you want to delete the Legend of</h5>
+                        <h4 id="legendNameToDelete" style="text-align:center;"></h4>
+                    </div>
+                    <input type="hidden" name="id" class="sectionIdToDelete" id="legendIdToDelete" />
+
+                    <div class="logoutModalBody2">
+                        <button type="submit" class="btn btn-danger logoutYes"> Yes</button>
+                        <button type="button" class="close btn btn-success logoutNo" data-bs-dismiss="modal" aria-label="Close">
+                            No
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+
+                                @*EDIT LEGEND*@
+<form asp-action="UpdateLegend" method="post">
+    <div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="staticBackdropLabel" id="editLegendModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document" style="height:50vh;">
+            <div class="modal-content" style="height: 240px; font-family: 'Montserrat', sans-serif; background-color:#DFEFD8;">
+                <div class="modal-body legendBody" >
+
+                    <div class="legendBodyDiv1">
+
+                        <div class="legendBodyDiv1Inner1">
+
+                            <input type="hidden" class="sectionIdToEdit addNewUserInput" asp-for="AddLegendDTO.legendID" id="legendId"/>
+
+                            <input type="hidden" class="sectionIdToEdit addNewUserInput" asp-for="AddLegendDTO.sectionId" id="sectionId" />             
+                            <input type="text" name="sectionName" class="sectionNameToEdit addNewUserInput form-control" id="sectionName" style="text-align:center; background-color:white; color:#425833;" disabled />
+
+                        </div>
+
+                        <div class="legendBodyDiv1Inner2">
+                            <input type="number" class="form-control addNewUserInput" autocomplete="off" style="width:15%;  background-color:white; color:#425833;" id="legendLow" asp-for="AddLegendDTO.LOW" />
+                            <input type="number" class="form-control addNewUserInput" autocomplete="off" style="width:15%;  background-color:white; color:#425833;" id="legendMed" asp-for="AddLegendDTO.MED" />
+                            <input type="number" class="form-control addNewUserInput" autocomplete="off" style="width:15%;  background-color:white; color:#425833;" id="legendMax" asp-for="AddLegendDTO.MAX" />
+                        </div>
+
+                    </div>
+                    <div class="legendBodyDiv2">
+                       
+                        <button type="submit" class="btn btn-success saveLegend"> SAVE</button>
+                        <button type="button" class="close btn btn-danger cancelLegend" data-bs-dismiss="modal" aria-label="Close">
+                            CANCEL
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+
+
+
+
+
+
+
+
+
+                        @*SECTION SETTINGS*@
+
+<div class="modal fade" id="sectionSettings" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog " role="document">
+        <div class="modal-content" style="border-radius:.5rem; border-bottom:1px solid gray">
+
+            <div class="modal-header" style="height:50px; background:#425833; display:flex; border-radius:.5rem .5rem 0 0 ;">
+                <div class="modal-headerDiv1" style="width:95%; display:flex;justify-content:center;align-items:center;">
+                    <h4 style="color:white;">SECTION SETTINGS</h4>
+                </div>
+                <div class="modal-headerDiv2">
+                    <i class="fa fa-times closeAddNewData" aria-hidden="true" data-bs-dismiss="modal" aria-label="Close"></i>
+                </div>
+            </div>
+            <div class="modal-body sectionSettingsBody" style="border-radius:0 0 .5rem .5rem; display:flex;flex-direction:column;">
+
+                           @*SIGNALR*@
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+                    @*DELETE SECTION*@
+<form asp-action="DeleteSection" method="post">
+    <div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="staticBackdropLabel" id="deleteSectionModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document" style="height:50vh;">
+            <div class="modal-content" style="height: 240px; font-family: 'Montserrat', sans-serif; background-color:#DFEFD8;">
+                <div class="modal-body logoutModalBody">
+
+                    <div class="logoutModalBody1" style="flex-direction:column">
+
+                        <h5 style="text-align:center;">Are you sure you want to Delete </h5>
+                        <h4 id="sectionNameToDelete" style="text-align:center;"></h4>
+                    </div>
+                    <input type="hidden" name="sectionId" class="sectionIdToDelete" />
+
+                    <div class="logoutModalBody2">
+                        <button type="submit" class="btn btn-danger logoutYes"> Yes</button>
+                        <button type="button" class="close btn btn-success logoutNo" data-bs-dismiss="modal" aria-label="Close">
+                            No
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+
+                    @*Update SECTION*@
+<form asp-action="UpdateSection" method="post">
+    <div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="staticBackdropLabel" id="editSectionModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document" style="height:50vh;">
+            <div class="modal-content" style="height: 240px; font-family: 'Montserrat', sans-serif; background-color:#DFEFD8;">
+                <div class="modal-body logoutModalBody">
+
+                    <div class="logoutModalBody1" style="flex-direction:column">
+
+                        <input type="text" name="sectionName" class="sectionNameToEdit addNewUserInput form-control" style="text-align:center; background-color:#425833; color:white;" />
+                     
+                    </div>
+             
+
+                    <div class="logoutModalBody2">
+                        <input type="hidden" name="sectionId" class="sectionIdToEdit addNewUserInput" />
+                        <button type="submit" class="btn btn-success logoutYes updateSectionSave" style="background-color:#425833;"> Save</button>
+                        <button type="button" class="close btn btn-danger logoutNo" data-bs-dismiss="modal" aria-label="Close">
+                            Cancel
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+
+
+
+
+
+
+                                @*DELETE USER*@ 
+<form asp-action="DeleteUser" method="post">
+    <div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="staticBackdropLabel" id="deleteUserModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document" style="height:50vh;">
+            <div class="modal-content" style="height: 240px; font-family: 'Montserrat', sans-serif;">
+                <div class="modal-body logoutModalBody">
+
+                    <div class="logoutModalBody1" style="flex-direction:column">
+
+                        <h5 style="text-align:center;">Are you sure you want to Delete </h5>
+                        <h4 id="userNameToDelete" style="text-align:center;"></h4>
+                    </div>
+                    <input type="hidden" name="userId" class="userIdToDelete"/>
+
+                    <div class="logoutModalBody2">
+                        <button type="submit" class="btn btn-danger logoutYes"> Yes</button>
+                        <button type="button" class="close btn btn-success logoutNo" data-bs-dismiss="modal" aria-label="Close">
+                            No
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+    
+
+
+    
+                         @*USERS PROFILE MODAL*@
+<div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="staticBackdropLabel" id="usersProfileModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" style="font-family: 'Montserrat', sans-serif;">
+    <div class="modal-dialog modal-dialog-centered" role="document" style="height:50vh;">
+
+        <div class="modal-content" style="height: 500px;">
+
+            <div class="modal-header profileHeader">
+                <div class="profileHeaderDiv1">
+          
+                </div>
+
+                <div class="profileHeaderDiv2">
+                    <img src="~/images/bananacat.png" class="usersProfilePicModal" />
+                </div>
+
+            </div>
+
+            <div class="modal-body profileModalBody">
+
+                <div class="profileModalBodyDiv1">
+                    <h4 style="text-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);" class="usersName"></h4>
+                    <h5 style="font-weight:500;" class="usersPosition">
+
+                    </h5>
+                </div>
+                <div class="profileModalBodyDiv2">
+
+                    <div class="profileModalBodyDiv2Inner1">
+
+                        <div class="profileModalBodyDiv2Inner1Div1">
+                            <i class="fa fa-envelope emailProfile" aria-hidden="true"></i>
+                        </div>
+
+                        <div class="profileModalBodyDiv2Inner1Div2">
+
+                            <span style="margin-right:15%;" class="usersEmail">
+
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                    <div class="profileModalBodyDiv2Inner2">
+
+                        <div class="profileModalBodyDiv2Inner2Div1">
+                            <i class="fa fa-phone phoneProfile" aria-hidden="true"></i>
+                        </div>
+                        <div class="profileModalBodyDiv2Inner2Div2">
+                            <span style="margin-right:15%;" class="usersNumber">
+
+
+                            </span>
+                        </div>
+
+                    </div>
+                    <div class="profileModalBodyDiv2Inner2">
+
+                        <div class="profileModalBodyDiv2Inner2Div1">
+                            <i class="fa fa-sitemap" aria-hidden="true"></i>
+                        </div>
+                        <div class="profileModalBodyDiv2Inner2Div2">
+                            <span style="margin-right:15%;" class="usersSection">
+
+
+                            </span>
+                        </div>
+
+                    </div>
+
+
+                </div>
+                <div class="profileModalBodyDiv3">
+
+                    <button class="profileEditBtn profileModalBackButton" data-bs-dismiss="modal" aria-label="Close"> 
+                        BACK
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<script>
+    function preventFormSubmit(event) {
+        event.preventDefault();
+        // Open the modal here
+        // ...
+    }
+</script>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

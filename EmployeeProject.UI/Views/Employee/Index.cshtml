@@ -1,0 +1,153 @@
+﻿@using EmployeeProject.Application.DTOs.Employee
+
+@model IndexDTO
+
+@{
+    Layout = "_EmployeeLayout";
+
+    var newUser = TempData["NewUser"] as String;
+
+    var changePass = TempData["ChangePass"] as String;
+
+    var login = TempData["Login"] as String;
+
+    var profileUpdate = TempData["ProfileUpdated"] as String;
+
+}
+@if (!string.IsNullOrEmpty(changePass) || !string.IsNullOrEmpty(login) || !string.IsNullOrEmpty(profileUpdate))
+{
+    <div class="alert alert-success d-flex justify-content-between align-items-center">
+        @if (!string.IsNullOrEmpty(changePass))
+        {
+            <strong>@changePass</strong>
+        }
+
+        @if (!string.IsNullOrEmpty(login))
+        {
+            <strong>@login</strong>
+        }
+        @if (!string.IsNullOrEmpty(profileUpdate))
+        {
+            <strong>@profileUpdate</strong>
+        }
+        <button type="button" class="close btn btn-outline-success" data-bs-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+}
+<div class="dashboardBody">
+
+    <div class="dashboardBodyDiv1"> 
+        <h1 style="  text-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);">
+            Your Monthly Total Work Hours in a Year
+        </h1>
+    </div>
+    <div class="dashboardBodyDiv2">
+        <select class="year" id="employeeYear" style="box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);">
+
+        </select>
+        <div class="dashboardBodyDiv2Inner1" style="  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);">
+            <div class="dashboardBodyDiv2Inner1Div1">
+                <div class="jan">JAN</div>
+                <div class="feb">FEB</div>
+                <div class="mar">MAR</div>
+                <div class="apr">APR</div>
+                <div class="may">MAY</div>
+                <div class="jun">JUN</div>
+                <div class="jul">JUL</div>
+                <div class="aug">AUG</div>
+                <div class="sep">SEP</div>
+                <div class="oct">OCT</div>
+                <div class="nov">NOV</div>
+                <div class="dec">DEC</div>
+                <div class="yearlyTotal">TOTAL</div>
+            </div>
+            <div class="dashboardBodyDiv2Inner1Div2">
+
+            </div>
+        </div>
+    </div>
+    <div class="dashboardBodyDiv3">
+
+        <div class="dashboardBodyDiv3Inner">
+
+            <div class="dashboardBodyDiv3InnerDiv1">
+                <h4>LEGEND</h4>
+
+                <h5>SECTION: <span style="font-size:17px;" id="legendSectionDisplay"></span></h5>
+
+            </div>
+            <div class="dashboardBodyDiv3InnerDiv2">
+
+                <div class="low">LOW</div>
+                <div class="med">MED</div>
+                <div class="max">MAX</div>
+                <div class="aboveMax">ABOVE MAX</div>
+
+            </div>
+            <div class="dashboardBodyDiv3InnerDiv3">
+
+                <div class="lowNumber" style="background-color:white; color:black;"></div>
+                <div class="medNumber" style="background-color:white; color:black;"></div>
+                <div class="maxNumber" style="background-color:white; color:black;"></div>
+                <div class="aboveMaxNumber" style="background-color:white; color:black;"></div>
+
+            </div>
+
+        </div>
+        <img src="~/images/prg_logo.png" />
+    </div>
+
+</div>
+@if (!string.IsNullOrEmpty(newUser))
+{
+    <script>
+        window.addEventListener('DOMContentLoaded', function () {
+            var changePassModal = document.getElementById('changePass');
+            changePassModal.classList.add('show');
+            changePassModal.style.display = 'block';
+
+            var closeButton = document.querySelector('#changePass .closeAddNewData');
+            closeButton.addEventListener('click', function () {
+                changePassModal.classList.remove('show');
+                changePassModal.style.display = 'none';
+            });
+        });
+    </script>
+    <form asp-controller="Home" asp-action="ChangePassword" method="post">
+        <div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="staticBackdropLabel" id="changePass" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document" style="height:50vh;">
+
+                <div class="modal-content" style="height: 450px; border-radius:1rem;font-family: 'Montserrat', sans-serif;">
+
+                    <div class="modal-header" style="height:60px; background:#425833; display:flex; border-radius:1rem 1rem 0 0 ; justify-content:center; align-items:center; color:white; ">
+
+                        <h4>Change Your Password</h4>
+
+                    </div>
+                    <div class="modal-body " style="border-radius:0 0 1rem 1rem; display:flex; flex-direction:column; align-items:center; ">
+                        <div asp-validation-summary="ModelOnly" style="color:red;"></div>
+                        <br />
+                        <input type="text" class="form-control addNewDataInput" placeholder="Current Password:" style="width:80%;" asp-for="@Model.ChangePasswordDTO.CurrentPassword" autocomplete="off" value="12345678"/>
+                        <span asp-validation-for="@Model.ChangePasswordDTO.CurrentPassword" class="text-danger"></span>
+                        <br />
+                        <input type="text" class="form-control addNewDataInput" placeholder="New Password:" style="width:80%;" asp-for="@Model.ChangePasswordDTO.NewPassword" autocomplete="off" />
+                        <span asp-validation-for="@Model.ChangePasswordDTO.NewPassword" class="text-danger"></span>
+                        <br />
+                        <input type="text" class="form-control addNewDataInput" placeholder="Confirm New Password:" style="width:80%;" asp-for="@Model.ChangePasswordDTO.ConfirmNewPassword" autocomplete="off" />
+                        <span asp-validation-for="@Model.ChangePasswordDTO.ConfirmNewPassword" class="text-danger"></span>
+                        <button type="submit" class="addNewUserBtn" id="saveChangePass" style="margin-top:20%;"><i class="fa fa-check" aria-hidden="true"></i>Save</button>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </form>
+}
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

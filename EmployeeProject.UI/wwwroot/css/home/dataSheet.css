@@ -1,0 +1,658 @@
+﻿.dataSheetBody{
+    height:90vh;
+    width:100%;
+    display:flex;
+    flex-direction:column;
+}
+
+.dataSheetBodyDiv1 {
+    height: 10vh;
+    width: 100%;
+    display:flex;
+}
+
+@media only screen and (max-width: 1366px) {
+    .theadDataSheet th{
+        font-size:12px;
+    }
+}
+
+
+
+
+
+.dataSheetBodyDiv2 {
+    height: 80vh;
+    width: 100%;
+    display:flex;
+    align-items:center;
+
+}
+
+.dataSheetBodyDiv2Inner {
+    height: 95%;
+    width: 98%;
+    overflow-y: auto;
+    overflow-x: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #425833 white;
+}
+
+.tableDataSheet {
+    width: 100%;
+    height: 100%;
+    border: 1px solid #425833;
+    border-top: none;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.theadDataSheet {
+    background: #425833;
+    position: sticky;
+    top: 0;
+    color: white;
+    text-align: center;
+}
+
+.thDataSheet {
+    padding: 10px;
+}
+
+
+.tbodyDataSheet{
+    text-align:center;
+}
+
+
+.tbodyDataSheet td:last-child {
+    border-left: 1px solid #425833;
+}
+
+.tbodyDataSheet td {
+    padding: 15px;
+    border-bottom: 1px solid #425833;
+    height:20px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.dataSheetBodyDiv1Inner1 {
+    height: 10vh;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    position:relative;
+}
+
+
+.autoFillSearchUsersDataSheetBody {
+    position: absolute;
+    min-height: 35px;
+    max-height: 100px;
+    top: 83%;
+    width:263px;
+    background-color: #fff;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #425833 white;
+    border-radius: .3rem;
+    left:185px;
+    background: white;
+    border: 1px solid #777;
+    z-index:1;
+    display:none;
+}
+
+.autoFillSearchUsersDataSheet {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.searchResult5 {
+    height: 35px;
+    width: 100%;
+    color: #425833;
+    font-weight: normal;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.searchResult5:hover {
+    background-color: #425833;
+    color: white;
+}
+
+
+.year {
+    scrollbar-width: thin;
+    scrollbar-color: #425833 white;
+}
+
+
+.dataSheetBodyDiv1Inner2 {
+    height: 10vh;
+    /*   border:1px solid;*/
+    width: 35%;
+}
+.addData {
+    height: 60px;
+    width: 150px;
+    border-radius: .3rem;
+    background-color: #425833;
+    color: white;
+    border: none;
+    margin-right: 2%;
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.addDataIcon{
+    margin-right:8%;
+}
+
+.dataSheetSearch{
+    align-self:center;
+}
+#dataSheetSearch {
+    width: 280px;
+    padding-left: 1%;
+    box-shadow: -4px 5px 5px 0px rgba(0,0,0,0.37);
+    -webkit-box-shadow: -4px 5px 5px 0px rgba(0,0,0,0.37);
+    -moz-box-shadow: -4px 5px 5px 0px rgba(0,0,0,0.37);
+}
+.closeAddNewData:hover:before {
+
+    color: gray;
+
+}
+
+.closeAddNewData:before{
+    font-size:35px;
+    color:white;
+    cursor:pointer;
+    margin-right:25px;
+}
+
+.addNewDataModalBody{
+    display:flex;
+    flex-direction:column;
+}
+
+.addDataModal::-webkit-scrollbar {
+    display: none;
+}
+
+
+.addNewDataModalBodyDiv1{
+    height:60px;
+    width:100%;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    position:relative;
+}
+.autoFillSearchDataSheetBody {
+    width: 40%;
+    min-height: 35px;
+    max-height: 100px;
+    border: 1px solid #777;
+    position: absolute;
+    background: white;
+    top: 85%;
+    overflow-y: auto;
+    scrollbar-width: none;
+    scrollbar-color: #425833 white;
+    border-radius: .3rem;
+    display: none;
+    scrollbar-width: thin;
+    scrollbar-color: #425833 white;
+}
+.autoFillSearchDataSheet {
+    height:100%;
+    width:100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+
+}
+.searchResult {
+    height:35px;
+    width: 100%;
+    color: #425833;
+    font-weight:normal;
+    cursor:pointer;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.searchResult1 {
+    height: 35px;
+    width: 100%;
+    color: #425833;
+    font-weight: normal;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.searchResult:hover {
+    background-color: #425833;
+    color:white;
+}
+
+.searchResult1:hover {
+    background-color: #425833;
+    color: white;
+}
+
+
+
+.searchResult2 {
+    height: 35px;
+    width: 100%;
+    color: #425833;
+    font-weight: normal;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.searchResult2:hover {
+    background-color: #425833;
+    color: white;
+}
+
+
+
+
+
+
+
+
+
+            .addNewDataInput {
+                width: 40%;
+                border-radius: .5rem;
+                background: #DEE7DE;
+                border:none;
+            }
+
+            .addNewDataInput::placeholder {
+                color:#425833;
+            }
+
+            .addNewDataInput:focus {
+                color: #212529;
+                background-color: #fff;
+                border-color: #A9C393;
+                outline: 0;
+                box-shadow: 0 0 20px rgba(169, 195, 147, 0.8);
+            }
+
+
+.addNewDataModalBodyDiv2 {
+    height: 60px;
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+.addNewDataModalBodyDiv3 {
+    height: 60px;
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+
+
+
+
+
+        .addNewDataModalBodyDiv4 {
+            height: 60px;
+            width: 100%;
+            display: flex;
+            flex-direction:row;
+        }
+        .addNewDataModalBodyDiv4Div1 {
+            width: 50%;
+            height: 100%;
+            display:flex;
+            flex-direction:row;
+            justify-content:space-evenly;
+            align-items:center;
+        }
+        .addNewDataModalBodyDiv4 span{
+            color:#425833;
+        }
+        .addNewDataStartDate{
+            height:70%;
+            width:47%;
+            border-radius: .5rem;
+            background: #DEE7DE;
+            border:none;
+            color:#425833;
+        }
+        .addNewDataStartDate:focus , .addNewDataEndDate:focus  {
+            color: #212529;
+            background-color: #fff;
+            border-color: #A9C393;
+            outline: 0;
+            box-shadow: 0 0 100px rgba(169, 195, 147, 1);
+        }
+
+
+.addNewDataModalBodyDiv4Div2 {
+    width: 50%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+}
+.addNewDataEndDate {
+    height: 70%;
+    width: 51%;
+    border-radius: .5rem;
+    background: #DEE7DE;
+    border: none;
+    color: #425833;
+}
+
+
+
+
+.addNewDataModalBodyDiv5 {
+    height: 60px;
+    width: 100%;
+
+    display:flex;
+    flex-direction:row;
+}
+.addNewDataModalBodyDiv5 span{
+    color: #425833;
+}
+
+.addNewDataModalBodyDiv5Div1 {
+    width: 50%;
+    height: 100%;
+    display: flex;
+
+    justify-content:space-evenly;
+    align-items:center;
+}
+.addNewDataSettingsBtn {
+    width: 53px;
+    height: 40px;
+    border-radius: .5rem;
+    background: #DEE7DE;
+    border: none;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+    .addNewDataSettingsBtn:hover {
+        background: #4C772F;
+        color: white;
+    }
+
+.addNewDataSettingsIcon:hover:before {
+    font-size: 20px;
+    color: whitesmoke;
+}
+
+.addNewDataSettingsIcon:before {
+    font-size: 20px;
+    color: #425833;
+}
+.addNewDataSelect {
+    height: 40px;
+    border-radius: .5rem;
+    color: #425833;
+    background-color: #DEE7DE;
+    text-align: center;
+    border: none;
+    width: 75px;
+    border-radius: .5rem;
+    border: none;
+}
+.addNewDataSelect:focus {
+    color: #212529;
+    background-color: #fff;
+    border-color: #A9C393;
+    outline: 0;
+    box-shadow: 0 0 10px rgba(169, 195, 147, 1);
+}
+
+
+.addNewDataModalBodyDiv5Div2 {
+    width: 50%;
+    height: 100%;
+    display: flex;
+    flex-direction:row;
+    justify-content:flex-start;
+    align-items:center;
+}
+.addNewDataResult:disabled {
+    height: 40px;
+    width: 75px;
+    border-radius: .5rem;
+    background: #DEE7DE;
+    border: none;
+    margin-left:10%;
+    margin-right: 5%;
+    color: #425833;
+}
+
+
+
+
+.addNewDataModalBodyDiv6 {
+    height: 120px;
+    width: 100%;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.addNewDataAddBtn {
+    height: 50px;
+    width: 105px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    border-radius: .5rem;
+    background-color: #425833;
+    color:white;
+    cursor:pointer;
+}
+
+.addNewDataAddBtn:hover {
+    background-color: #4C772F;
+    color: white;
+}
+
+.workingHoursPerDayModalBody{
+   display:flex;
+   justify-content:space-around;
+   align-items:center;
+   background:#DEE7DE;
+}
+
+.workingHoursUpdateIcon:before {
+    font-size: 30px;
+    color: #515151;
+}
+
+.workingHoursPlusIcon:before {
+    font-size: 40px;
+}
+
+.workingHoursTrashIcon:before{
+    font-size:30px;
+}
+
+.addWorkingHoursPerDay {
+    height: 50px;
+    width: 105px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    border-radius: .5rem;
+    background-color: #425833;
+    color: white;
+    cursor: pointer;
+}
+.addWorkingHoursPerDay:hover{
+    background-color: #4C772F;
+    color:white;
+}
+
+.updateWorkingHoursPerDay {
+    height: 50px;
+    width: 105px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    border-radius: .5rem;
+    background-color: #F1E902;
+    color: white;
+    cursor: pointer;
+}
+
+.updateWorkingHoursPerDay:hover {
+    background-color: #DCD741;
+
+}
+
+
+
+.deleteWorkingHoursPerDay {
+    height: 50px;
+    width: 105px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    border-radius: .5rem;
+    background-color: #E24848;
+    color: white;
+    cursor: pointer;
+}
+
+.deleteWorkingHoursPerDay:hover {
+    background-color: #D62B2B;
+    color: white;
+}
+
+
+.dataSheetYearClass {
+    height: 100%;
+    width: 25%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin-left:30%;
+}
+
+.modal-headerDiv2{
+    height:100%;
+    width:5%;
+    display:flex;
+    justify-content:center;align-items:center;
+}
+
+.tbodyDataSheet tr td:last-child{
+    display:flex;
+    height:100%;
+    width:100%;
+    border-bottom:none;
+    flex-direction:row;
+    justify-content:space-between;
+    align-items:center;
+    gap:5px;
+}
+
+
+.tbodyDataSheet .fa {
+    height: 30px;
+    width: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: .2rem;
+    background-color: gray;
+    cursor:pointer;
+}
+
+.tbodyDataSheet .fa:hover {
+    background-color: #C8C8C8;
+}
+
+.tbodyDataSheet .fa-pencil:before {
+    color: #F1E902;
+}
+
+.tbodyDataSheet .fa-trash:before {
+    color: #E24848;
+}
+
+.allworkingHoursModalBodyDiv1 .fa {
+    height: 30px;
+    width: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: .2rem;
+    background-color: gray;
+    cursor: pointer;
+}
+
+.allworkingHoursModalBodyDiv1 .fa-pencil {
+    color: #F1E902;
+}
+
+.allworkingHoursModalBodyDiv1 .fa-trash {
+    color: #E24848;
+}

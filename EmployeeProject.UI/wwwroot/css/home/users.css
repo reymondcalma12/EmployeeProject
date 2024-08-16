@@ -1,0 +1,689 @@
+﻿.alert {
+    position: fixed;
+    top: 10px;
+    right: 20px;
+    z-index: 1000;
+    width: 97%;
+}
+.usersBody{
+    height:90vh;
+    width:100%;
+    display:flex;
+    flex-direction:column;
+}
+.usersBodyDiv1 {
+    height: 15vh;
+    width: 100%;
+    display:flex;
+    flex-direction:row;
+}
+.usersBodyDiv2 {
+    height: 75vh;
+    width: 100%;
+    display:flex;
+    align-items:center;
+}
+.usersBodyDiv2Inner {
+    height: 95%;
+    width: 98%;
+
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-width: thin;
+    scrollbar-color: #425833 white;
+    align-items:flex-start;
+    justify-content:space-evenly;
+}
+
+.usersBodyDiv2InnerCards {
+    height: 225px;
+    width: 228px;
+    margin: 12px 20px;
+    display: flex;
+    flex-direction: column;
+    font-family: 'Montserrat', sans-serif;
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius:1rem;
+    border:1px solid #F4F4F4; 
+}
+.usersBodyDiv2InnerCardsDiv1 {
+    height: 40%;
+    width: 100%;
+
+    display:flex;
+    justify-content:center;
+    align-items:flex-end;
+}
+.usersProfilePic {
+    height: 65px;
+    width: 65px;
+    border-radius: 50%;
+}
+
+.usersProfilePicModal {
+    height: 100px;
+    width: 100px;
+    border-radius: 50%;
+    border: 5px solid white;
+}
+
+.usersBodyDiv2InnerCardsDiv2 {
+    height: 60%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+.usersBodyDiv2InnerCardsDiv2Inner1{
+    height:60%;
+    width:100%;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+}
+
+.usersBodyDiv2InnerCardsDiv2Inner1 h5{
+    font-size:15px;
+}
+
+.usersBodyDiv2InnerCardsDiv2Inner1 h6{
+    background-color:#144727;
+    width:90%;
+    height:25px;
+    border-radius:1rem;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    color:white;
+
+}
+
+.usersBodyDiv2InnerCardsDiv2Inner2{
+    display:flex;
+    flex-direction:row;
+    height:40%;
+    width:100%;
+    justify-content:space-around;
+}
+
+.usersBodyDiv2InnerCardsDiv2Inner2 button{
+    height:65%;
+    width:50px;
+    border:none;
+    background-color:#C7D0CA;
+    border-radius:1rem;
+}
+
+    .usersBodyDiv2InnerCardsDiv2Inner2 button:hover {
+        background-color: #D6E2DB;
+    }
+
+.usersBodyDiv2InnerCardsDiv2Inner2 .fa-user-circle{
+    color:#2D6B44;
+}
+
+
+.usersBodyDiv2InnerCardsDiv2Inner2 .fa-trash{
+    color:#B22222;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.usersBodyDiv1Inner1 {
+    height: 100%;
+    width: 55%;
+    display: flex;
+    flex-direction: row;
+}
+
+.usersBodyDiv1Inner11 {
+    height: 100%;
+    width: 50%;
+
+    display:flex;
+    flex-direction:column;
+}
+.usersBodyDiv1Inner111{
+    height:60%;
+    width:100%;
+
+    display:flex;
+    flex-direction:row;
+    justify-content:center;
+    align-items:center;
+    position:relative;
+}
+
+
+.autoFillSearchUsersBody {
+    position: absolute;
+    min-height: 35px;
+    max-height: 100px;
+    top: 83%;
+    width: 100%;
+    background-color: #fff;
+    width: 75%;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #425833 white;
+    border-radius: .3rem;
+    right: 20%;
+    background: white;
+    border: 1px solid #777;
+    display: none;
+}
+
+.autoFillSearchUsers {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.searchResult {
+    height: 35px;
+    width: 100%;
+    color: #425833;
+    font-weight: normal;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+    .searchResult:hover {
+        background-color: #425833;
+        color: white;
+    }
+
+
+
+
+
+
+.usersBodyDiv1Inner112 {
+    height: 40%;
+    width: 100%;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+
+.usersBodyDiv1Inner12 {
+    height: 100%;
+    width: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+
+.usersBodyDiv1Inner121 {
+    height: 100%;
+    width: 80%;
+    background-color: #A9C393;
+    border-radius: .5rem;
+    display: flex;
+    flex-direction: row;
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+
+
+.usersBodyDiv1Inner1211{
+    height:100%;
+    width:40%;
+    display:flex;
+    justify-content:flex-end;
+    align-items:center;
+}
+.usersBodyDiv1Inner1212 {
+    height: 100%;
+    width: 70%;
+    display: flex;
+    flex-direction:column;
+    justify-content: center;
+    align-items: center;
+    color:white
+}
+
+.totalEmployeeIcon:before {
+    font-size: 35px;
+    color: #425833;
+    padding: 10px;
+    background-color: white;
+    border-radius: .5rem;
+}
+
+#userSearch{
+    width:78%;
+    padding-left:5%;
+}
+
+#userSection{
+    height:90%;
+    margin:0 0 0 3%;
+}
+
+#userPosition {
+    height: 90%;
+    margin: 0 3% 0 0;
+}
+
+.usersBodyDiv1Inner2 {
+    height: 100%;
+    width: 45%;
+    display: flex;
+    flex-direction: row;
+
+}
+
+.usersBodyDiv1Inner21 {
+    height: 100%;
+    width: 40%;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.usersBodyDiv1Inner211 {
+    height: 100%;
+    width: 100%;
+    background-color: #A9C393;
+    border-radius: .5rem;
+    display: flex;
+    flex-direction: row;
+}
+
+.usersBodyDiv1Inner2111 {
+    height: 100%;
+    width: 30%;
+    display:flex;
+    justify-content:flex-end;
+    align-items:center;
+
+}
+.usersBodyDiv1Inner2112 {
+    height: 100%;
+    width: 70%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: black;
+}
+.newEmployeeIcon:before {
+    font-size: 25px;
+    color: #425833;
+}
+
+.usersBodyDiv1Inner22 {
+    height: 100%;
+    width: 60%;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+}
+.addUser {
+    height: 60px;
+    width: 220px;
+    border-radius: .5rem;
+    background-color: #A9C393;
+    color: white;
+    border: none;
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.addSectionUsers {
+    height: 60px;
+    width: 180px;
+    border-radius: .5rem;
+    background-color: #425833;
+    color: white;
+    border: none;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.addSectionIcon:before {
+    font-size: 25px;
+}
+
+.addNewUserModalBody {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+   
+}
+
+.addNewUserModalBody > div{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.addNewUserModalBody > div:nth-child(odd) {
+    height: 10%;
+    width: 100%;
+
+}
+
+
+.addNewUserModalBody > div:nth-child(even) {
+    height: 3%;
+    width: 100%;
+}
+
+.addNewUserModalBodyDiv10 > span{
+    text-align:center;
+}
+
+
+.addNewUserInput {
+    width: 70%;
+    border-radius: .5rem;
+    background: #DEE7DE;
+    border: none;
+}
+
+.addNewUserInput::placeholder {
+    color: #425833;
+}
+
+.addNewUserInput:focus {
+    color: #212529;
+    background-color: #fff;
+    border-color: #A9C393;
+    outline: 0;
+    box-shadow: 0 0 20px rgba(169, 195, 147, 0.8);
+}
+
+
+.addNewUserSelect {
+    height: 50px;
+    border-radius: .5rem;
+    color: #425833;
+    background-color: #DEE7DE;
+    text-align: center;
+    border: none;
+    width: 103px;
+    border-radius: .5rem;
+    border: none;
+}
+
+.addNewUserSelect:focus {
+    color: #212529;
+    background-color: #fff;
+    border-color: #A9C393;
+    outline: 0;
+    box-shadow: 0 0 10px rgba(169, 195, 147, 1);
+}
+
+
+/*.addNewUserModalBodyDiv1{
+    height:40%;
+    width:100%;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}*/
+
+.addNewUserBtn {
+    height: 40px;
+    width: 100px;
+    border: 1px solid;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+    text-decoration: none;
+    border-radius: .3rem;
+    color: white;
+    background-color: #425833;
+    cursor: pointer;
+}
+.addNewUserBtn:hover {
+    background-color: #4C772F;
+    color: white;
+}
+.addNewUserSelect option:hover {
+    color: #1e2125;
+    background-color: #e9ecef;
+}
+
+.addSectionBodyDiv1{
+    height:30%;
+    width:100%;
+    display:flex;
+    justify-content:space-evenly;
+    align-items:center;
+}
+.addSectionBodyDiv2 {
+    height: 30%;
+    width: 100%;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    flex-direction:row;
+}
+
+.addSectionBodyDiv3 {
+    height: 35%;
+    width: 100%;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    flex-direction:column;
+}
+
+.addSectionBodyDiv2 .fa:before {
+    font-size: 30px;
+    color: #425833;
+    cursor:pointer;
+}
+
+.addSectionBodyDiv2 .fa:hover:before{
+    font-size: 30px;
+    color: #4C772F;
+}
+
+.addSectionBodyDiv1 .fa:before {
+    font-size: 30px;
+    color: #425833;
+    cursor: pointer;
+}
+
+.addSectionBodyDiv1 .fa:hover:before {
+    font-size: 30px;
+    color: #4C772F;
+}
+
+
+.sectionSettingsBodyDiv1 {
+    display: flex;
+    height: 100%;
+    width: 100%;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.sectionSettingsBody{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+}
+
+.sectionSettingsBodyDiv1 .fa {
+    height: 30px;
+    width: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: .2rem;
+    background-color: gray;
+    cursor: pointer;
+}
+
+.sectionSettingsBodyDiv1 .fa:hover {
+    background-color: #C8C8C8;
+}
+
+.sectionSettingsBodyDiv1 .fa-pencil {
+    color: #F1E902;
+}
+
+.sectionSettingsBodyDiv1 .fa-trash {
+    color: #E24848;
+}
+
+.updateSectionSave:hover {
+    background-color: #4C772F;
+}
+
+.legendSettingsBody {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+
+.legendSettingsBody input{
+    text-align: center;
+}
+
+
+.legendSettingsBodyDiv1 {
+    display: flex;
+    height: 100%;
+    width: 100%;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+
+    .legendSettingsBodyDiv1 .fa {
+        height: 30px;
+        width: 30px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: .2rem;
+        background-color: gray;
+        cursor: pointer;
+    }
+
+        .legendSettingsBodyDiv1 .fa:hover {
+            background-color: #C8C8C8;
+        }
+
+    .legendSettingsBodyDiv1 .fa-pencil {
+        color: #F1E902;
+    }
+
+    .legendSettingsBodyDiv1 .fa-trash {
+        color: #E24848;
+    }
+
+
+.legendBody{
+    display:flex;
+    flex-direction:column;
+}
+
+.legendBodyDiv1{
+    height:70%;
+    width:100%;
+    display:flex;
+    flex-direction:column;
+}
+
+.legendBodyDiv2 {
+    height: 30%;
+    width: 100%;
+
+    display:flex;
+    flex-direction:row;
+    justify-content:space-evenly;
+    align-items:center;
+}
+
+.legendBodyDiv1Inner1 {
+    height: 50%;
+    width: 100%;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.legendBodyDiv1Inner2 {
+    height: 50%;
+    width: 100%;
+    display:flex;
+    flex-direction:row;
+    justify-content:space-evenly;
+    align-items:center;
+}
+
+.saveLegend, .cancelLegend {
+    padding: 10px 28px;
+}
+
+input[type=number]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+select {
+    scrollbar-width: thin; /* Set the scrollbar width to 'thin' */
+    scrollbar-color: #425833 white; /* Set the scrollbar color (thumb and track) */
+}
+
+    /* Target the scrollbar for WebKit-based browsers (Chrome, Safari, Opera) */
+    select::-webkit-scrollbar {
+        width: 5px; /* Set the scrollbar width */
+    }
+
+    select::-webkit-scrollbar-thumb {
+        background-color: #425833; /* Set the scrollbar thumb color */
+    }
+
+    select::-webkit-scrollbar-track {
+        background-color: white; /* Set the scrollbar track color */
+    }
+
+#saveChangePass:hover {
+    background-color: #4C772F;
+    color: white;
+}

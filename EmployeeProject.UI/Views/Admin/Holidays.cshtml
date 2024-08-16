@@ -1,0 +1,244 @@
+﻿@using EmployeeProject.Application.DTOs.Admin
+
+@model MovableHolidaysDTO
+
+@{
+    Layout = "_AdminLayout";
+
+    var addHoliday = TempData["AddHoliday"] as String;
+
+    var deleteHoliday = TempData["DeleteHoliday"] as String;
+
+    var updateHoliday = TempData["UpdateHoliday"] as String;
+}
+
+@if (!string.IsNullOrEmpty(addHoliday) || !string.IsNullOrEmpty(deleteHoliday) || !string.IsNullOrEmpty(updateHoliday))
+{
+    <div class="alert alert-success d-flex justify-content-between align-items-center">
+        @if (!string.IsNullOrEmpty(addHoliday))
+        {
+            <strong>@addHoliday</strong>
+        }
+
+        @if (!string.IsNullOrEmpty(deleteHoliday))
+        {
+            <strong>@deleteHoliday</strong>
+        }
+        @if (!string.IsNullOrEmpty(updateHoliday))
+        {
+            <strong>@updateHoliday</strong>
+        }
+        <button type="button" class="close btn btn-outline-success" data-bs-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+}
+
+<div class="holidaysBody">
+    <div class="holidaysBodyDiv1">
+        <button class="addHolidayBtn" style="box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);" data-bs-toggle="modal" data-bs-target="#addHolidayModal"><i class="fa fa-plus addDataIcon" aria-hidden="true"></i>ADD HOLIDAY</button>
+
+
+
+        <div class="holidaysBodyDiv1Inner">
+            <h4 style="margin-top:2%; color:#425833;">SELECT YEAR</h4>
+            <select class="year" id="holidayYear">
+
+            </select>
+        </div>
+    </div>
+
+    <div class="holidaysBodyDiv2">
+
+        <div class="holidaysBodyDiv2Inner1">
+
+            <table class="tableHoliday">
+
+                <thead class="theadHoliday">
+
+                    <tr class="trHoliday">
+                        <th class="thHoliday" style="border-radius:.1rem 0 0 0; ">Holiday Names</th>
+                        <th class="thHoliday" style="">DATE</th>
+                        <th class="thHoliday" style="border-radius:0 .2rem 0 0;">ACTIONS</th>
+                    </tr>
+
+                </thead>
+
+                <tbody class="tbodyHoliday">
+     
+
+                
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</div>
+
+
+
+                                        @*ADD HOLIDAY*@
+<form asp-action="AddMovable" method="post">
+    <div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="staticBackdropLabel" id="addHolidayModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document" style="height:50vh;">
+
+            <div class="modal-content" style="height: 340px; border-radius:.5rem; font-family: 'Montserrat', sans-serif;">
+
+                <div class="modal-header" style="height:50px; background:#425833; display:flex; border-radius:.5rem .5rem 0 0 ;">
+
+                    <div class="modal-headerDiv1" style="width:95%; display:flex;justify-content:center;align-items:center;">
+                        <h5 style="color:white;">ADD MOVABLE HOLIDAYS</h5>
+                    </div>
+                    <div class="modal-headerDiv2">
+                        <i class="fa fa-times closeAddNewData" aria-hidden="true" data-bs-dismiss="modal" aria-label="Close"></i>
+                    </div>
+
+                </div>
+                <div class="modal-body addSectionBody" style="border-radius:0 0 .5rem .5rem; display:flex;flex-direction:column; border:1px solid gray; border-top:none;">
+
+                    <div class="addSectionBodyDiv1">
+
+                        <select class="form-control addNewUserInput"  id="addHolidaySelect" style="text-align:center;" asp-for="movableName">
+
+                        </select>
+
+   
+                    </div>
+
+                            <div class="" style="display:flex; align-items:center; justify-content:center; height:5%;width:100%;">
+                                 <span class="text-danger" asp-validation-for="movableName"></span>
+                            </div>
+
+                    <div class="" style="display:flex; align-items:center; ;justify-content:center; height:30%;width:100%; flex-direction:row;">
+
+                        <span style="color:#425833; margin-right:5%;">Date: </span>
+                        <input type="date" class="form-control addNewDataStartDate" id="addHolidayDate" asp-for="movableDate">
+
+                    </div>
+
+                            <div class="" style="display:flex; align-items:center; justify-content:center; height:5%;width:100%;">
+                                <span class="text-danger" asp-validation-for="movableDate"></span>
+                            </div>
+
+                    <div class="addSectionBodyDiv3" style="height:30%;">
+
+                        <button type="submit" class="addWorkingHoursPerDay" style="border:none;"><span style="font-size:20px">ADD</span></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+
+
+                @*Update HOLIDAY*@
+<form asp-action="UpdateMovable" method="post">
+    <div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="staticBackdropLabel" id="updateHolidayModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document" style="height:50vh;">
+
+            <div class="modal-content" style="height: 340px; border-radius:.5rem; font-family: 'Montserrat', sans-serif;">
+
+                <div class="modal-header" style="height:50px; background:#425833; display:flex; border-radius:.5rem .5rem 0 0 ;">
+
+                    <div class="modal-headerDiv1" style="width:95%; display:flex;justify-content:center;align-items:center;">
+                        <h5 style="color:white;">UPDATE MOVABLE HOLIDAYS</h5>
+                    </div>
+                    <div class="modal-headerDiv2">
+                        <i class="fa fa-times closeAddNewData" aria-hidden="true" data-bs-dismiss="modal" aria-label="Close"></i>
+                    </div>
+
+                </div>
+                <div class="modal-body addSectionBody" style="border-radius:0 0 .5rem .5rem; display:flex;flex-direction:column; border:1px solid gray; border-top:none;">
+
+                    <div class="addSectionBodyDiv1">
+
+                        <input type="hidden" asp-for="Id" id="holidayId" />
+
+                        <select class="form-control addNewUserInput" id="updateHolidaySelect" style="text-align:center;" asp-for="movableName">
+                        </select>
+                    </div>
+
+                    <div class="" style="display:flex; align-items:center; justify-content:center; height:5%;width:100%;">
+                        <span class="text-danger" asp-validation-for="movableName"></span>
+                    </div>
+
+                    <div class="" style="display:flex; align-items:center; ;justify-content:center; height:30%;width:100%; flex-direction:row;">
+
+                        <span style="color:#425833; margin-right:5%;">Date: </span>
+                        <input type="date" class="form-control addNewDataStartDate" id="updateHolidayDate" asp-for="movableDate">
+
+                    </div>
+
+                    <div class="" style="display:flex; align-items:center; justify-content:center; height:5%;width:100%;">
+                        <span class="text-danger" asp-validation-for="movableDate"></span>
+                    </div>
+
+                    <div class="addSectionBodyDiv3" style="height:30%;">
+
+                        <button type="submit" class="addWorkingHoursPerDay" style="border:none;"><span style="font-size:20px">SAVE</span></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+
+                @*DELETE Holiday*@
+<form asp-action="DeleteHoliday" method="post">
+    <div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="staticBackdropLabel" id="deleteHolidayModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document" style="height:50vh;">
+            <div class="modal-content" style="height: 240px; font-family: 'Montserrat', sans-serif;">
+                <div class="modal-body logoutModalBody">
+
+                    <div class="logoutModalBody1" style="flex-direction:column">
+
+                        <h5 style="text-align:center;">Are you sure you want to Delete </h5>
+                        <h4 id="holidayToDelete" style="text-align:center;"></h4>
+                    </div>
+                    <input type="hidden" name="holidayId" class="holidayIdToDelete" />
+
+                    <div class="logoutModalBody2">
+                        <button type="submit" class="btn btn-danger logoutYes"> Yes</button>
+                        <button type="button" class="close btn btn-success logoutNo" data-bs-dismiss="modal" aria-label="Close">
+                            No
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+
+
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="~/js/site.js" asp-append-version="true"></script>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+
+        const currentYear = new Date().getFullYear();
+
+        const yearSelect = document.querySelector('.year');
+        for (let i = currentYear; i >= currentYear - 20; i--) {
+            const option = document.createElement('option');
+            option.value = i;
+            option.text = i;
+            yearSelect.add(option);
+        }
+
+
+
+    </script>
+
+}
+
