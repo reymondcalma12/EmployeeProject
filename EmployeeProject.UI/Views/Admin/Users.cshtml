@@ -145,7 +145,7 @@
 
             <div class="modal-content" style="height: 540px; color: #425833;  font-family: 'Montserrat', sans-serif; border-radius:.5rem;">
 
-                <div class="modal-header" style="height:60px; background:#425833; display:flex; border-radius:.5rem .5rem 0 0 ;">
+                <div class="modal-header" style="height:60px; background:#1E4F3B; display:flex; border-radius:.5rem .5rem 0 0 ;">
 
                     <div class="modal-headerDiv1" style="width:95%; display:flex;justify-content:center;align-items:center;">
                         <h4 style="color:white;">ADD NEW USER</h4>
@@ -165,7 +165,7 @@
                         <span asp-validation-for="RegisterDTO.FullName" class="text-danger"></span>
                     </div>
                     <div class="addNewUserModalBodyDiv3">
-                        <input type="text" class="form-control addNewUserInput" placeholder="User Name:" asp-for="RegisterDTO.UserName" autocomplete="off" />
+                        <input type="email" class="form-control addNewUserInput" placeholder="User Name:" asp-for="RegisterDTO.UserName" autocomplete="off" id="addNewEmailUser"/>
                     </div>
                     <div class="addNewUserModalBodyDiv4">
                         <span asp-validation-for="RegisterDTO.UserName" class="text-danger"></span>
@@ -221,7 +221,7 @@
 
             <div class="modal-content" style="height: 340px; border-radius:.5rem;">
 
-                <div class="modal-header" style="height:50px; background:#425833; display:flex; border-radius:.5rem .5rem 0 0 ;">
+                <div class="modal-header" style="height:50px; background:#1E4F3B; display:flex; border-radius:.5rem .5rem 0 0 ;">
 
                     <div class="modal-headerDiv1" style="width:95%; display:flex;justify-content:center;align-items:center;">
                         <h4 style="color:white;">ADD SECTION</h4>
@@ -272,7 +272,7 @@
 
             <div class="modal-content" style="height: 440px; border-radius:.5rem;">
 
-                <div class="modal-header" style="height:50px; background:#425833; display:flex; border-radius:.5rem .5rem 0 0 ;">
+                <div class="modal-header" style="height:50px; background:#1E4F3B; display:flex; border-radius:.5rem .5rem 0 0 ;">
 
                     <div class="modal-headerDiv1" style="width:95%; display:flex;justify-content:center;align-items:center;">
                         <h4 style="color:white;">ADD LEGEND</h4>
@@ -324,7 +324,7 @@
     <div class="modal-dialog " role="document">
         <div class="modal-content" style="border-radius:.5rem; border-bottom:1px solid gray">
 
-            <div class="modal-header" style="height:50px; background:#425833; display:flex; border-radius:.5rem .5rem 0 0 ;">
+            <div class="modal-header" style="height:50px; background:#1E4F3B; display:flex; border-radius:.5rem .5rem 0 0 ;">
                 <div class="modal-headerDiv1" style="width:95%; display:flex;justify-content:center;align-items:center;">
                     <h4 style="color:white;">LEGEND SETTINGS</h4>
                 </div>
@@ -425,7 +425,7 @@
     <div class="modal-dialog " role="document">
         <div class="modal-content" style="border-radius:.5rem; border-bottom:1px solid gray">
 
-            <div class="modal-header" style="height:50px; background:#425833; display:flex; border-radius:.5rem .5rem 0 0 ;">
+            <div class="modal-header" style="height:50px; background:#1E4F3B; display:flex; border-radius:.5rem .5rem 0 0 ;">
                 <div class="modal-headerDiv1" style="width:95%; display:flex;justify-content:center;align-items:center;">
                     <h4 style="color:white;">SECTION SETTINGS</h4>
                 </div>
@@ -482,14 +482,14 @@
 
                     <div class="logoutModalBody1" style="flex-direction:column">
 
-                        <input type="text" name="sectionName" class="sectionNameToEdit addNewUserInput form-control" style="text-align:center; background-color:#425833; color:white;" />
+                        <input type="text" name="sectionName" class="sectionNameToEdit addNewUserInput form-control" style="text-align:center; background-color:white; color:#425833;" />
                      
                     </div>
              
 
                     <div class="logoutModalBody2">
                         <input type="hidden" name="sectionId" class="sectionIdToEdit addNewUserInput" />
-                        <button type="submit" class="btn btn-success logoutYes updateSectionSave" style="background-color:#425833;"> Save</button>
+                        <button type="submit" class="btn btn-success logoutYes updateSectionSave"> Save</button>
                         <button type="button" class="close btn btn-danger logoutNo" data-bs-dismiss="modal" aria-label="Close">
                             Cancel
                         </button>

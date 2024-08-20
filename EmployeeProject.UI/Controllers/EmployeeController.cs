@@ -1,4 +1,5 @@
-﻿using EmployeeProject.Application.DTOs.Employee;
+﻿using EmployeeProject.Application.DTOs.Admin;
+using EmployeeProject.Application.DTOs.Employee;
 using EmployeeProject.Application.Interfaces;
 using EmployeeProject.Application.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -45,6 +46,8 @@ namespace EmployeeProject.UI.Controllers
             return View();
         }
 
+
+        [HttpPost]
         public async Task<IActionResult> UpdateProfile(IFormFile image, string position, string name, string email, string number)
         {
             var result = await adminServices.UpdateProfile(image, position, name, email, number);

@@ -1,8 +1,10 @@
 ﻿using EmployeeProject.Core.Entities.User;
 using ExternalLogin.Extensions;
 using ExternalLogin.Interfaces;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Serilog;
 
 namespace EmployeeProject.UI.Controllers
 {
@@ -25,76 +27,88 @@ namespace EmployeeProject.UI.Controllers
         [HttpGet]
         public async Task<IActionResult> Login(string token) // make sure to add the parameter in the endpoint
         {
-            var ipaddress = HttpContext.IpAddress();
-            var usercode = string.Empty;
+            try
+            {
+                var ipaddress = HttpContext.IpAddress();
+                var usercode = string.Empty;
 
-            if (externalLoginService.TryValidateToken(token, ipaddress, out usercode))
-                return await AuthenticateUser(usercode); // if validated, this is where you setup the user session 
+                if (externalLoginService.TryValidateToken(token, ipaddress, out usercode))
+                    return await AuthenticateUser(usercode); // if validated, this is where you setup the user session 
 
-            return RedirectToAction("Index", "Employee");
+                return RedirectToAction("Index", "Employee");
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Error in Login action of ExternalController");
+                return RedirectToAction("Index", "Employee");
+            }
         }
 
         public IActionResult Logout()
         {
-            return Redirect(externalLoginService.PortalUrl);
+            try
+            {
+                signInManager.SignOutAsync();
+                HttpContext.Session.Remove("UsersId");
+
+                return Redirect(externalLoginService.PortalUrl);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Error in Logout action of ExternalController");
+                return RedirectToAction("Index", "Employee");
+            }
         }
 
-        // sample app user session setup 
         private async Task<IActionResult> AuthenticateUser(string usercode)
         {
-            var user = await userManager.FindByEmailAsync(usercode + "@princeretail.com");
-
-            if (user != null)
+            try
             {
-                await signInManager.SignInAsync(user, isPersistent: false);
+                var user = await userManager.FindByEmailAsync(usercode + "@princeretail.com");
 
-
-                if (user.isNewUser == true)
+                if (user != null)
                 {
-                    var userRoles = await userManager.GetRolesAsync(user);
+                    await signInManager.SignInAsync(user, isPersistent: false);
 
+                    var userRoles = await userManager.GetRolesAsync(user);
                     var userRole = userRoles.FirstOrDefault();
 
-                    user.isNewUser = false;
-
-                    await userManager.UpdateAsync(user);
-
-                    if (userRole == "Manager")
+                    if (user.isNewUser == true)
                     {
-                        TempData["NewUser"] = "Yes";
-                        return RedirectToAction("Index", "Admin", new { success = "Login SuccessFully!" });
+                        user.isNewUser = false;
+                        await userManager.UpdateAsync(user);
+
+                        if (userRole == "Manager")
+                        {
+                            TempData["NewUser"] = "Yes";
+                            return RedirectToAction("Index", "Admin", new { success = "Login SuccessFully!" });
+                        }
+                        else if (userRole == "Employee")
+                        {
+                            TempData["NewUser"] = "Yes";
+                            return RedirectToAction("Index", "Employee", new { success = "Login SuccessFully!" });
+                        }
                     }
-                    else if (userRole == "Employee")
+                    else
                     {
-                        TempData["NewUser"] = "Yes";
-                        return RedirectToAction("Index", "Employee", new { success = "Login SuccessFully!" });
-
+                        if (userRole == "Manager")
+                        {
+                            return RedirectToAction("Index", "Admin", new { success = "Login SuccessFully!" });
+                        }
+                        else if (userRole == "Employee")
+                        {
+                            return RedirectToAction("Index", "Employee", new { success = "Login SuccessFully!" });
+                        }
                     }
-
-                }
-                else
-                {
-                    var userRoles = await userManager.GetRolesAsync(user);
-
-                    var userRole = userRoles.FirstOrDefault();
-
-                    if (userRole == "Manager")
-                    {
-                        return RedirectToAction("Index", "Admin", new { success = "Login SuccessFully!" });
-                    }
-                    else if (userRole == "Employee")
-                    {
-                        return RedirectToAction("Index", "Employee", new { success = "Login SuccessFully!" });
-
-                    }
-
                 }
 
-
+                return Redirect(externalLoginService.PortalUrl);
             }
-
-            return Redirect(externalLoginService.PortalUrl);
-
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Error in AuthenticateUser action of ExternalController");
+                return RedirectToAction("Index", "Employee");
+            }
         }
     }
 }

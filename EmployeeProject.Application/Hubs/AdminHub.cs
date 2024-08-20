@@ -68,7 +68,7 @@ namespace EmployeeProject.Application.Hubs
 
                 var sections = await adminServices.GetSections();
                 
-                 await Clients.All.SendAsync("SectionsDropdown", sections);
+                 await Clients.Caller.SendAsync("SectionsDropdown", sections);
 
             }
             catch (Exception ex)
@@ -87,7 +87,7 @@ namespace EmployeeProject.Application.Hubs
 
                 var allowed = await adminServices.GetAllowedHours();
 
-                await Clients.All.SendAsync("AllowedHours", allowed);
+                await Clients.Caller.SendAsync("AllowedHours", allowed);
 
             }
             catch (Exception ex)
@@ -148,7 +148,7 @@ namespace EmployeeProject.Application.Hubs
 
                 var data = await adminServices.GetAllDataSheetSort(name, year);
 
-                await Clients.All.SendAsync("GetAllDataSheetSort", data);
+                await Clients.Caller.SendAsync("GetAllDataSheetSort", data);
 
             }
             catch (Exception ex)
@@ -237,7 +237,7 @@ namespace EmployeeProject.Application.Hubs
 
                 var holidays = holi.OrderBy(a => a.FixedDate);
 
-                await Clients.All.SendAsync("HolidaysByYear", holidays);
+                await Clients.Caller.SendAsync("HolidaysByYear", holidays);
 
             }
             catch (Exception ex)
@@ -256,7 +256,7 @@ namespace EmployeeProject.Application.Hubs
 
                 var usersMonthlyStatistics = await adminServices.GetUserMonthlyStatistics();
 
-                await Clients.All.SendAsync("UsersMonthlyStatistics", usersMonthlyStatistics);
+                await Clients.Caller.SendAsync("UsersMonthlyStatistics", usersMonthlyStatistics);
             }
             catch (Exception ex)
             {
@@ -267,14 +267,14 @@ namespace EmployeeProject.Application.Hubs
         }
 
 
-        public async Task GetUsersMonthlyStatisticsSort(int? sectionId, string? name, int? year)
+        public async Task GetUsersMonthlyStatisticsSort(int? sectionId, string? name, int year)
         {
             try
             {
 
                 var usersMonthlyStatisticsSort = await adminServices.GetUserMonthlyStatisticsSort(sectionId, name, year);
 
-                await Clients.All.SendAsync("UsersMonthlyStatisticsSort", usersMonthlyStatisticsSort);
+                await Clients.Caller.SendAsync("UsersMonthlyStatisticsSort", usersMonthlyStatisticsSort);
             }
             catch (Exception ex)
             {
@@ -284,14 +284,14 @@ namespace EmployeeProject.Application.Hubs
 
         }
 
-        public async Task GetUserMonthlyStatisticsEmployeeSort(int? year)
+        public async Task GetUserMonthlyStatisticsEmployeeSort(int year)
         {
             try
             {
 
                 var usersMonthlyStatisticsSort = await adminServices.GetUserMonthlyStatisticsEmployeeSort(year);
 
-                await Clients.All.SendAsync("GetUserMonthlyStatisticsEmployeeSort", usersMonthlyStatisticsSort);
+                await Clients.Caller.SendAsync("GetUserMonthlyStatisticsEmployeeSort", usersMonthlyStatisticsSort);
 
             }
             catch (Exception ex)

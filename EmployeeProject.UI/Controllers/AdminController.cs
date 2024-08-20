@@ -208,13 +208,7 @@ namespace EmployeeProject.UI.Controllers
 
 
 
-
-
-
-
-
-
-
+        [HttpPost]
         public async Task<IActionResult> UpdateProfile(IFormFile image, string position, string name, string email, string number)
         {
             var result = await adminServices.UpdateProfile(image, position, name, email, number);

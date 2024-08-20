@@ -32,7 +32,9 @@ namespace EmployeeProject.Application.Services
                     FullName = userDTO.FullName,
                     UserName = userDTO.UserName,
                     SectionId = userDTO.SectionId,
-                    isNewUser = true            
+                    isNewUser = true,
+                    Email = userDTO.UserName,
+                    
                 };
 
                 var result = await userManager.CreateAsync(user, userDTO.Password!);
@@ -52,30 +54,19 @@ namespace EmployeeProject.Application.Services
 
         public async Task<(bool, string, bool)> LoginAccount(LoginDTO loginDTO)
         {
-
             if (loginDTO != null)
             {
-
                 var result = await signInManager.PasswordSignInAsync(loginDTO.Username, loginDTO.Password!, false, false);
-
-
                 if (result.Succeeded)
                 {
-
                     var user = userManager.Users.FirstOrDefault(a => a.UserName == loginDTO.Username);
-        
                     httpcontext.HttpContext.Session.SetString("UsersId", user.Id);
 
-                    if (user.isNewUser == true)
+                    if (user.isNewUser == true) 
                     {
                         var userRoles = await userManager.GetRolesAsync(user);
-
                         var userRole = userRoles.FirstOrDefault();
-
-                        user.isNewUser = false;
-
                         await userManager.UpdateAsync(user);
-
                         if (userRole != null)
                         {
                             return (true, userRole, true);
@@ -84,20 +75,15 @@ namespace EmployeeProject.Application.Services
                     else
                     {
                         var userRoles = await userManager.GetRolesAsync(user);
-
                         var userRole = userRoles.FirstOrDefault();
-
                         if (userRole != null)
                         {
                             return (true, userRole, false);
                         }
-
                     }
-
                 }
             }
-  
-                return (false, null, false);
+            return (false, null, false);
         }
 
     
@@ -105,9 +91,7 @@ namespace EmployeeProject.Application.Services
         public async Task<bool> Logout()
         {
             await signInManager.SignOutAsync();
-
             httpcontext.HttpContext.Session.Remove("UsersId");
-
             return true;
         }
 
@@ -130,6 +114,11 @@ namespace EmployeeProject.Application.Services
 
                     if (changePasswordResult.Succeeded)
                     {
+
+                        user.isNewUser = false;
+
+                        await userManager.UpdateAsync(user);
+
                         return (true, userRole);
                     }
                     else

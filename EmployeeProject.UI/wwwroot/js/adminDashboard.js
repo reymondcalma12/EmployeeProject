@@ -2,7 +2,8 @@
 
     let connection = new signalR.HubConnectionBuilder().withUrl("/adminHub").build();
 
-    
+
+    const currentYear = new Date().getFullYear();
 
     $("#userInputPassword").on("focusout", function () {
         var pass = $("#userInputPassword").val();
@@ -13,13 +14,26 @@
         else {
             if (pass.length < 8) {
                 alert("Password Must Be 8 Digit!")
-            }
+            } 
             else {
 
             }
         }
     });
 
+
+
+    $("#addNewEmailUser").on("focusout", function () {
+        var email = $("#addNewEmailUser").val();
+
+        if (email.length == 0) {
+
+        }
+        else {
+            $("#addNewEmailUser").val(email + "@princeretail.com");
+        }
+
+    });
 
 
     $("#addDataSheetResourceName").on("input", function () {
@@ -922,7 +936,29 @@
                     year: "numeric"
                 });
 
-                let shtml = `    
+
+                if (new Date(data.startDate).getFullYear() < currentYear && new Date(data.endDate).getFullYear() < currentYear) {
+                    let shtml = `    
+                     <tr>
+                        <td>${data.section.sectionName}</td>
+                        <td>${data.appUser.fullName}</td>
+                        <td>${data.project.projectName}</td>
+                        <td>${data.activity.activityName}</td>
+                        <td>${data.businessOrIt.businessOrItName}</td>
+                        <td>${formattedStartDate}</td>
+                        <td>${formattedEndDate}</td>
+                        <td>${data.hoursPerDay}</td>
+                        <td>${data.hoursPerMonth}</td>
+                        <td>
+
+                        </td>
+                    </tr>`;
+
+                    container.append(shtml);
+                }
+                else {
+
+                    let shtml = `    
                      <tr>
                         <td>${data.section.sectionName}</td>
                         <td>${data.appUser.fullName}</td>
@@ -946,50 +982,56 @@
                         </td>
                     </tr>`;
 
-                container.append(shtml);
+                    container.append(shtml);
 
 
-                $(".dataSheetUpdate").on("click", function () {
+                    $(".dataSheetUpdate").on("click", function () {
 
-                    var dataSheetId = $(this).data("id");
-                    var sectionName = $(this).data("section");
-                    var fullName = $(this).data("fullname");
-                    var projectName = $(this).data("project");
-                    var activityName = $(this).data("activity");
-                    var businessOrIt = $(this).data("business");
-                    var startDate = $(this).data("start");
-                    var endDate = $(this).data("endd");
-                    var hoursPerDay = parseFloat($(this).data("day"));
-                    var hoursPerMonth = $(this).data("month");
-
-
-                    $("#updateDataSheetId").val(dataSheetId);
-                    $("#updateDataSheetSection").val(sectionName);
-                    $("#updateDataSheetSectionDisplay").val(sectionName);
-                    $("#updateDataSheetResourceName").val(fullName);
-                    $("#updateDataSheetProjectName").val(projectName);
-                    $("#updateDataSheetActivityName").val(activityName);
-                    $("#updateDataSheetBusinessOrIT").val(businessOrIt);
-                    $("#updateDataSheetStartDate").val(startDate);
-
-                    $("#updateDataSheetEndDate").val(endDate);
-
-                    $("#updateDataSheetWorkingHours").val(hoursPerDay);
-                    $("#updateDataSheetTotalHoursDisplay").val(hoursPerMonth);
-                });
+                        var dataSheetId = $(this).data("id");
+                        var sectionName = $(this).data("section");
+                        var fullName = $(this).data("fullname");
+                        var projectName = $(this).data("project");
+                        var activityName = $(this).data("activity");
+                        var businessOrIt = $(this).data("business");
+                        var startDate = $(this).data("start");
+                        var endDate = $(this).data("endd");
+                        var hoursPerDay = parseFloat($(this).data("day"));
+                        var hoursPerMonth = $(this).data("month");
 
 
+                        $("#updateDataSheetId").val(dataSheetId);
+                        $("#updateDataSheetSection").val(sectionName);
+                        $("#updateDataSheetSectionDisplay").val(sectionName);
+                        $("#updateDataSheetResourceName").val(fullName);
+                        $("#updateDataSheetProjectName").val(projectName);
+                        $("#updateDataSheetActivityName").val(activityName);
+                        $("#updateDataSheetBusinessOrIT").val(businessOrIt);
+                        $("#updateDataSheetStartDate").val(startDate);
 
-                $(".dataSheetDelete").on("click", function () {
+                        $("#updateDataSheetEndDate").val(endDate);
 
-                    var dataSheetId = $(this).data("id");
+                        $("#updateDataSheetWorkingHours").val(hoursPerDay);
+                        $("#updateDataSheetTotalHoursDisplay").val(hoursPerMonth);
+                    });
 
-                    $("#dataSheetIdDelete").val(dataSheetId);
 
-                });
+
+                    $(".dataSheetDelete").on("click", function () {
+
+                        var dataSheetId = $(this).data("id");
+
+                        $("#dataSheetIdDelete").val(dataSheetId);
+
+                    });
+                }
+
 
 
             });
+
+
+
+
         }
         else {
             container.empty();
@@ -1367,16 +1409,16 @@
 
         if (low != 0 && med != 0 && max != 0) {
             if (value == 0) {
-                return "background-color: white; color:black;";
+                return "background-color: white; color:black";
             }
             else if (value <= low) {
-                return "background-color: #DED710; color:black;";
+                return "background-color: #DED710; color:black";
             } else if (value <= med) {
-                return "background-color: #C3942C; color:white;";
+                return "background-color: #C3942C; color:white";
             } else if (value <= max) {
-                return "background-color: #A9C393; color:white;";
+                return "background-color: #A9C393; color:white";
             } else {
-                return "background-color: #E24848; color:white;";
+                return "background-color: #E24848; color:white";
             }
         }
         else {
@@ -1724,7 +1766,6 @@
 
 
 
-    const currentYear = new Date().getFullYear();
 
 
 
@@ -1905,7 +1946,7 @@
 
         var container = $("#addDataSheetBusinessDropdown");
 
-    /*    console.log(names);*/
+        var container1 = $("#updateDataSheetBusinessOrIT");
 
         names.forEach(function (data) {
 
@@ -1914,6 +1955,7 @@
             `;
 
             container.append(html);
+            container1.append(html);
 
 
         });

@@ -5,7 +5,7 @@ using EmployeeProject.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using EmployeeProject.Application;
 using EmployeeProject.Application.Hubs;
-
+using Serilog;
 using ExternalLogin.Interfaces;
 using ExternalLogin.Services;
 using ExternalLogin;
@@ -18,6 +18,7 @@ namespace EmployeeProject.UI
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            builder.Host.UseSerilog((ctx, lc) => lc.WriteTo.Console().ReadFrom.Configuration(ctx.Configuration));
 
             //AD Login
             // set the db connection

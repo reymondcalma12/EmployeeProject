@@ -35,7 +35,7 @@
     overflow-y: auto;
     overflow-x: auto;
     scrollbar-width: thin;
-    scrollbar-color: #425833 white;
+    scrollbar-color: #1E4F3B white;
 }
 
 .tableDataSheet {
@@ -47,7 +47,7 @@
 }
 
 .theadDataSheet {
-    background: #425833;
+    background: #1E4F3B;
     position: sticky;
     top: 0;
     color: white;
@@ -55,12 +55,13 @@
 }
 
 .thDataSheet {
-    padding: 10px;
+    padding: 20px 0 20px 0;
 }
 
 
-.tbodyDataSheet{
-    text-align:center;
+.tbodyDataSheet {
+    text-align: center;
+    background: rgba(169, 195, 147, 0.3);
 }
 
 
@@ -70,7 +71,6 @@
 
 .tbodyDataSheet td {
     padding: 15px;
-    border-bottom: 1px solid #425833;
     height:20px;
 }
 
@@ -167,7 +167,7 @@
     height: 60px;
     width: 150px;
     border-radius: .3rem;
-    background-color: #425833;
+    background-color: #345F49;
     color: white;
     border: none;
     margin-right: 2%;
@@ -428,10 +428,10 @@
     justify-content:center;
     align-items:center;
 }
-    .addNewDataSettingsBtn:hover {
-        background: #4C772F;
-        color: white;
-    }
+.addNewDataSettingsBtn:hover {
+    background: #CCCCCC;
+    color: white;
+}
 
 .addNewDataSettingsIcon:hover:before {
     font-size: 20px;
@@ -440,7 +440,7 @@
 
 .addNewDataSettingsIcon:before {
     font-size: 20px;
-    color: #425833;
+    color: #183B2B;
 }
 .addNewDataSelect {
     height: 40px;
@@ -500,13 +500,13 @@
     align-items: center;
     text-decoration: none;
     border-radius: .5rem;
-    background-color: #425833;
-    color:white;
-    cursor:pointer;
+    background-color: #183B2B;
+    color: white;
+    cursor: pointer;
 }
 
 .addNewDataAddBtn:hover {
-    background-color: #4C772F;
+    background-color: #05513b;
     color: white;
 }
 
@@ -538,14 +538,14 @@
     align-items: center;
     text-decoration: none;
     border-radius: .5rem;
-    background-color: #425833;
+    background-color: #183B2B;
     color: white;
     cursor: pointer;
 }
-.addWorkingHoursPerDay:hover{
-    background-color: #4C772F;
-    color:white;
-}
+    .addWorkingHoursPerDay:hover {
+        background-color: #05513b;
+        color: white;
+    }
 
 .updateWorkingHoursPerDay {
     height: 50px;
@@ -613,7 +613,9 @@
     align-items:center;
     gap:5px;
 }
-
+.tbodyDataSheet tr:nth-child(even) {
+    background-color: #c2d7d3;
+}
 
 .tbodyDataSheet .fa {
     height: 30px;
@@ -623,7 +625,7 @@
     align-items: center;
     border-radius: .2rem;
     background-color: gray;
-    cursor:pointer;
+    cursor: pointer;
 }
 
 .tbodyDataSheet .fa:hover {

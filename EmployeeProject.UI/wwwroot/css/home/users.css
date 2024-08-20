@@ -243,7 +243,7 @@
 .usersBodyDiv1Inner121 {
     height: 100%;
     width: 80%;
-    background-color: #A9C393;
+    background-color: #345F49;
     border-radius: .5rem;
     display: flex;
     flex-direction: row;
@@ -271,7 +271,7 @@
 
 .totalEmployeeIcon:before {
     font-size: 35px;
-    color: #425833;
+    color: #183B2B;
     padding: 10px;
     background-color: white;
     border-radius: .5rem;
@@ -337,7 +337,7 @@
 }
 .newEmployeeIcon:before {
     font-size: 25px;
-    color: #425833;
+    color: white;
 }
 
 .usersBodyDiv1Inner22 {
@@ -353,7 +353,7 @@
     height: 60px;
     width: 220px;
     border-radius: .5rem;
-    background-color: #A9C393;
+    background-color: #3b6652;
     color: white;
     border: none;
     box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
@@ -366,7 +366,7 @@
     height: 60px;
     width: 180px;
     border-radius: .5rem;
-    background-color: #425833;
+    background-color: #3b6652;
     color: white;
     border: none;
     display: flex;
@@ -469,11 +469,11 @@
     text-decoration: none;
     border-radius: .3rem;
     color: white;
-    background-color: #425833;
+    background-color: #183B2B;
     cursor: pointer;
 }
 .addNewUserBtn:hover {
-    background-color: #4C772F;
+    background-color: #05513b;
     color: white;
 }
 .addNewUserSelect option:hover {
@@ -508,24 +508,24 @@
 
 .addSectionBodyDiv2 .fa:before {
     font-size: 30px;
-    color: #425833;
-    cursor:pointer;
+    color: #183B2B;
+    cursor: pointer;
 }
 
-.addSectionBodyDiv2 .fa:hover:before{
+.addSectionBodyDiv2 .fa:hover:before {
     font-size: 30px;
-    color: #4C772F;
+    color: #05513b;
 }
 
 .addSectionBodyDiv1 .fa:before {
     font-size: 30px;
-    color: #425833;
+    color: #183B2B;
     cursor: pointer;
 }
 
 .addSectionBodyDiv1 .fa:hover:before {
     font-size: 30px;
-    color: #4C772F;
+    color: #05513b;
 }
 
 

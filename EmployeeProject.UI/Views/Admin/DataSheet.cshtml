@@ -113,7 +113,7 @@
     
             <div class="modal-content " style="width:800px; height:520px;  font-family: 'Montserrat', sans-serif; border-radius:1.5rem;">
 
-                <div class="modal-header" style="height:60px; background:#425833; display:flex; border-radius:1rem 1rem 0 0 ;">
+                <div class="modal-header" style="height:60px; background:#1E4F3B; display:flex; border-radius:1rem 1rem 0 0 ;">
 
                     <div class="modal-headerDiv1" style="width:95%; display:flex;justify-content:center;align-items:center;">
                         <h4 style="color:white;">ADD NEW DATA</h4>
@@ -227,7 +227,7 @@
 
             <div class="modal-content " style="width:800px; height:520px;  font-family: 'Montserrat', sans-serif; border-radius:1.5rem;">
 
-                <div class="modal-header" style="height:60px; background:#425833; display:flex; border-radius:1rem 1rem 0 0 ;">
+                <div class="modal-header" style="height:60px; background:#1E4F3B; display:flex; border-radius:1rem 1rem 0 0 ;">
 
                     <div class="modal-headerDiv1" style="width:95%; display:flex;justify-content:center;align-items:center;">
                         <h4 style="color:white;">UPDATE DATA</h4>
@@ -273,7 +273,13 @@
 
                     <div class="addNewDataModalBodyDiv3" style="flex-wrap:wrap;">
                   
-                        <input type="text" class="form-control addNewDataInput" placeholder="Business/IT:" asp-for="DataSheetBusDTO.BusinessOrIt" id="updateDataSheetBusinessOrIT"/>
+                  @*       <input type="text" class="form-control addNewDataInput" placeholder="Business/IT:" asp-for="DataSheetBusDTO.BusinessOrIt" id="updateDataSheetBusinessOrIT"/> *@
+
+                        <select class="form-control addNewDataInput" asp-for="DataSheetBusDTO.BusinessOrIt" id="updateDataSheetBusinessOrIT">
+                            <option value="" disabled>Business Or IT:</option>
+                        </select>
+
+
                         <input type="hidden" id="updateDataSheetSection" asp-for="DataSheetBusDTO.SectioName" />
                         <input type="text" class="form-control addNewDataInput" placeholder="SECTION:" disabled  id="updateDataSheetSectionDisplay" />
                   
@@ -365,7 +371,7 @@
 
             <div class="modal-content" style="height: 340px; border-radius:.5rem;">
 
-                <div class="modal-header" style="height:50px; background:#425833; display:flex; border-radius:.5rem .5rem 0 0 ;">
+                <div class="modal-header" style="height:50px; background:#1E4F3B; display:flex; border-radius:.5rem .5rem 0 0 ;">
 
                     <div class="modal-headerDiv1" style="width:95%; display:flex;justify-content:center;align-items:center;">
                         <h4 style="color:white;">ADD WORKING HOURS PER DAY</h4>
@@ -402,7 +408,7 @@
     <div class="modal-dialog " role="document">
         <div class="modal-content" style="border-radius:.5rem; border-bottom:1px solid gray">
 
-            <div class="modal-header" style="height:50px; background:#425833; display:flex; border-radius:.5rem .5rem 0 0 ;">
+            <div class="modal-header" style="height:50px; background:#1E4F3B; display:flex; border-radius:.5rem .5rem 0 0 ;">
                 <div class="modal-headerDiv1" style="width:95%; display:flex;justify-content:center;align-items:center;">
                     <h4 style="color:white;">ALL WORKING HOURS PER DAY</h4>
                 </div>

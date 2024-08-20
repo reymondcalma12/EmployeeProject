@@ -18,7 +18,7 @@
     flex-direction:row;
     justify-content:flex-start;
     align-items:center;
-    background:white;
+    background-color:transparent;
     position:relative;
 }
 
@@ -165,7 +165,7 @@
 .dashboardSearchBtn {
     height: 50px;
     width: 50px;
-    background-color: #425833;
+    background-color: #183B2B;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -202,7 +202,8 @@
     overflow-y: auto;
     overflow-x: auto;
     scrollbar-width: thin;
-    scrollbar-color: #425833 white;
+    scrollbar-color: #183B2B white;
+    background-color: rgba(169, 195, 147, 0.3);
 }
 
 .dashbBoardTable {
@@ -215,22 +216,24 @@
 
 
 .theadDashboard {
-    background: #425833;
+    background: #1E4F3B;
     position: sticky;
     top: 0;
     color: white;
-    text-align:center;
+    text-align: center;
 }
 
 .thDashboard {
-    padding: 10px;
+    padding: 20px 0 20px 0;
 }
 
 .tbodyDashboard{
     text-align:center;
 }
 
-
+.tbodyDashboard tr:nth-child(even) {
+    background-color: #c2d7d3;
+}
 
 .tbodyDashboard td:nth-child(2) {
     border-right: 1px solid #425833;
@@ -238,6 +241,7 @@
 }
 .tbodyDashboard td:last-child {
     border-left: 1px solid #425833;
+    background-color:transparent;
 
 }
 

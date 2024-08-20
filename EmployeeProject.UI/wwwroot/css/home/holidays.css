@@ -29,8 +29,9 @@
     overflow-y: auto;
     overflow-x: hidden;
     scrollbar-width: thin;
-    scrollbar-color: #425833 white;
+    scrollbar-color: #1E4F3B white;
     box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+    background-color: rgba(169, 195, 147, 0.3);
 }
 
 #holidayYear {
@@ -51,14 +52,13 @@
 }
 .addHolidayBtn {
     height: 60px;
-    max-width:160px;
+    max-width: 160px;
     width: 15%;
     border-radius: .3rem;
-    background-color: #425833;
+    background-color: #345F49;
     color: white;
     border: none;
     margin-right: 1%;
-
 }
 
 .tableHoliday {
@@ -68,34 +68,39 @@
 }
 
 .theadHoliday {
-    background: #425833;
+    background: #1E4F3B;
     position: sticky;
     top: 0;
     color: white;
-
 }
 .trHoliday {
 
 }
 .thHoliday {
-    padding: 10px;
+    padding: 20px 0;
     text-align: center;
     font-weight: lighter;
 }
 
 .tbodyHoliday {
     text-align: center;
-    color: #425833;
+    color: #183B2B;
 }
 
 .tableHoliday td {
     padding: 15px;
-    border-bottom: 1px solid #425833;
+
 }
 
  .tbodyHoliday td:nth-child(2) {
     border-right: 2px solid #425833;
 }
+
+
+.tbodyHoliday tr:nth-child(even) {
+    background-color: #c2d7d3;
+}
+
 
 /*table tbody {
     display: block;
@@ -120,6 +125,7 @@
     justify-content: space-evenly;
     align-items: center;
     gap: 5px;
+    background-color:white;
 }
 
 
@@ -134,10 +140,15 @@
     cursor: pointer;
 }
 
+
+.tbodyHoliday .fa:hover {
+    background-color: #C8C8C8;
+}
+
+
 .tbodyHoliday .fa-pencil {
     color: #F1E902;
 }
-
 
 .tbodyHoliday .fa-trash {
     color: #E24848;

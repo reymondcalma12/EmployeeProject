@@ -50,7 +50,7 @@ namespace EmployeeProject.Application.Interfaces
         Task<bool> AddSection(SectionDTO section);
 
 
-        Task<List<UserMonthlyStatistics>> GetUserMonthlyStatisticsEmployeeSort(int? year);
+        Task<List<UserMonthlyStatistics>> GetUserMonthlyStatisticsEmployeeSort(int year);
 
         //Task<bool> AddMovable(MovableHolidaysDTO model);
         Task<bool> AddMovable(MovableHolidaysDTO model);
@@ -78,7 +78,7 @@ namespace EmployeeProject.Application.Interfaces
 
         Task<List<UserMonthlyStatistics>> GetUserMonthlyStatistics();
 
-        Task<List<UserMonthlyStatistics>> GetUserMonthlyStatisticsSort(int? section, string? name, int? year);
+        Task<List<UserMonthlyStatistics>> GetUserMonthlyStatisticsSort(int? section, string? name, int year);
 
         Task<LegendDTO> Legend(int sectionId);
 
