@@ -95,11 +95,11 @@
             </div>
 
         </div>
-        <img src="~/images/prg_logo.png" />
+        <img src="~/images/newLogoPrince.png" />
     </div>
 
 </div>
-@if (!string.IsNullOrEmpty(newUser))
+@* @if (!string.IsNullOrEmpty(newUser))
 {
     <script>
         window.addEventListener('DOMContentLoaded', function () {
@@ -144,8 +144,21 @@
             </div>
         </div>
     </form>
-}
+} *@
+<script>
+    const startYear = 2024;
+    const endYear = 2044;
 
+    const yearSelect = document.querySelector('.year');
+
+    for (let i = startYear; i <= endYear; i++) {
+        const option = document.createElement('option');
+        option.value = i;
+        option.text = i;
+        yearSelect.add(option);
+    }
+
+</script>
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");

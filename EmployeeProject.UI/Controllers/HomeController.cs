@@ -67,34 +67,20 @@ namespace EmployeeProject.UI.Controllers
                 if (isLoginSuccessful)
                 {
 
-                    if (newUser)
+
+                    if (userRole == "Manager")
                     {
-                        if (userRole == "Manager")
-                        {
-                            TempData["NewUser"] = "Yes";
-                            return RedirectToAction("Index", "Admin", new { success = "Login SuccessFully!" });
-                        }
-                        else if (userRole == "Employee")
-                        {
-                            TempData["NewUser"] = "Yes";
-                            return RedirectToAction("Index", "Employee", new { success = "Login SuccessFully!" });
-
-                        }
+                        return RedirectToAction("Index", "Admin", new { success = "Login SuccessFully!" });
                     }
-                    else
+                    else if (userRole == "Project_Manager")
                     {
-
-                        if (userRole == "Manager")
-                        {
-                            return RedirectToAction("Index", "Admin", new { success = "Login SuccessFully!" });
-                        }
-                        else if (userRole == "Employee")
-                        {
-                            return RedirectToAction("Index", "Employee", new { success = "Login SuccessFully!" });
-
-                        }
-
+                        return RedirectToAction("Index", "Admin", new { success = "Login SuccessFully!" });
                     }
+                    else if (userRole == "Employee")
+                    {
+                        return RedirectToAction("Index", "Employee", new { success = "Login SuccessFully!" });
+                    }
+
                 }
                 ModelState.AddModelError("", "Invalid Login Attempt!");
                 return View(loginDto);

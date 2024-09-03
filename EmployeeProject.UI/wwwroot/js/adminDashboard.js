@@ -3,7 +3,10 @@
     let connection = new signalR.HubConnectionBuilder().withUrl("/adminHub").build();
 
 
+
     const currentYear = new Date().getFullYear();
+
+    let sectionLegends = [];
 
     $("#userInputPassword").on("focusout", function () {
         var pass = $("#userInputPassword").val();
@@ -21,7 +24,7 @@
         }
     });
 
-
+    
 
     $("#addNewEmailUser").on("focusout", function () {
         var email = $("#addNewEmailUser").val();
@@ -35,49 +38,7 @@
 
     });
 
-
-    $("#addDataSheetResourceName").on("input", function () {
-
-        var resourceName = $("#addDataSheetResourceName").val();
-
-        var body = $(".autoFillSearchDataSheetBody");
-
-        if (resourceName.length > 0) {
-
-            body.show();
-
-            connection.invoke("GetUserAddDataSheet", resourceName)
-                .catch(function (err) {
-                    return console.error(err.toString());
-                });
-        }
-        else {
-            body.hide();
-        }
-
-    });
-
-
-    $("#updateDataSheetResourceName").on("input", function () {
-
-        var resourceName = $("#updateDataSheetResourceName").val();
-
-        var body = $(".autoFillSearchDataSheetBody");
-
-        if (resourceName.length > 0) {
-
-            body.show();
-
-            connection.invoke("GetUserAddDataSheet", resourceName)
-                .catch(function (err) {
-                    return console.error(err.toString());
-                });
-        }
-        else {
-            body.hide();
-        }
-
-    });
+    
 
 
 
@@ -101,6 +62,7 @@
         }
 
     });
+
 
 
     $("#dataSheetSearch").on("input", function () {
@@ -148,37 +110,139 @@
 
 
 
+    $("#updateDataSheetResourceName").on("input", function () {
+
+        var resourceName = $("#updateDataSheetResourceName").val();
+
+        var body = $(".autoFillSearchDataSheetBody");
+
+        if (resourceName.length > 0) {
+
+            body.show();
+
+            connection.invoke("GetUserAddNewDataForSectionOnly", resourceName)
+                .catch(function (err) {
+                    return console.error(err.toString());
+                });
+
+
+            $.ajax({
+                type: 'GET',
+                url: "/Admin/AddDataSheetUserExistEnableButton",
+                data: { name: resourceName },
+                dataType: "json",
+                success: function (result) {
+ 
+                    if (result.result) {
+                        body.hide();
+
+                        $("#updateDataSheetButton").prop("disabled", false);
+
+                        $("#updateDataSheetSection").val(result.section);
+                        $("#updateDataSheetSectionDisplay").val(result.section);
+
+                        $("#updateDataSheetResourceName").val(result.fullName);
+
+                    }
+                    else {
+
+                        $("#updateDataSheetButton").prop("disabled", true);
+                        $("#updateDataSheetSection").val("");
+                        $("#updateDataSheetSectionDisplay").val("");
+                    }
+                },
+                error: function (req, status, error) {
+                    console.log(status);
+                }
+            });
+
+
+        }
+        else {
+            body.hide();
+            $("#updateDataSheetButton").prop("disabled", true);
+            $("#updateDataSheetSection").val("");
+            $("#updateDataSheetSectionDisplay").val("");
+        }
+
+    });
+
+
+    
+    $("#addDataSheetResourceName").on("input", function () {
+
+        var resourceName = $("#addDataSheetResourceName").val();
+
+        var body = $(".autoFillSearchDataSheetBody");
+
+        if (resourceName.length > 0) {
+
+            body.show();
+
+            connection.invoke("GetUserAddNewDataForSectionOnly", resourceName)
+                .catch(function (err) {
+                    return console.error(err.toString());
+                });
+
+
+            $.ajax({
+                type: 'GET',
+                url: "/Admin/AddDataSheetUserExistEnableButton",
+                data: { name: resourceName },
+                dataType: "json",
+                success: function (result) {
+
+                    if (result.result) {
+                        body.hide();
+                        $("#addNewDataButton").prop("disabled", false);
+                        $("#addDataSheetSection").val(result.section);
+                        $("#addDataSheetSectionDisplay").val(result.section);
+                        $("#addDataSheetResourceName").val(result.fullName);
+                      
+                    }
+                    else {
+
+                        $("#addNewDataButton").prop("disabled", true);
+                        $("#addDataSheetSection").val("");
+                        $("#addDataSheetSectionDisplay").val("");
+                    }
+                },
+                error: function (req, status, error) {
+                    console.log(status);
+                }
+            });
+
+
+        }
+        else {
+            body.hide();
+            $("#addNewDataButton").prop("disabled", true);
+            $("#addDataSheetSection").val("");
+            $("#addDataSheetSectionDisplay").val("");
+        }
+
+    });
+
+
+
     connection.on("GetUserAddDataSheetResult", function (users) {
 
-        var container = $(".autoFillSearchDataSheet");
-
         var container2 = $(".autoFillSearchUsers");
-
-
-        var container3 = $(".autoFillSearchDataSheetUpdate");
-
 
         var container4 = $(".autoFillSearchUsersDataSheet");
 
         var container5 = $(".autoFillSearchUsersDashboard");
 
-
-
         if (users.length > 0) {
 
-            console.log(users);
 
-            container.empty();
             container2.empty();
-            container3.empty();
+
             container4.empty();
             container5.empty();
 
             users.forEach(function (user) {
 
-                let usershtml = `
-                     <div class="searchResult" data-name="${user.fullName}">${user.fullName}</div>
-                `;
 
                 let usershtml1 = `
                      <div class="searchResult1" data-name="${user.fullName}">${user.fullName}</div>
@@ -190,18 +254,9 @@
                     
                 `;
 
-                container.append(usershtml);
-
                 container2.append(usershtml1);
 
                 container4.append(usershtml5);
-
-
-                let usershtml2 = `
-                     <div class="searchResult2" data-name="${user.fullName}">${user.fullName}</div>
-                `;
-
-                container3.append(usershtml2);
 
 
                 let usershtmDashboard = `
@@ -239,84 +294,6 @@
                 });
 
 
-
-
-
-                $(".searchResult2").on("click", function () {
-
-                    var userName = $(this).data("name")
-
-                    $("#updateDataSheetResourceName").val(userName);
-
-                    $(".autoFillSearchDataSheetBody").hide();
-
-
-                    var resourceName = $("#updateDataSheetResourceName").val();
-
-                    connection.invoke("GetUserSearch", resourceName, 0)
-                        .catch(function (err) {
-                            return console.error(err.toString());
-                        });
-
-                    $.ajax({
-                        type: 'GET',
-                        url: "/Admin/AddDataSheetUserExist",
-                        data: { name: resourceName },
-                        dataType: "json",
-                        success: function (result) {
-                            if (result == "No") {
-                                /*alert("User Doesn't Exist! Please Add the User First ");*/
-                            }
-                            else {
-
-                                $("#updateDataSheetSection").val(result);
-                                $("#updateDataSheetSectionDisplay").val(result);
-                            }
-                        },
-                        error: function (req, status, error) {
-                            console.log(status);
-                        }
-                    });
-
-
-                });
-
-                $(".searchResult").on("click", function () {
-
-                    var userName = $(this).data("name");
-
-                    $("#addDataSheetResourceName").val(userName);
-
-                    $(".autoFillSearchDataSheetBody").hide();
-          
-
-                    var resourceName = $("#addDataSheetResourceName").val();
-
-                    $.ajax({
-                        type: 'GET',
-                        url: "/Admin/AddDataSheetUserExist",
-                        data: { name: resourceName },
-                        dataType: "json",
-                        success: function (result) {
-                            if (result == "No") {
-                                /*alert("User Doesn't Exist! Please Add the User First ");*/
-                            }
-                            else {
-
-                                $("#addDataSheetSection").val(result);
-                                $("#addDataSheetSectionDisplay").val(result);
-                            }
-                        },
-                        error: function (req, status, error) {
-                            console.log(status);
-                        }
-                    });
-
-
-                });
-
-
-
                 $(".searchResult1").on("click", function () {
 
                     var userName = $(this).data("name")
@@ -333,8 +310,8 @@
                             return console.error(err.toString());
                         });
 
-
                 });
+
 
 
                 $(".searchResult5").on("click", function () {
@@ -352,10 +329,25 @@
 
                     var year = parseInt(years);
 
-                    connection.invoke("GetAllDataSheetSort", name, year)
-                        .catch(function (err) {
-                            return console.error(err.toString());
-                        });
+                    var section = $("#dataSheetSectionDropDown").val()
+
+                    var sectionId = parseInt(section);
+
+                    if (section === "SECTION") {
+
+                        connection.invoke("GetAllDataSheetSort", null, name, year)
+                            .catch(function (err) {
+                                return console.error(err.toString());
+                            });
+                    }
+                    else {
+                        connection.invoke("GetAllDataSheetSort", sectionId, name, year)
+                            .catch(function (err) {
+                                return console.error(err.toString());
+                            });
+                    }
+
+
 
                 });
 
@@ -366,60 +358,147 @@
 
         }
         else {
-            container.empty();
             container2.empty();
-            container3.empty();
             container4.empty();
+            container5.empty();
 
             var htmls = `
             <div class="searchResult">No User Found!</div>
-        `;
+                `;
 
-            container.append(htmls);
             container2.append(htmls);
-            container3.append(htmls);
             container4.append(htmls);
+            container5.append(htmls);
         }
 
     });
 
+    connection.on("GetUserAddNewDataForSectionOnlyResult", function (users) {
+
+        var container = $(".autoFillSearchDataSheet");
+
+        var container3 = $(".autoFillSearchDataSheetUpdate");
+
+        if (users.length > 0) {
+
+            container.empty();
+
+            container3.empty();
+
+            users.forEach(function (user) {
+
+                let usershtml = `
+                     <div class="searchResult" data-name="${user.fullName}">${user.fullName}</div>
+                `;
+                container.append(usershtml);
 
 
-    //let timeoutId;
-
-    //const inputElement = document.getElementById('workingHoursinput');
-    //inputElement.addEventListener('input', function () {
-
-    //    var numbers = parseInt($("#workingHoursinput").val()); 
-
-    //    if (timeoutId) {
-    //        clearTimeout(timeoutId);
-    //    }
-
-    //    timeoutId = setTimeout(function () {
-
-    //        $.ajax({
-    //            type: 'GET',
-    //            url: "/Admin/CheckNumberIfExist",
-    //            data: { number: numbers },
-    //            dataType: "json",
-    //            success: function (result) {
-    //                if (result == "exist") {
-
-    //                }
-    //                else {
-    //                    alert(result);
-    //                }
-    //            },
-    //            error: function (req, status, error) {
-    //                console.log(status);
-    //            }
-    //        });
+                let usershtml2 = `
+                     <div class="searchResult2" data-name="${user.fullName}">${user.fullName}</div>
+                `;
+                container3.append(usershtml2);
 
 
-    //    }, 2000);
-    //});
+                $(".searchResult").on("click", function () {
 
+
+
+                    var userName = $(this).data("name");
+
+                    $("#addDataSheetResourceName").val(userName);
+
+                    $(".autoFillSearchDataSheetBody").hide();
+
+                    var resourceName = $("#addDataSheetResourceName").val();
+
+                    $.ajax({
+                        type: 'GET',
+                        url: "/Admin/AddDataSheetUserExist",
+                        data: { name: resourceName },
+                        dataType: "json",
+                        success: function (result) {
+                            if (result == "No") {
+
+                                alert("This User Doesn't have a Section! Please put a Section of this User First!");
+                                $("#addDataSheetSection").val("");
+                                $("#addDataSheetSectionDisplay").val("");
+                            }
+                            else {
+
+                                $("#addNewDataButton").prop("disabled", false);
+
+                                $("#addDataSheetSection").val(result);
+                                $("#addDataSheetSectionDisplay").val(result);
+
+                            }
+                        },
+                        error: function (req, status, error) {
+                            console.log(status);
+                        }
+                    });
+
+
+                });
+
+                $(".searchResult2").on("click", function () {
+
+                    var userName = $(this).data("name")
+
+                    $("#updateDataSheetResourceName").val(userName);
+
+                    $(".autoFillSearchDataSheetBody").hide();
+
+
+                    var resourceName = $("#updateDataSheetResourceName").val();
+
+
+
+                    $.ajax({
+                        type: 'GET',
+                        url: "/Admin/AddDataSheetUserExist",
+                        data: { name: resourceName },
+                        dataType: "json",
+                        success: function (result) {
+
+                            if (result == "No") {
+
+                                alert("This User Doesn't have a Section! Please put a Section of this User First!");
+                                $("#updateDataSheetSection").val("");
+                                $("#updateDataSheetSectionDisplay").val("");
+                            }
+                            else {
+
+                                $("#updateDataSheetButton").prop("disabled", false);
+
+                                $("#updateDataSheetSection").val(result);
+                                $("#updateDataSheetSectionDisplay").val(result);
+                            }
+                        },
+                        error: function (req, status, error) {
+                            console.log(status);
+                        }
+                    });
+                });
+
+
+
+            });
+
+
+        }
+        else {
+            container.empty();
+            container3.empty();
+
+            var htmls = `
+            <div class="searchResult">No User Found!</div>
+                `;
+
+            container.append(htmls);
+            container3.append(htmls);
+        }
+
+    });
 
     $("#userSearch, #userSection").on("input", function () {
 
@@ -487,7 +566,7 @@
                     <div class="usersBodyDiv2InnerCardsDiv2">
                       <div class="usersBodyDiv2InnerCardsDiv2Inner1">
                         <h5>${user.fullName}</h5>
-                        <h6>${user.section?.sectionName}</h6>
+                        <h6>${user.section?.sectionName || "Section Deleted"}</h6>
                       </div>
                       <div class="usersBodyDiv2InnerCardsDiv2Inner2">
                         <button id="usersModal" class="user-modal-btn" data-name="${user.fullName}" data-position="${user.position}" data-email="${user.email}" data-number="${user.phoneNumber}" data-profilestring="${user.profileString}" data-section="${user.section?.sectionName || ' No Section Yet'}" data-bs-toggle="modal" data-bs-target="#usersProfileModal"><i class="fa fa-user-circle" aria-hidden="true"></i></button>
@@ -503,7 +582,7 @@
                     $(".usersName").empty();
                     $(".usersPosition").empty();
                     $(".usersEmail").empty();
-                    $(".usersNumber").empty();
+
 
                     $(".usersSection").empty();
 
@@ -512,7 +591,7 @@
                     $(".usersName").text($(this).data("name"));
                     $(".usersPosition").text($(this).data("position") || "No Position yet");
                     $(".usersEmail").text($(this).data("email") || "No Email yet");
-                    $(".usersNumber").text($(this).data("number") || "No Number Yet");
+       
                     $(".usersSection").text($(this).data("section"));
 
                     var profileString = $(this).data("profilestring");
@@ -664,44 +743,34 @@
 
     connection.on("SectionsDropdown", function (sections) {
 
-
-
-
         var userEditSection = $("#userEditSection");
 
         var addDataSheetSection = $("#addDataSheetSection");
-
-        var addLegendSection = $("#addLegendSection");
-
-
-
-
-
-
-
 
         var dashboard = $("#dashboardSectionDropDown");
 
         var dashboardLegend = $(".sectionforLegend");
 
-
-
         var userSection = $("#userSection");
 
-        var addNewUserSection = $(".addNewUserSectionDrop");
-
         var sectionSettingsBody = $(".sectionSettingsBody");
-        
+
+        var dataSheetSectionDropdown = $("#dataSheetSectionDropDown");
+
 
         if (sections.length > 0) {
 
             dashboard.empty();
-            dashboardLegend.empty();
+            dataSheetSectionDropdown.empty();
 
+            dashboardLegend.empty();
 
             userSection.empty();
 
-            addNewUserSection.empty();
+            $("#addNewUserSectionDrop").empty();
+
+            let htmluser11 = `<option disabled selected>Section</option>`;
+            $("#addNewUserSectionDrop").append(htmluser11);
 
             sectionSettingsBody.empty();
 
@@ -709,15 +778,12 @@
             let htmldash1 = `<option>SECTION</option>`;
             dashboard.append(htmldash1);
 
+            dataSheetSectionDropdown.append(htmldash1);
+
             let htmldash2 = `<option value="0">SECTION</option>`;
             dashboardLegend.append(htmldash2);
 
             userSection.append(htmldash2);
-
-            
-
-            let htmluser1 = `<option disabled selected>Section</option>`;
-            addNewUserSection.append(htmluser1);
 
 
             sections.forEach(function (section) {
@@ -727,14 +793,15 @@
                 let htmlForDataSheet = `<option value="${section.sectionName}">${section.sectionName}</option>`;
 
                 dashboard.append(html);
+
+                dataSheetSectionDropdown.append(html);
+
                 dashboardLegend.append(html);
                 userEditSection.append(html);
                 userSection.append(html);
 
                 addDataSheetSection.append(htmlForDataSheet);
- 
 
-                addLegendSection.append(html);
 
                 $("#addNewUserSectionDrop").append(html);
 
@@ -775,6 +842,24 @@
         }
 
     });
+    
+
+    connection.on("LegendSectionsDropdown", function (sections) {
+        var addLegendSection = $("#addLegendSection");
+        addLegendSection.empty();
+
+        let html = `<option disabled="" selected="">SELECT SECTION</option>`;
+
+        addLegendSection.append(html);
+        sections.forEach(function (sectionArray) {
+            let section = sectionArray[0];
+            //console.log(section);
+
+            let htmlForLegend = `<option value="${section.sectionId}" ${section.status}>${section.sectionName}</option>`;
+
+            addLegendSection.append(htmlForLegend);
+        });
+    });
 
 
     connection.on("AllUsersCount", function (users) {
@@ -784,128 +869,120 @@
 
 
 
+    //connection.on("AllDataSheet", function (datas) {
+
+    //    var container = $(".tbodyDataSheet");
+
+    //    if (datas.length > 0) {
+
+    //        container.empty();
+
+    //        datas.forEach(function (data) {
+
+    //            var startDate = new Date(data.startDate);
+    //            var endDate = new Date(data.endDate);
+
+    //            var formattedStartDate = startDate.toLocaleDateString("en-US", {
+    //                month: "long",
+    //                day: "numeric",
+    //                year: "numeric"
+    //            });
+
+    //            var formattedEndDate = endDate.toLocaleDateString("en-US", {
+    //                month: "long",
+    //                day: "numeric",
+    //                year: "numeric"
+    //            });
+
+    //            let shtml = `            <tr>
+    //                    <td>${data.section.sectionName}</td>
+    //                    <td>${data.appUser.fullName}</td>
+    //                    <td>${data.project.projectName}</td>
+    //                    <td>${data.activity.activityName}</td>
+    //                    <td>${data.businessOrIt.businessOrItName}</td>
+    //                    <td>${formattedStartDate}</td>
+    //                    <td>${formattedEndDate}</td>
+    //                    <td>${data.hoursPerDay}</td>
+    //                    <td>${data.hoursPerMonth}</td>
+    //                    <td>
+    //                        <i class="fa fa-pencil dataSheetUpdate" aria-hidden="true"
+    //                        data-section="${data.section.sectionName}" data-fullname="${data.appUser.fullName}" 
+    //                        data-project="${data.project.projectName}" data-activity="${data.activity.activityName}" 
+    //                        data-business="${data.businessOrIt.businessOrItName}" data-start="${data.startDate}" 
+    //                        data-endd="${data.endDate}" data-day="${data.hoursPerDay}" data-month="${data.hoursPerMonth}" 
+    //                        data-id="${data.dataSheetBusId}" data-bs-toggle="modal" data-bs-target="#updateDataSheetModal"></i>
+
+    //                        <i class="fa fa-trash dataSheetDelete" aria-hidden="true" data-id="${data.dataSheetBusId}"
+    //                        data-bs-toggle="modal" data-bs-target="#deleteDataSheetModal"></i>
+    //                    </td>
+    //                </tr>`;
+
+    //            container.append(shtml);
 
 
+    //            $(".dataSheetUpdate").on("click", function () {
 
-    connection.on("AllDataSheet", function (datas) {
-
-        var container = $(".tbodyDataSheet");
-
-        if (datas.length > 0) {
-
-            container.empty();
-
-            datas.forEach(function (data) {
-
-                var startDate = new Date(data.startDate);
-                var endDate = new Date(data.endDate);
-
-                var formattedStartDate = startDate.toLocaleDateString("en-US", {
-                    month: "long",
-                    day: "numeric",
-                    year: "numeric"
-                });
-
-                var formattedEndDate = endDate.toLocaleDateString("en-US", {
-                    month: "long",
-                    day: "numeric",
-                    year: "numeric"
-                });
-
-                let shtml = `            <tr>
-                        <td>${data.section.sectionName}</td>
-                        <td>${data.appUser.fullName}</td>
-                        <td>${data.project.projectName}</td>
-                        <td>${data.activity.activityName}</td>
-                        <td>${data.businessOrIt.businessOrItName}</td>
-                        <td>${formattedStartDate}</td>
-                        <td>${formattedEndDate}</td>
-                        <td>${data.hoursPerDay}</td>
-                        <td>${data.hoursPerMonth}</td>
-                        <td>
-                            <i class="fa fa-pencil dataSheetUpdate" aria-hidden="true"
-                            data-section="${data.section.sectionName}" data-fullname="${data.appUser.fullName}" 
-                            data-project="${data.project.projectName}" data-activity="${data.activity.activityName}" 
-                            data-business="${data.businessOrIt.businessOrItName}" data-start="${data.startDate}" 
-                            data-endd="${data.endDate}" data-day="${data.hoursPerDay}" data-month="${data.hoursPerMonth}" 
-                            data-id="${data.dataSheetBusId}" data-bs-toggle="modal" data-bs-target="#updateDataSheetModal"></i>
-
-                            <i class="fa fa-trash dataSheetDelete" aria-hidden="true" data-id="${data.dataSheetBusId}"
-                            data-bs-toggle="modal" data-bs-target="#deleteDataSheetModal"></i>
-                        </td>
-                    </tr>`;
-
-                container.append(shtml);
-
-
-                $(".dataSheetUpdate").on("click", function () {
-
-                    var dataSheetId = $(this).data("id");
-                    var sectionName = $(this).data("section");
-                    var fullName = $(this).data("fullname");
-                    var projectName = $(this).data("project");
-                    var activityName = $(this).data("activity");
-                    var businessOrIt = $(this).data("business");
-                    var startDate = $(this).data("start");
-                    var endDate = $(this).data("endd");
-                    var hoursPerDay = parseFloat($(this).data("day"));
-                    var hoursPerMonth = $(this).data("month");
+    //                var dataSheetId = $(this).data("id");
+    //                var sectionName = $(this).data("section");
+    //                var fullName = $(this).data("fullname");
+    //                var projectName = $(this).data("project");
+    //                var activityName = $(this).data("activity");
+    //                var businessOrIt = $(this).data("business");
+    //                var startDate = $(this).data("start");
+    //                var endDate = $(this).data("endd");
+    //                var hoursPerDay = parseFloat($(this).data("day"));
+    //                var hoursPerMonth = $(this).data("month");
 
     
-                    $("#updateDataSheetId").val(dataSheetId);
-                    //$("#updateDataSheetSectionValue").empty();
-                    //let htm = `
-                    //    ${sectionName}
-                    //`;
+    //                $("#updateDataSheetId").val(dataSheetId);
+    //                //$("#updateDataSheetSectionValue").empty();
+    //                //let htm = `
+    //                //    ${sectionName}
+    //                //`;
 
-                    //$("#updateDataSheetSectionValue").append(htm);
-                    $("#updateDataSheetSection").val(sectionName);
-                    $("#updateDataSheetSectionDisplay").val(sectionName);
-                    $("#updateDataSheetResourceName").val(fullName);
-                    $("#updateDataSheetProjectName").val(projectName);
-                    $("#updateDataSheetActivityName").val(activityName);
-                    $("#updateDataSheetBusinessOrIT").val(businessOrIt);
-                    $("#updateDataSheetStartDate").val(startDate);
+    //                //$("#updateDataSheetSectionValue").append(htm);
+    //                $("#updateDataSheetSection").val(sectionName);
+    //                $("#updateDataSheetSectionDisplay").val(sectionName);
+    //                $("#updateDataSheetResourceName").val(fullName);
+    //                $("#updateDataSheetProjectName").val(projectName);
+    //                $("#updateDataSheetActivityName").val(activityName);
+    //                $("#updateDataSheetBusinessOrIT").val(businessOrIt);
+    //                $("#updateDataSheetStartDate").val(startDate);
 
-                    $("#updateDataSheetEndDate").val(endDate);
+    //                $("#updateDataSheetEndDate").val(endDate);
                     
-                    $("#updateDataSheetWorkingHours").val(hoursPerDay);
-                    $("#updateDataSheetTotalHoursDisplay").val(hoursPerMonth);
-                });
+    //                $("#updateDataSheetWorkingHours").val(hoursPerDay);
+    //                $("#updateDataSheetTotalHoursDisplay").val(hoursPerMonth);
+    //            });
 
 
 
-                $(".dataSheetDelete").on("click", function () {
+    //            $(".dataSheetDelete").on("click", function () {
 
-                    var dataSheetId = $(this).data("id");
+    //                var dataSheetId = $(this).data("id");
 
-                    $("#dataSheetIdDelete").val(dataSheetId);
+    //                $("#dataSheetIdDelete").val(dataSheetId);
                     
-                });
+    //            });
 
 
 
 
 
 
-            });
-        }
-        else {
-            container.empty();
+    //        });
+    //    }
+    //    else {
+    //        container.empty();
 
-            let htmls = `<div style="width: 80%; height: 70%; position: absolute;display:flex; justify-content:center; align-items:center;">
-                <h1 style="color:#425833;">No Data</h1>
-            </div>`;
+    //        let htmls = `<div style="width: 80%; height: 60%; position: absolute;display:flex; justify-content:center; align-items:center;">
+    //            <h1 style="color:#425833;">No Data</h1>
+    //        </div>`;
 
-            container.append(htmls);
+    //        container.append(htmls);
 
-        }
-    });
-
-
-
-
-
+    //    }
+    //});
 
 
 
@@ -913,32 +990,31 @@
 
         var container = $(".tbodyDataSheet");
 
-        var search = $("#dataSheetSearch").val();
-
-        if (datas.length > 0) {
+        if (datas.data.length > 0) {
 
             container.empty();
 
-            datas.forEach(function (data) {
+            if (datas.success) {
+                datas.data.forEach(function (data) {
 
-                var startDate = new Date(data.startDate);
-                var endDate = new Date(data.endDate);
+                    var startDate = new Date(data.startDate);
+                    var endDate = new Date(data.endDate);
 
-                var formattedStartDate = startDate.toLocaleDateString("en-US", {
-                    month: "long",
-                    day: "numeric",
-                    year: "numeric"
-                });
+                    var formattedStartDate = startDate.toLocaleDateString("en-US", {
+                        month: "long",
+                        day: "numeric",
+                        year: "numeric"
+                    });
 
-                var formattedEndDate = endDate.toLocaleDateString("en-US", {
-                    month: "long",
-                    day: "numeric",
-                    year: "numeric"
-                });
+                    var formattedEndDate = endDate.toLocaleDateString("en-US", {
+                        month: "long",
+                        day: "numeric",
+                        year: "numeric"
+                    });
 
 
-                if (new Date(data.startDate).getFullYear() < currentYear && new Date(data.endDate).getFullYear() < currentYear) {
-                    let shtml = `    
+                    if (new Date(data.startDate).getFullYear() < currentYear && new Date(data.endDate).getFullYear() < currentYear) {
+                        let shtml = `    
                      <tr>
                         <td>${data.section.sectionName}</td>
                         <td>${data.appUser.fullName}</td>
@@ -954,11 +1030,11 @@
                         </td>
                     </tr>`;
 
-                    container.append(shtml);
-                }
-                else {
+                        container.append(shtml);
+                    }
+                    else {
 
-                    let shtml = `    
+                        let shtml = `    
                      <tr>
                         <td>${data.section.sectionName}</td>
                         <td>${data.appUser.fullName}</td>
@@ -982,52 +1058,128 @@
                         </td>
                     </tr>`;
 
-                    container.append(shtml);
+                        container.append(shtml);
 
 
-                    $(".dataSheetUpdate").on("click", function () {
+                        $(".dataSheetUpdate").on("click", function () {
 
-                        var dataSheetId = $(this).data("id");
-                        var sectionName = $(this).data("section");
-                        var fullName = $(this).data("fullname");
-                        var projectName = $(this).data("project");
-                        var activityName = $(this).data("activity");
-                        var businessOrIt = $(this).data("business");
-                        var startDate = $(this).data("start");
-                        var endDate = $(this).data("endd");
-                        var hoursPerDay = parseFloat($(this).data("day"));
-                        var hoursPerMonth = $(this).data("month");
+                            var dataSheetId = $(this).data("id");
+                            var sectionName = $(this).data("section");
+                            var fullName = $(this).data("fullname");
+                            var projectName = $(this).data("project");
+                            var activityName = $(this).data("activity");
+                            var businessOrIt = $(this).data("business");
+                            var startDate = $(this).data("start");
+                            var endDate = $(this).data("endd");
+                            var hoursPerDay = parseFloat($(this).data("day"));
+                            var hoursPerMonth = $(this).data("month");
 
 
-                        $("#updateDataSheetId").val(dataSheetId);
-                        $("#updateDataSheetSection").val(sectionName);
-                        $("#updateDataSheetSectionDisplay").val(sectionName);
-                        $("#updateDataSheetResourceName").val(fullName);
-                        $("#updateDataSheetProjectName").val(projectName);
-                        $("#updateDataSheetActivityName").val(activityName);
-                        $("#updateDataSheetBusinessOrIT").val(businessOrIt);
-                        $("#updateDataSheetStartDate").val(startDate);
+                            $("#updateDataSheetId").val(dataSheetId);
+                            $("#updateDataSheetSection").val(sectionName);
+                            $("#updateDataSheetSectionDisplay").val(sectionName);
+                            $("#updateDataSheetResourceName").val(fullName);
+                            $("#updateDataSheetProjectName").val(projectName);
+                            $("#updateDataSheetActivityName").val(activityName);
+                            $("#updateDataSheetBusinessOrIT").val(businessOrIt);
+                            $("#updateDataSheetStartDate").val(startDate);
 
-                        $("#updateDataSheetEndDate").val(endDate);
+                            $("#updateDataSheetEndDate").val(endDate);
 
-                        $("#updateDataSheetWorkingHours").val(hoursPerDay);
-                        $("#updateDataSheetTotalHoursDisplay").val(hoursPerMonth);
+                            $("#updateDataSheetWorkingHours").val(hoursPerDay);
+                            $("#updateDataSheetTotalHoursDisplay").val(hoursPerMonth);
+                        });
+
+
+
+                        $(".dataSheetDelete").on("click", function () {
+
+                            var dataSheetId = $(this).data("id");
+
+                            $("#dataSheetIdDelete").val(dataSheetId);
+
+                        });
+                    }
+
+
+
+                });
+            }
+            else {
+                datas.data.forEach(function (data) {
+
+                    var startDate = new Date(data.startDate);
+                    var endDate = new Date(data.endDate);
+
+                    var formattedStartDate = startDate.toLocaleDateString("en-US", {
+                        month: "long",
+                        day: "numeric",
+                        year: "numeric"
+                    });
+
+                    var formattedEndDate = endDate.toLocaleDateString("en-US", {
+                        month: "long",
+                        day: "numeric",
+                        year: "numeric"
                     });
 
 
+                    if (new Date(data.startDate).getFullYear() < currentYear && new Date(data.endDate).getFullYear() < currentYear) {
+                        let shtml = `    
+                     <tr>
+                        <td>${data.section.sectionName}</td>
+                        <td>${data.appUser.fullName}</td>
+                        <td>${data.project.projectName}</td>
+                        <td>${data.activity.activityName}</td>
+                        <td>${data.businessOrIt.businessOrItName}</td>
+                        <td>${formattedStartDate}</td>
+                        <td>${formattedEndDate}</td>
+                        <td>${data.hoursPerDay}</td>
+                        <td>${data.hoursPerMonth}</td>
+                        <td>
 
-                    $(".dataSheetDelete").on("click", function () {
+                        </td>
+                    </tr>`;
 
-                        var dataSheetId = $(this).data("id");
+                        container.append(shtml);
+                    }
+                    else {
 
-                        $("#dataSheetIdDelete").val(dataSheetId);
+                        let shtml = `    
+                     <tr>
+                        <td>${data.section.sectionName}</td>
+                        <td>${data.appUser.fullName}</td>
+                        <td>${data.project.projectName}</td>
+                        <td>${data.activity.activityName}</td>
+                        <td>${data.businessOrIt.businessOrItName}</td>
+                        <td>${formattedStartDate}</td>
+                        <td>${formattedEndDate}</td>
+                        <td>${data.hoursPerDay}</td>
+                        <td>${data.hoursPerMonth}</td>
+                        <td>
+                            <i class="fa fa-times dataSheetUpdate" aria-hidden="true"
+                            data-section="${data.section.sectionName}" data-fullname="${data.appUser.fullName}" 
+                            data-project="${data.project.projectName}" data-activity="${data.activity.activityName}" 
+                            data-business="${data.businessOrIt.businessOrItName}" data-start="${data.startDate}" 
+                            data-endd="${data.endDate}" data-day="${data.hoursPerDay}" data-month="${data.hoursPerMonth}" 
+                            data-id="${data.dataSheetBusId}" data-bs-toggle="modal" data-bs-target="#updateDataSheetModal" style="pointer-events: none;"></i>
 
-                    });
-                }
+                            <i class="fa fa-times dataSheetDelete" aria-hidden="true" data-id="${data.dataSheetBusId}"
+                            data-bs-toggle="modal" data-bs-target="#deleteDataSheetModal" style="pointer-events: none;"></i>
+                        </td>
+                    </tr>`;
+
+                        container.append(shtml);
+
+
+                    }
 
 
 
-            });
+                });
+            }
+
+
 
 
 
@@ -1036,7 +1188,7 @@
         else {
             container.empty();
 
-            let htmls = `<div style="width: 80%; height: 70%; position: absolute;display:flex; justify-content:center; align-items:center;">
+            let htmls = `<div style="width: 80%; height: 60%; position: absolute;display:flex; justify-content:center; align-items:center;">
                 <h1 style="color:#425833;"><span style="font-weight:bold;"> </span>No Data!</h1>
             </div>`;
 
@@ -1047,82 +1199,84 @@
 
 
 
-    //function isHoliday(date) {
-    //    const dateStr = date.toISOString().slice(0, 10);
-    //    return holidays.some(holiday => holiday.fixedDate === dateStr);
-    //}
-    //function getHolidayName(date) {
-    //    const dateStr = date.toISOString().slice(0, 10);
-    //    const foundHoliday = holidays.find(h => h.fixedDate === dateStr);
-    //    return foundHoliday ? foundHoliday.fixedName : null;
-    //}
-    //function isWeekday(date) {
-    //    const day = date.getDay();
-    //    return day > 0 && day < 6;
-    //}
+    function isHoliday(date) {
+        const dateStr = date.toISOString().slice(0, 10);
+        return holidays.some(holiday => holiday.fixedDate === dateStr);
+    }
+    function getHolidayName(date) {
+        const dateStr = date.toISOString().slice(0, 10);
+        const foundHoliday = holidays.find(h => h.fixedDate === dateStr);
+        return foundHoliday ? foundHoliday.fixedName : null;
+    }
+    function isWeekday(date) {
+        const day = date.getDay();
+        return day > 0 && day < 6;
+    }
 
-    //$("#hoursperday").on("input", function () {
-    //    const startDate = new Date(document.getElementById('startDate').value);
-    //    const endDate = new Date(document.getElementById('endDate').value);
-    //    const hoursPerDay = parseFloat(document.getElementById('hoursperday').value);
-    //    let totalWorkHours = 0;
-    //    let currentDate = new Date(startDate);
-    //    let holidayNames = [];
+    $("#hoursperday").on("input", function () {
+        const startDate = new Date(document.getElementById('startDate').value);
+        const endDate = new Date(document.getElementById('endDate').value);
+        const hoursPerDay = parseFloat(document.getElementById('hoursperday').value);
+        let totalWorkHours = 0;
+        let currentDate = new Date(startDate);
+        let holidayNames = [];
 
-    //    while (currentDate <= endDate) {
-    //        if (isWeekday(currentDate) && !isHoliday(currentDate)) {
-    //            totalWorkHours += hoursPerDay;
-    //        } else if (isHoliday(currentDate)) {
-    //            const holidayName = getHolidayName(currentDate);
-    //            if (holidayName) {
-    //                holidayNames.push(holidayName);
-    //            }
-    //        }
-    //        currentDate.setDate(currentDate.getDate() + 1);
-    //    }
-    //    $("#TotalHoursPerMonth").val(totalWorkHours);
-    //    $("#TotalHoursPerMonthDisplay").val(totalWorkHours);
-    //});
-    //$("#updateDataSheetWorkingHours").on("input", function () {
-
-    //    const startDate = new Date(document.getElementById('updateDataSheetStartDate').value);
-    //    const endDate = new Date(document.getElementById('updateDataSheetEndDate').value);
-    //    const hoursPerDay = parseFloat(document.getElementById('updateDataSheetWorkingHours').value);
-
-    //    let totalWorkHours = 0;
-    //    let currentDate = new Date(startDate);
-    //    let holidayNames = [];
-
-    //    while (currentDate <= endDate) {
-    //        if (isWeekday(currentDate) && !isHoliday(currentDate)) {
-    //            totalWorkHours += hoursPerDay;
-    //        } else if (isHoliday(currentDate)) {
-    //            const holidayName = getHolidayName(currentDate);
-    //            if (holidayName) {
-    //                holidayNames.push(holidayName);
-    //            }
-    //        }
-    //        currentDate.setDate(currentDate.getDate() + 1);
-    //    }
-    //    $("#updateDataSheetTotalHours").val(totalWorkHours);
-
-    //    $("#updateDataSheetTotalHoursDisplay").val(totalWorkHours);
-    //});
+        while (currentDate <= endDate) {
+            if (isWeekday(currentDate) && !isHoliday(currentDate)) {
+                totalWorkHours += hoursPerDay;
+            } else if (isHoliday(currentDate)) {
+                const holidayName = getHolidayName(currentDate);
+                if (holidayName) {
+                    holidayNames.push(holidayName);
+                }
+            }
+            currentDate.setDate(currentDate.getDate() + 1);
+        }
+        $("#TotalHoursPerMonth").val(totalWorkHours);
+        $("#TotalHoursPerMonthDisplay").val(totalWorkHours);
+    });
 
 
+    $("#updateDataSheetWorkingHours").on("input", function () {
+
+        const startDate = new Date(document.getElementById('updateDataSheetStartDate').value);
+        const endDate = new Date(document.getElementById('updateDataSheetEndDate').value);
+        const hoursPerDay = parseFloat(document.getElementById('updateDataSheetWorkingHours').value);
+
+        let totalWorkHours = 0;
+        let currentDate = new Date(startDate);
+        let holidayNames = [];
+
+        while (currentDate <= endDate) {
+            if (isWeekday(currentDate) && !isHoliday(currentDate)) {
+                totalWorkHours += hoursPerDay;
+            } else if (isHoliday(currentDate)) {
+                const holidayName = getHolidayName(currentDate);
+                if (holidayName) {
+                    holidayNames.push(holidayName);
+                }
+            }
+            currentDate.setDate(currentDate.getDate() + 1);
+        }
+        $("#updateDataSheetTotalHours").val(totalWorkHours);
+
+        $("#updateDataSheetTotalHoursDisplay").val(totalWorkHours);
+    });
 
 
 
-    //function isHoliday(date) {
-    //    const dateStr = date.toISOString().slice(0, 10);
-    //    return holidays.some(holiday => holiday.fixedDate === dateStr);
-    //}
 
 
-    //function isWeekday(date) {
-    //    const day = date.getDay();
-    //    return day > 0 && day < 6;
-    //}
+    function isHoliday(date) {
+        const dateStr = date.toISOString().slice(0, 10);
+        return holidays.some(holiday => holiday.fixedDate === dateStr);
+    }
+
+
+    function isWeekday(date) {
+        const day = date.getDay();
+        return day > 0 && day < 6;
+    }
 
     function isHoliday(date) {
         const dateStr = date.toISOString().slice(0, 10);
@@ -1171,19 +1325,20 @@
         const endDate = new Date(document.getElementById('endDate').value);
         const hoursPerDay = parseFloat(document.getElementById('hoursperday').value);
 
-        if (!isNaN(startDate.getTime()) && !isNaN(endDate.getTime())) {
 
-            if (startDate.getFullYear() !== endDate.getFullYear()) {
-                alert("The Start Date Year and End Date Year is not the same !");
-
-                $("#endDate").val("");
-
-            }
-            else {
-
+        if (!isNaN(startDate.getTime())) {
+            if (startDate.getFullYear() !== new Date().getFullYear()) {
+                alert("The Start Date Year Must Be This Year!");
+                $("#startDate").val("");
             }
         }
 
+        if (!isNaN(startDate.getTime()) && !isNaN(endDate.getTime())) {
+            if (startDate.getFullYear() !== endDate.getFullYear()) {
+                alert("The Start Date Year and End Date Year Must Be the same!");
+                $("#endDate").val("");
+            }
+        }
 
         let totalWorkHours = 0;
         let currentDate = new Date(startDate);
@@ -1253,15 +1408,6 @@
 
 
 
-
-
-
-
-
-
-
-
-
     //const movableNames = [];
     //connection.on("MovableHolidays", function (movable) {
     //    movable.forEach(function (data) {
@@ -1303,56 +1449,60 @@
     //    });
     //});
 
-    connection.on("UsersMonthlyStatistics", function (users) {
-
-        var container = $(".tbodyDashboard");
-
-        if (users.length > 0) {
-
-            container.empty();
 
 
 
-            users.forEach(function (user) {
-        /*            console.log(user);*/
+
+    //connection.on("UsersMonthlyStatistics", function (users) {
+
+    //    var container = $(".tbodyDashboard");
+
+    //    if (users.length > 0) {
+
+    //        container.empty();
 
 
-                let html = `
-                     <tr>
-                        <td>${user.sectionName}</td>
-                        <td>${user.appUserName}</td>
-                        <td  style="${getBackgroundColor(user.january, user.low, user.med, user.max)};">${user.january}</td>
-                        <td  style="${getBackgroundColor(user.february, user.low, user.med, user.max)};">${user.february} </td>
-                        <td  style="${getBackgroundColor(user.march, user.low, user.med, user.max)};">${user.march} </td>
-                        <td  style="${getBackgroundColor(user.april, user.low, user.med, user.max)};">${user.april} </td>
-                        <td  style="${getBackgroundColor(user.may, user.low, user.med, user.max)};">${user.may} </td>
-                        <td  style="${getBackgroundColor(user.june, user.low, user.med, user.max)};">${user.june} </td>
-                        <td  style="${getBackgroundColor(user.july, user.low, user.med, user.max)};">${user.july} </td>
-                        <td  style="${getBackgroundColor(user.august, user.low, user.med, user.max)};">${user.august} </td>
-                        <td  style="${getBackgroundColor(user.september, user.low, user.med, user.max)};">${user.september} </td>
-                        <td  style="${getBackgroundColor(user.october, user.low, user.med, user.max)};">${user.october} </td>
-                        <td style="${getBackgroundColor(user.november, user.low, user.med, user.max)};">${user.november} </td>
-                        <td  style="${getBackgroundColor(user.december, user.low, user.med, user.max)};">${user.december} </td>
-                        <td >${user.totalHours} </td>
-                    </tr>
-                `;
 
-                container.append(html);
+    //        users.forEach(function (user) {
+    //    /*            console.log(user);*/
 
-            });
-        }
-        else {
 
-            container.empty();
+    //            let html = `
+    //                 <tr>
+    //                    <td>${user.sectionName}</td>
+    //                    <td>${user.appUserName}</td>
+    //                    <td  style="${getBackgroundColor(user.january, user.low, user.med, user.max)};">${user.january}</td>
+    //                    <td  style="${getBackgroundColor(user.february, user.low, user.med, user.max)};">${user.february} </td>
+    //                    <td  style="${getBackgroundColor(user.march, user.low, user.med, user.max)};">${user.march} </td>
+    //                    <td  style="${getBackgroundColor(user.april, user.low, user.med, user.max)};">${user.april} </td>
+    //                    <td  style="${getBackgroundColor(user.may, user.low, user.med, user.max)};">${user.may} </td>
+    //                    <td  style="${getBackgroundColor(user.june, user.low, user.med, user.max)};">${user.june} </td>
+    //                    <td  style="${getBackgroundColor(user.july, user.low, user.med, user.max)};">${user.july} </td>
+    //                    <td  style="${getBackgroundColor(user.august, user.low, user.med, user.max)};">${user.august} </td>
+    //                    <td  style="${getBackgroundColor(user.september, user.low, user.med, user.max)};">${user.september} </td>
+    //                    <td  style="${getBackgroundColor(user.october, user.low, user.med, user.max)};">${user.october} </td>
+    //                    <td style="${getBackgroundColor(user.november, user.low, user.med, user.max)};">${user.november} </td>
+    //                    <td  style="${getBackgroundColor(user.december, user.low, user.med, user.max)};">${user.december} </td>
+    //                    <td >${user.totalHours} </td>
+    //                </tr>
+    //            `;
 
-           let htmls = `<div style="width: 80%; height: 70%; position: absolute;display:flex; justify-content:center; align-items:center;">
-                <h1 style="color:#425833;">No Data</h1>
-            </div>`;
+    //            container.append(html);
 
-            container.append(htmls);
-        }
+    //        });
+    //    }
+    //    else {
 
-    });
+    //        container.empty();
+
+    //       let htmls = `<div style="width: 80%; height: 60%; position: absolute;display:flex; justify-content:center; align-items:center;">
+    //            <h1 style="color:#425833;">No Data</h1>
+    //        </div>`;
+
+    //        container.append(htmls);
+    //    }
+
+    //});
 
 
     connection.on("UsersMonthlyStatisticsSort", function (users) {
@@ -1395,7 +1545,7 @@
 
             container.empty();
 
-            let htmls = `<div style="width: 80%; height: 70%; position: absolute;display:flex; justify-content:center; align-items:center;">
+            let htmls = `<div style="width: 80%; height: 60%; position: absolute;display:flex; justify-content:center; align-items:center;">
                 <h1 style="color:#425833;"><span style="font-weight:bold;">${search} </span>Not Found!</h1>
             </div>`;
 
@@ -1501,6 +1651,14 @@
             });
     }
 
+    function GetSectionsLegends() {
+        connection.invoke("GetLegendSections")
+            .catch(function (err) {
+                return console.error(err.toString());
+            });
+    }
+
+
     function GetAllUsersCount() {
         connection.invoke("GetAllUsersCount")
             .catch(function (err) {
@@ -1566,7 +1724,8 @@
         if (legend.length > 0) {
 
             legend.forEach(function (legends) {
-   /*             console.log(legends);*/
+        
+                sectionLegends.push(legends);
 
                 let html = `
                     <div class="legendSettingsBodyDiv1">
@@ -1608,7 +1767,7 @@
                     var sectionName = $(this).data("name");
 
                     $("#legendIdToDelete").val(legendId);
-                    $("#legendNameToDelete").val(sectionName);
+                    $("#legendNameToDelete").text(sectionName+"?");
 
                 });
 
@@ -1658,31 +1817,12 @@
 
 
     const holidays = [];
+
     connection.on("Holidays", function (holi) {
         var container = $(".tbodyHoliday").empty();
 
         holi.forEach(function (data) {
-
             holidays.push(data);
-
-            //var date = new Date(data.fixedDate);
-            //var fixedDate = date.toLocaleDateString("en-US", {
-            //    month: "long",
-            //    day: "numeric"
-            //});
-
-            //let html = `
-            //     <tr>
-            //        <td>${data.fixedName}</td>
-            //        <td>${fixedDate}</td>
-            //         <td>
-            //             ${data.type === 'fixed' ? '<i class="fa fa-pencil" aria-hidden="true"></i><i class="fa fa-trash" aria-hidden="true"></i>' : ''}
-            //        </td>
-            //    </tr>
-
-            //    `;
-
-            //container.append(html);
         });
     });
 
@@ -1787,9 +1927,9 @@
 
 
 
-    function GetAllDataSheetSort(name, year) {
+    function GetAllDataSheetSort(sectionId, name, year) {
 
-        connection.invoke("GetAllDataSheetSort", name, year)
+        connection.invoke("GetAllDataSheetSort", sectionId, name, year)
             .catch(function (err) {
                 return console.error(err.toString());
             });
@@ -1818,12 +1958,18 @@
 
         if (name.length == 0 && section == "SECTION") {
 
+            $("#legendLow").text("");
+            $("#legendMed").text("");
+            $("#legendMax").text("");
+
             connection.invoke("GetUsersMonthlyStatisticsSort", null, null, year)
                 .catch(function (err) {
                     return console.error(err.toString());
                 });
         }
         else if (section != "SECTION" && name.length == 0) {
+
+            GetLegend(sectionId);
 
             connection.invoke("GetUsersMonthlyStatisticsSort", sectionId, null, year)
                 .catch(function (err) {
@@ -1832,6 +1978,10 @@
         }
         else if (section == "SECTION" && name.length > 0) {
 
+            $("#legendLow").text("");
+            $("#legendMed").text("");
+            $("#legendMax").text("");
+
             connection.invoke("GetUsersMonthlyStatisticsSort", null, name, year)
                 .catch(function (err) {
                     return console.error(err.toString());
@@ -1839,6 +1989,8 @@
 
         }
         else if (section != "SECTION" && name.length > 0) {
+
+            GetLegend(sectionId);
 
             connection.invoke("GetUsersMonthlyStatisticsSort", sectionId, name, year)
                 .catch(function (err) {
@@ -1852,23 +2004,43 @@
 
 
 
-    $("#dataSheetYear, #dataSheetSearch").on("input", function () {
+    $("#dataSheetYear, #dataSheetSearch, #dataSheetSectionDropDown").on("input", function () {
 
         var name = $("#dataSheetSearch").val();
 
         var years = $("#dataSheetYear").val();
         var year = parseInt(years);
 
+        var section = $("#dataSheetSectionDropDown").val();
+        var sectionId = parseInt(section);
 
-        if (name.length == 0) {
 
-            connection.invoke("GetAllDataSheetSort", null, year)
+        if (name.length == 0 && section == "SECTION") {
+
+            connection.invoke("GetAllDataSheetSort", null, null, year)
+                .catch(function (err) {
+                    return console.error(err.toString());
+                });
+
+        }
+        else if (section != "SECTION" && name.length == 0) {
+
+            connection.invoke("GetAllDataSheetSort", sectionId, null, year)
                 .catch(function (err) {
                     return console.error(err.toString());
                 });
         }
-        else {
-            connection.invoke("GetAllDataSheetSort", name, year)
+        else if (section == "SECTION" && name.length > 0) {
+
+            connection.invoke("GetAllDataSheetSort", null, name, year)
+                .catch(function (err) {
+                    return console.error(err.toString());
+                });
+
+        }
+        else if (section != "SECTION" && name.length > 0) {
+
+            connection.invoke("GetAllDataSheetSort", sectionId, name, year)
                 .catch(function (err) {
                     return console.error(err.toString());
                 });
@@ -1963,11 +2135,57 @@
 
     });
 
+    let userDetailsSection;
+
+    connection.on("UserDetails", function (user) {
+
+        userDetailsSection = user.section.sectionId;
+
+        $("#dashboardSectionDropDown").val(userDetailsSection);
+
+    });
+
+
+    connection.on("ReceiveAllRoles", function (names) {
+
+        $("#addNewUserRoles").empty();
+
+        let htmluser11 = `<option disabled selected> Role </option>`;
+        $("#addNewUserRoles").append(htmluser11);
+
+        names.forEach(function (data) {
+
+            console.log(data);
+            let html = `<option value="${data}">${data}</option>`;
+            $("#addNewUserRoles").append(html);
+        });
+
+
+    });
+
+
+    function GetUserDetails() {
+        connection.invoke("GetUserDetails")
+            .catch(function (err) {
+                return console.error(err.toString());
+            });
+    }
+
+    function GetAllRoles() {
+        connection.invoke("GetAllRoles")
+            .catch(function (err) {
+                return console.error(err.toString());
+            });
+    }
 
     connection.start().then(function () {
 
+        GetUserDetails();
+        GetAllRoles();
+
         GetAllUsers();
         GetSectionsDropdown();
+        GetSectionsLegends();
         GetAllUsersCount();
         GetAllDataSheet();
         GetLegends();
@@ -1981,18 +2199,18 @@
 
         GetUsersMonthlyStatistics();
         GetAllowedHours();
-        GetAllDataSheetSort(null, currentYear);
+
+        GetAllDataSheetSort(null, null, currentYear);
 
         GetUserMonthlyStatisticsSort(null, null, currentYear);
+
+        GetLegend(null);
 
     }).catch(function (err) {
             console.error(err.toString());
         });
 
 });
-
-
-
 
 
 

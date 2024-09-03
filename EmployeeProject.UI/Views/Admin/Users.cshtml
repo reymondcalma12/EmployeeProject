@@ -148,7 +148,7 @@
                 <div class="modal-header" style="height:60px; background:#1E4F3B; display:flex; border-radius:.5rem .5rem 0 0 ;">
 
                     <div class="modal-headerDiv1" style="width:95%; display:flex;justify-content:center;align-items:center;">
-                        <h4 style="color:white;">ADD NEW USER</h4>
+                        <h4 style="color:gold;">ADD NEW USER</h4>
                     </div>
                     <div class="modal-headerDiv2">
                         <i class="fa fa-times closeAddNewData" aria-hidden="true" data-bs-dismiss="modal" aria-label="Close"></i>
@@ -165,24 +165,28 @@
                         <span asp-validation-for="RegisterDTO.FullName" class="text-danger"></span>
                     </div>
                     <div class="addNewUserModalBodyDiv3">
-                        <input type="email" class="form-control addNewUserInput" placeholder="User Name:" asp-for="RegisterDTO.UserName" autocomplete="off" id="addNewEmailUser"/>
+                        <input type="email" class="form-control addNewUserInput" placeholder="User Email:" asp-for="RegisterDTO.UserName" autocomplete="off" id="addNewEmailUser"/>
                     </div>
                     <div class="addNewUserModalBodyDiv4">
                         <span asp-validation-for="RegisterDTO.UserName" class="text-danger"></span>
                     </div>
                     <div class="addNewUserModalBodyDiv5">
-                        <input type="hidden" class="form-control addNewUserInput" placeholder="Password:" value="12345678" asp-for="RegisterDTO.Password" autocomplete="off" />
-                        <input type="text" class="form-control addNewUserInput" placeholder="Password:" value="12345678" disabled autocomplete="off" />
+                        <input type="text" class="form-control addNewUserInput" placeholder="Position:" asp-for="RegisterDTO.Position" autocomplete="off" id="addNewEmailUser" />
+
                     </div>
                     <div class="addNewUserModalBodyDiv6">
-                        <span asp-validation-for="RegisterDTO.Password" class="text-danger"></span>
+                        <span asp-validation-for="RegisterDTO.Position" class="text-danger"></span>
+
                     </div>
-                    <div class="addNewUserModalBodyDiv7">
+                    <div class="addNewUserModalBodyDiv7" style="justify-content:space-evenly">
+                        <input type="hidden" class="form-control addNewUserInput" placeholder="Password:" value="12345678" asp-for="RegisterDTO.Password" autocomplete="off" />
+                        <input type="text" class="form-control addNewUserInput" placeholder="Password:" value="12345678" disabled autocomplete="off" style="width:30%;"/>
                         <input type="hidden" class="form-control addNewUserInput" placeholder="Confirm Password:" value="12345678" asp-for="RegisterDTO.ConfirmPassword" autocomplete="off" />
-                        <input type="text" class="form-control addNewUserInput" placeholder="Confirm Password:" disabled value="12345678" autocomplete="off" />
+                        <input type="text" class="form-control addNewUserInput" placeholder="Confirm Password:" disabled value="12345678" autocomplete="off" style="width:30%;" />
                     </div>
                     <div class="addNewUserModalBodyDiv8">
-                        <span asp-validation-for="RegisterDTO.ConfirmPassword" class="text-danger"></span>
+    
+
                     </div>
                     <div class="addNewUserModalBodyDiv9" style="height:15%; justify-content:space-evenly;">
 
@@ -190,10 +194,10 @@
 
                         </select>
 
-                        <select class="addNewUserSelect" asp-for="RegisterDTO.UserRole">
-                            <option selected disabled> Role </option>
+                        <select class="addNewUserSelect" asp-for="RegisterDTO.UserRole" id="addNewUserRoles">
+@*                          <option selected disabled> Role </option>
                             <option value="Employee"> Employee </option>
-                            <option value="Manager"> Manager </option>
+                            <option value="Manager"> Manager </option> *@
                         </select>
 
                     </div>
@@ -224,7 +228,7 @@
                 <div class="modal-header" style="height:50px; background:#1E4F3B; display:flex; border-radius:.5rem .5rem 0 0 ;">
 
                     <div class="modal-headerDiv1" style="width:95%; display:flex;justify-content:center;align-items:center;">
-                        <h4 style="color:white;">ADD SECTION</h4>
+                        <h4 style="color:gold;">ADD SECTION</h4>
                     </div>
                     <div class="modal-headerDiv2">
                         <i class="fa fa-times closeAddNewData" aria-hidden="true" data-bs-dismiss="modal" aria-label="Close"></i>
@@ -236,26 +240,31 @@
                     <div class="addSectionBodyDiv1">
       
                         <div style="width:60%; height:60%;">
+
                         </div>
 
                         <div style="width:40%; height:40%; display:flex; justify-content:flex-end;">
-                            <button class="addWorkingHoursPerDay" onclick="preventFormSubmit(event)" data-bs-toggle="modal" data-bs-target="#addLegend" style="border:none; width:80%; height:100%; border-radius:.2rem;"><span style="font-size:15px">ADD LEGEND</span></button>
+                            <button class="addWorkingHoursPerDay" id="addLegendButton" onclick="preventFormSubmit(event)" data-bs-toggle="modal" data-bs-target="#addLegend" style="border:none; width:80%; height:100%; border-radius:.2rem;"><span style="font-size:15px">ADD LEGEND</span></button>
                         </div>
 
                     </div>
+
                     <div class="addSectionBodyDiv2">
                   
                         <input type="text" class="form-control-lg addNewUserInput" placeholder="Section Name:" autocomplete="off" asp-for="SectionDTO.SectionName" />
                         <i class="fa fa-cog" aria-hidden="true" data-bs-toggle="modal" data-bs-target="#sectionSettings"></i>
 
                     </div>
+
                     <div class="" style="height:10%;width:100%; text-align:center;">
                         <span asp-validation-for="SectionDTO.SectionName" class="text-danger"></span>
                     </div>
+
                     <div class="addSectionBodyDiv3">
                   
                         <button type="submit" class="addWorkingHoursPerDay" style="border:none;"><span style="font-size:20px">ADD</span></button>
                     </div>
+
                 </div>
             </div>
         </div>
@@ -275,7 +284,7 @@
                 <div class="modal-header" style="height:50px; background:#1E4F3B; display:flex; border-radius:.5rem .5rem 0 0 ;">
 
                     <div class="modal-headerDiv1" style="width:95%; display:flex;justify-content:center;align-items:center;">
-                        <h4 style="color:white;">ADD LEGEND</h4>
+                        <h4 style="color:gold;">ADD LEGEND</h4>
                     </div>
                     <div class="modal-headerDiv2">
                         <i class="fa fa-times closeAddNewData" aria-hidden="true" data-bs-dismiss="modal" aria-label="Close"></i>
@@ -288,7 +297,7 @@
                     <div class="addSectionBodyDiv1" style="height:30%;">         
                         
                         <select class="form-control addNewDataInput" id="addLegendSection" style="color:#425833; width:50%; text-align:center;" asp-for="AddLegendDTO.sectionId">
-                            <option disabled="" selected="">SELECT SECTION</option>
+                    
                         </select>
                         <i class="fa fa-cog" aria-hidden="true" data-bs-toggle="modal" data-bs-target="#legendSettings"></i>
                     </div>
@@ -326,7 +335,7 @@
 
             <div class="modal-header" style="height:50px; background:#1E4F3B; display:flex; border-radius:.5rem .5rem 0 0 ;">
                 <div class="modal-headerDiv1" style="width:95%; display:flex;justify-content:center;align-items:center;">
-                    <h4 style="color:white;">LEGEND SETTINGS</h4>
+                    <h4 style="color:gold;">LEGEND SETTINGS</h4>
                 </div>
                 <div class="modal-headerDiv2">
                     <i class="fa fa-times closeAddNewData" aria-hidden="true" data-bs-dismiss="modal" aria-label="Close"></i>
@@ -347,13 +356,13 @@
 <form asp-action="DeleteLegend" method="post">
     <div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="staticBackdropLabel" id="deleteLegendModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document" style="height:50vh;">
-            <div class="modal-content" style="height: 240px; font-family: 'Montserrat', sans-serif; background-color:#DFEFD8;">
+            <div class="modal-content" style="height: 240px; font-family: 'Montserrat', sans-serif; background-color:#142d09;">
                 <div class="modal-body logoutModalBody">
 
                     <div class="logoutModalBody1" style="flex-direction:column">
 
-                        <h5 style="text-align:center;">Are you sure you want to delete the Legend of</h5>
-                        <h4 id="legendNameToDelete" style="text-align:center;"></h4>
+                        <h5 style="text-align:center;color:gold;">Are you sure you want to delete the Legend of</h5>
+                        <h4 id="legendNameToDelete" style="text-align:center;color:gold;"></h4>
                     </div>
                     <input type="hidden" name="id" class="sectionIdToDelete" id="legendIdToDelete" />
 
@@ -375,7 +384,7 @@
 <form asp-action="UpdateLegend" method="post">
     <div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="staticBackdropLabel" id="editLegendModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document" style="height:50vh;">
-            <div class="modal-content" style="height: 240px; font-family: 'Montserrat', sans-serif; background-color:#DFEFD8;">
+            <div class="modal-content" style="height: 240px; font-family: 'Montserrat', sans-serif; background-color:#142d09;">
                 <div class="modal-body legendBody" >
 
                     <div class="legendBodyDiv1">
@@ -385,14 +394,14 @@
                             <input type="hidden" class="sectionIdToEdit addNewUserInput" asp-for="AddLegendDTO.legendID" id="legendId"/>
 
                             <input type="hidden" class="sectionIdToEdit addNewUserInput" asp-for="AddLegendDTO.sectionId" id="sectionId" />             
-                            <input type="text" name="sectionName" class="sectionNameToEdit addNewUserInput form-control" id="sectionName" style="text-align:center; background-color:white; color:#425833;" disabled />
+                            <input type="text" name="sectionName" class="sectionNameToEdit addNewUserInput form-control" id="sectionName" style="text-align:center; background-color:gold; color:black;" disabled />
 
                         </div>
 
                         <div class="legendBodyDiv1Inner2">
-                            <input type="number" class="form-control addNewUserInput" autocomplete="off" style="width:15%;  background-color:white; color:#425833;" id="legendLow" asp-for="AddLegendDTO.LOW" />
-                            <input type="number" class="form-control addNewUserInput" autocomplete="off" style="width:15%;  background-color:white; color:#425833;" id="legendMed" asp-for="AddLegendDTO.MED" />
-                            <input type="number" class="form-control addNewUserInput" autocomplete="off" style="width:15%;  background-color:white; color:#425833;" id="legendMax" asp-for="AddLegendDTO.MAX" />
+                            <input type="number" class="form-control addNewUserInput" autocomplete="off" style="width:15%;  background-color:white; color:black;" id="legendLow" asp-for="AddLegendDTO.LOW" />
+                            <input type="number" class="form-control addNewUserInput" autocomplete="off" style="width:15%;  background-color:white; color:black;" id="legendMed" asp-for="AddLegendDTO.MED" />
+                            <input type="number" class="form-control addNewUserInput" autocomplete="off" style="width:15%;  background-color:white; color:black;" id="legendMax" asp-for="AddLegendDTO.MAX" />
                         </div>
 
                     </div>
@@ -427,7 +436,7 @@
 
             <div class="modal-header" style="height:50px; background:#1E4F3B; display:flex; border-radius:.5rem .5rem 0 0 ;">
                 <div class="modal-headerDiv1" style="width:95%; display:flex;justify-content:center;align-items:center;">
-                    <h4 style="color:white;">SECTION SETTINGS</h4>
+                    <h4 style="color:gold;">SECTION SETTINGS</h4>
                 </div>
                 <div class="modal-headerDiv2">
                     <i class="fa fa-times closeAddNewData" aria-hidden="true" data-bs-dismiss="modal" aria-label="Close"></i>
@@ -449,13 +458,13 @@
 <form asp-action="DeleteSection" method="post">
     <div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="staticBackdropLabel" id="deleteSectionModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document" style="height:50vh;">
-            <div class="modal-content" style="height: 240px; font-family: 'Montserrat', sans-serif; background-color:#DFEFD8;">
+            <div class="modal-content" style="height: 240px; font-family: 'Montserrat', sans-serif; background-color:#142d09;">
                 <div class="modal-body logoutModalBody">
 
                     <div class="logoutModalBody1" style="flex-direction:column">
 
-                        <h5 style="text-align:center;">Are you sure you want to Delete </h5>
-                        <h4 id="sectionNameToDelete" style="text-align:center;"></h4>
+                        <h5 style="text-align:center; color:gold;">Are you sure you want to Delete </h5>
+                        <h4 id="sectionNameToDelete" style="text-align:center;color:gold;"></h4>
                     </div>
                     <input type="hidden" name="sectionId" class="sectionIdToDelete" />
 
@@ -477,12 +486,12 @@
 <form asp-action="UpdateSection" method="post">
     <div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="staticBackdropLabel" id="editSectionModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document" style="height:50vh;">
-            <div class="modal-content" style="height: 240px; font-family: 'Montserrat', sans-serif; background-color:#DFEFD8;">
+            <div class="modal-content" style="height: 240px; font-family: 'Montserrat', sans-serif; background-color:#142d09;">
                 <div class="modal-body logoutModalBody">
 
                     <div class="logoutModalBody1" style="flex-direction:column">
 
-                        <input type="text" name="sectionName" class="sectionNameToEdit addNewUserInput form-control" style="text-align:center; background-color:white; color:#425833;" />
+                        <input type="text" name="sectionName" class="sectionNameToEdit addNewUserInput form-control" style="text-align:center; background-color:white; color:black;" />
                      
                     </div>
              
@@ -542,7 +551,7 @@
 <div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="staticBackdropLabel" id="usersProfileModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" style="font-family: 'Montserrat', sans-serif;">
     <div class="modal-dialog modal-dialog-centered" role="document" style="height:50vh;">
 
-        <div class="modal-content" style="height: 500px;">
+        <div class="modal-content" style="height: 450px;">
 
             <div class="modal-header profileHeader">
                 <div class="profileHeaderDiv1">
@@ -581,23 +590,11 @@
 
                     </div>
 
+
                     <div class="profileModalBodyDiv2Inner2">
 
                         <div class="profileModalBodyDiv2Inner2Div1">
-                            <i class="fa fa-phone phoneProfile" aria-hidden="true"></i>
-                        </div>
-                        <div class="profileModalBodyDiv2Inner2Div2">
-                            <span style="margin-right:15%;" class="usersNumber">
-
-
-                            </span>
-                        </div>
-
-                    </div>
-                    <div class="profileModalBodyDiv2Inner2">
-
-                        <div class="profileModalBodyDiv2Inner2Div1">
-                            <i class="fa fa-sitemap" aria-hidden="true"></i>
+                            <i class="fa fa-sitemap phoneProfile" aria-hidden="true"></i>
                         </div>
                         <div class="profileModalBodyDiv2Inner2Div2">
                             <span style="margin-right:15%;" class="usersSection">

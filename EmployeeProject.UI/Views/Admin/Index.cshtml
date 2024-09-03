@@ -1,4 +1,6 @@
-﻿@using EmployeeProject.Application.DTOs.Account
+﻿@using Microsoft.AspNetCore.Authorization
+@inject Microsoft.AspNetCore.Authorization.IAuthorizationService AuthorizationService
+@using EmployeeProject.Application.DTOs.Account
 
 @model ChangePasswordDTO
 
@@ -42,9 +44,13 @@
 
         <div class="dashboardBodyDiv1Inner1">
 
-            <select class="section" id="dashboardSectionDropDown">
-                <option>SECTION</option>
-            </select>
+            @if (User.IsInRole("Manager"))
+            {
+                <select class="section" id="dashboardSectionDropDown">
+                    <option>SECTION</option>
+                </select>
+            }
+
 
             <input type="text" list="names" class="dashboardSearch" id="dashboardSearch" style="box-shadow:none;" placeholder="Search..." autocomplete="off"/>
            
@@ -86,15 +92,9 @@
                 </div>
                   
                 <div class="dashboardBodyDiv1Inner1Div1Div2">
-                    <h5 style="color:#425833;">LEGEND</h5>
+                    <h4 style="color:#425833;">LEGEND</h4>
 
-                    <select class=" sectionforLegend">
-                        <option value="0">SECTION</option>
-         @*              
-                        <option>Dev</option>
-                        <option>Dev</option>
-                        <option>Dev</option> *@
-                    </select>
+
                 </div>
 
             </div>
@@ -193,14 +193,12 @@
     <script src="https://cdn.datatables.net/2.0.8/js/dataTables.min.js"></script>
 
     <script>
-
-
-
-        const currentYear = new Date().getFullYear();
-
+        const startYear = 2024;
+        const endYear = 2044;
 
         const yearSelect = document.querySelector('.year');
-        for (let i = currentYear; i >= currentYear - 20; i--) {
+
+        for (let i = startYear; i <= endYear; i++) {
             const option = document.createElement('option');
             option.value = i;
             option.text = i;

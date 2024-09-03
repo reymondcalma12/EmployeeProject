@@ -13,7 +13,7 @@ namespace EmployeeProject.Application.Interfaces
     public interface IAdminServices
     {
 
-        Task<bool> UpdateProfile(IFormFile image, string position, string name, string email, string number);
+        Task<bool> UpdateProfile(IFormFile image);
 
         Task<IEnumerable<AppUser>> GetAllUsers();
 
@@ -21,18 +21,18 @@ namespace EmployeeProject.Application.Interfaces
 
         Task<IEnumerable<Section>> GetSections();
 
-
+        Task<List<List<SectionForAddLegendDTO>>> GetLegendSections();
         Task<IEnumerable<Legend>> GetLegends();
 
         Task<IEnumerable<BusinessOrIt>> GetBusinessOrIt();
 
         Task<IEnumerable<AllowedHours>> GetAllowedHours();
-
+        Task<AppUser> GetUserDetails();
         Task<IEnumerable<AppUser>> GetUserAddDataSheet(string name);
 
         Task<IEnumerable<AppUser>> GetUserSearch(string? name, int? section);
 
-
+        Task<(bool, string, string)> AddDataSheetUserExistEnableButton(string name);
         Task<bool> DeleteUser(string id);
 
         Task<bool> DeleteSection(int id);
@@ -68,7 +68,7 @@ namespace EmployeeProject.Application.Interfaces
 
         Task<IEnumerable<DataSheetBus>> GetAllDataSheet();
 
-        Task<IEnumerable<DataSheetBus>> GetAllDataSheetSort(string? name, int? year);
+        Task<(IEnumerable<DataSheetBus>, bool)> GetAllDataSheetSort(int? sectionId, string? name, int? year);
 
         Task<IEnumerable<Holidays>> GetAllFixedHolidays();
 
@@ -80,7 +80,7 @@ namespace EmployeeProject.Application.Interfaces
 
         Task<List<UserMonthlyStatistics>> GetUserMonthlyStatisticsSort(int? section, string? name, int year);
 
-        Task<LegendDTO> Legend(int sectionId);
+        Task<LegendDTO> Legend(int? sectionId);
 
         Task<bool> DeleteDataSheet(int dataSheetId);
 
@@ -89,7 +89,7 @@ namespace EmployeeProject.Application.Interfaces
 
         Task<bool> UpdateLegend(AddLegendDTO addLegendDTO);
 
-
+        Task<IEnumerable<AppUser>> GetUserAddNewDataForSectionOnly(string name);
 
 
         Task<IEnumerable<DataSheetBus>> GetAllDataSheetEmpolyee();
@@ -104,6 +104,6 @@ namespace EmployeeProject.Application.Interfaces
 
         Task<IEnumerable<MovableNames>> GetMovableNames();
 
-
+        Task<IList<string>> GetAllRoles();
     }
 }

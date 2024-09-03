@@ -68,11 +68,13 @@ namespace EmployeeProject.UI
 
             builder.Services.AddAuthorization(options =>
             {
-                options.AddPolicy("RequireManagerRole", policy =>
-                    policy.RequireRole("Manager"));
+
+                options.AddPolicy("RequireManagerOrProjectManagerRole", policy =>
+                    policy.RequireRole("Manager", "Project_Manager"));
 
                 options.AddPolicy("RequireEmployeeRole", policy =>
                     policy.RequireRole("Employee"));
+
             });
 
 

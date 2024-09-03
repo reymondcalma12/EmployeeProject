@@ -39,7 +39,7 @@ namespace EmployeeProject.Core.Entities.Model
         public BusinessOrIt? BusinessOrIt { get; set; }
 
         [ForeignKey("SectionId")]
-        public int SectionId { get; set; }
+        public int? SectionId { get; set; }
         [ValidateNever]
         public Section? Section { get; set; }
 

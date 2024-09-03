@@ -20,7 +20,7 @@ namespace EmployeeProject.Application.Hubs
             {
                 var allUsers = await adminServices.GetAllUsers();
 
-                await Clients.Caller.SendAsync("ReceiveAllUsers", allUsers);
+                await Clients.All.SendAsync("ReceiveAllUsers", allUsers);
             }
             catch (Exception ex)
             {
@@ -29,6 +29,20 @@ namespace EmployeeProject.Application.Hubs
             }
         }
 
+        public async Task GetAllRoles()
+        {
+            try
+            {
+                var allRoles = await adminServices.GetAllRoles();
+
+                await Clients.All.SendAsync("ReceiveAllRoles", allRoles);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error occurred in GetAllUsers: {ex.Message}");
+                await Clients.Others.SendAsync("Error", "An error occurred while fetching users.");
+            }
+        }
 
         public async Task GetUserSearch(string? name, int? section)
         {
@@ -60,6 +74,20 @@ namespace EmployeeProject.Application.Hubs
             }
         }
 
+        public async Task GetUserAddNewDataForSectionOnly(string name)
+        {
+            try
+            {
+                var allUsersSearch = await adminServices.GetUserAddNewDataForSectionOnly(name);
+
+                await Clients.Caller.SendAsync("GetUserAddNewDataForSectionOnlyResult", allUsersSearch);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error occurred in GetAllUsers: {ex.Message}");
+                await Clients.Others.SendAsync("Error", "An error occurred while fetching users.");
+            }
+        }
 
         public async Task GetSections()
         {
@@ -77,6 +105,21 @@ namespace EmployeeProject.Application.Hubs
                 await Clients.Others.SendAsync("Error", "An error occurred while fetching sections.");
             }
 
+        }
+
+
+        public async Task GetLegendSections()
+        {
+            try
+            {
+                var sections = await adminServices.GetLegendSections();
+                await Clients.Caller.SendAsync("LegendSectionsDropdown", sections);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error occurred in GetLegendSectionsAsync: {ex.Message}");
+                await Clients.Others.SendAsync("Error", "An error occurred while fetching sections and legends.");
+            }
         }
 
 
@@ -140,15 +183,15 @@ namespace EmployeeProject.Application.Hubs
         }
 
         //   HERE
-        public async Task GetAllDataSheetSort(string? name, int? year)
+        public async Task GetAllDataSheetSort(int? sectionId, string? name, int? year)
         {
 
             try
             {
 
-                var data = await adminServices.GetAllDataSheetSort(name, year);
+                var (data, success) = await adminServices.GetAllDataSheetSort(sectionId, name, year);
 
-                await Clients.Caller.SendAsync("GetAllDataSheetSort", data);
+                await Clients.Caller.SendAsync("GetAllDataSheetSort", new { Data = data, Success = success });
 
             }
             catch (Exception ex)
@@ -213,7 +256,7 @@ namespace EmployeeProject.Application.Hubs
 
                 var holidays = holi.OrderBy(a => a.FixedDate);
 
-                await Clients.All.SendAsync("Holidays", holidays);
+                await Clients.Caller.SendAsync("Holidays", holidays);
 
             }
             catch (Exception ex)
@@ -238,7 +281,7 @@ namespace EmployeeProject.Application.Hubs
                 var holidays = holi.OrderBy(a => a.FixedDate);
 
                 await Clients.Caller.SendAsync("HolidaysByYear", holidays);
-
+                
             }
             catch (Exception ex)
             {
@@ -256,7 +299,7 @@ namespace EmployeeProject.Application.Hubs
 
                 var usersMonthlyStatistics = await adminServices.GetUserMonthlyStatistics();
 
-                await Clients.Caller.SendAsync("UsersMonthlyStatistics", usersMonthlyStatistics);
+                await Clients.All.SendAsync("UsersMonthlyStatistics", usersMonthlyStatistics);
             }
             catch (Exception ex)
             {
@@ -303,7 +346,7 @@ namespace EmployeeProject.Application.Hubs
         }
 
 
-        public async Task GetLegend(int legendId)
+        public async Task GetLegend(int? legendId)
         {
             try
             {
@@ -336,6 +379,21 @@ namespace EmployeeProject.Application.Hubs
             }
         }
 
+        public async Task GetUserDetails()
+        {
+            try
+            {
+                var user = await adminServices.GetUserDetails();
+
+                await Clients.Caller.SendAsync("UserDetails", user);
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error occurred in GetLegend: {ex.Message}");
+                await Clients.Caller.SendAsync("Error", "An error occurred while fetching the legend.");
+            }
+        }
 
         public async Task GetStatisticsEmployee()
         {

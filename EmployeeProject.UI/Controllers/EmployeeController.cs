@@ -13,10 +13,12 @@ namespace EmployeeProject.UI.Controllers
     public class EmployeeController : BaseController<EmployeeController>
     {
         private readonly IAdminServices adminServices;
+        private readonly ILogger<AdminController> logger;
 
-        public EmployeeController(IAdminServices adminServices)
+        public EmployeeController(IAdminServices adminServices, ILogger<AdminController> logger)
         {
             this.adminServices = adminServices;
+            this.logger = logger;   
         }
 
         public IActionResult Index(string success)
@@ -48,17 +50,23 @@ namespace EmployeeProject.UI.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> UpdateProfile(IFormFile image, string position, string name, string email, string number)
+        public async Task<IActionResult> UpdateProfile(IFormFile image)
         {
-            var result = await adminServices.UpdateProfile(image, position, name, email, number);
-
-            if (result)
+            try
             {
-                TempData["ProfileUpdated"] = "Profile Updated Successfully!";
-                return RedirectToAction("Index");
+                var result = await adminServices.UpdateProfile(image);
+                if (result)
+                {
+                    TempData["ProfileUpdated"] = "Profile Updated Successfully!";
+                    return RedirectToAction("Index");
+                }
+                return View();
             }
-
-            return View();
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "Error occured while processing, in ");
+                return Json(new { message = "failed" });
+            }
         }
 
     }

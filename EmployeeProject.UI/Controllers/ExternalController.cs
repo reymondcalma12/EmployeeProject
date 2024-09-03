@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
+using System.Net.Http;
 
 namespace EmployeeProject.UI.Controllers
 {
@@ -73,33 +74,21 @@ namespace EmployeeProject.UI.Controllers
                     var userRoles = await userManager.GetRolesAsync(user);
                     var userRole = userRoles.FirstOrDefault();
 
-                    if (user.isNewUser == true)
-                    {
-                        user.isNewUser = false;
-                        await userManager.UpdateAsync(user);
+                    HttpContext.Session.SetString("UsersId", user.Id);
 
-                        if (userRole == "Manager")
-                        {
-                            TempData["NewUser"] = "Yes";
-                            return RedirectToAction("Index", "Admin", new { success = "Login SuccessFully!" });
-                        }
-                        else if (userRole == "Employee")
-                        {
-                            TempData["NewUser"] = "Yes";
-                            return RedirectToAction("Index", "Employee", new { success = "Login SuccessFully!" });
-                        }
-                    }
-                    else
+                    if (userRole == "Manager")
                     {
-                        if (userRole == "Manager")
-                        {
-                            return RedirectToAction("Index", "Admin", new { success = "Login SuccessFully!" });
-                        }
-                        else if (userRole == "Employee")
-                        {
-                            return RedirectToAction("Index", "Employee", new { success = "Login SuccessFully!" });
-                        }
+                        return RedirectToAction("Index", "Admin", new { success = "Login SuccessFully!" });
                     }
+                    else if (userRole == "Project_Manager")
+                    {
+                        return RedirectToAction("Index", "Admin", new { success = "Login SuccessFully!" });
+                    }
+                    else if (userRole == "Employee")
+                    {
+                        return RedirectToAction("Index", "Employee", new { success = "Login SuccessFully!" });
+                    }
+   
                 }
 
                 return Redirect(externalLoginService.PortalUrl);

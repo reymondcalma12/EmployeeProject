@@ -18,6 +18,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace EmployeeProject.Application.Services
 {
@@ -27,17 +28,23 @@ namespace EmployeeProject.Application.Services
         private readonly IAppUnitOfWork appUnitOfWork;
         private readonly IHttpContextAccessor httpcontext;
         private readonly IWebHostEnvironment webHostEnvironment;
+        private readonly RoleManager<IdentityRole> roleManager;
 
-        public AdminServices(UserManager<AppUser> userManager, IAppUnitOfWork appUnitOfWork, IHttpContextAccessor httpcontext, IWebHostEnvironment webHostEnvironment)
+        public AdminServices(UserManager<AppUser> userManager,
+                              IAppUnitOfWork appUnitOfWork,
+                              IHttpContextAccessor httpcontext,
+                              IWebHostEnvironment webHostEnvironment,
+                              RoleManager<IdentityRole> roleManager)
         {
 
             this.userManager = userManager;
             this.appUnitOfWork = appUnitOfWork;
             this.httpcontext = httpcontext;
             this.webHostEnvironment = webHostEnvironment;   
+            this.roleManager = roleManager; 
         }
 
-        public async Task<bool> UpdateProfile(IFormFile image, string position, string name, string email, string number)
+        public async Task<bool> UpdateProfile(IFormFile image)
         {
 
             var userId = httpcontext.HttpContext.Session.GetString("UsersId").ToString();
@@ -47,37 +54,19 @@ namespace EmployeeProject.Application.Services
 
                 var user = userManager.Users.FirstOrDefault(x => x.Id == userId);
 
-                if (image != null && image.Length > 0)
+                var profileName = Guid.NewGuid().ToString() + image.FileName;
+                var imageFilePath = Path.Combine(webHostEnvironment.WebRootPath, "profile", profileName);
+
+                using (var fileStream = new FileStream(imageFilePath, FileMode.Create))
                 {
-                    var profileName = Guid.NewGuid().ToString() + image.FileName;
-                    var imageFilePath = Path.Combine(webHostEnvironment.WebRootPath, "profile", profileName);
-
-                    using (var fileStream = new FileStream(imageFilePath, FileMode.Create))
-                    {
-                        await image.CopyToAsync(fileStream);
-                    }
-
-                    user.FullName = name;
-                    user.position = position;
-                    user.Email = email;
-                    user.PhoneNumber = number;
-                    user.profileString = profileName;
-
-                    await appUnitOfWork.Complete();
-                    return true;
+                    await image.CopyToAsync(fileStream);
                 }
-                else
-                {
-      
-                    user.FullName = name;
-                    user.position = position;
-                    user.Email = email;
-                    user.PhoneNumber = number;
 
+                user.profileString = profileName;
 
-                    await appUnitOfWork.Complete();
-                    return true;
-                }
+                await appUnitOfWork.Complete();
+                return true;
+    
             }
             else
             {
@@ -103,6 +92,35 @@ namespace EmployeeProject.Application.Services
 
             return sections;
         }
+
+
+
+
+        public async Task<List<List<SectionForAddLegendDTO>>> GetLegendSections()
+        {
+            var sections = await appUnitOfWork.repository<Section>().AsQueryable().ToListAsync();
+            var legends = await appUnitOfWork.repository<Legend>().AsQueryable().Include(l => l.Section).ToListAsync();
+
+            var sectionDtosList = new List<List<SectionForAddLegendDTO>>();
+
+            foreach (var section in sections)
+            {
+                var sectionDtos = new List<SectionForAddLegendDTO>
+                {
+                    new SectionForAddLegendDTO
+                    {
+                        SectionId = section.SectionId,
+                        SectionName = section.SectionName,
+                        Status = legends.Any(l => l.SectionId == section.SectionId) ? "disabled" : "null"
+                    }
+                };
+
+                sectionDtosList.Add(sectionDtos);
+            }
+
+            return sectionDtosList;
+        }
+
 
 
 
@@ -153,13 +171,79 @@ namespace EmployeeProject.Application.Services
         }
 
 
+
+        public async Task<IEnumerable<AppUser>> GetUserAddNewDataForSectionOnly(string name)
+        {
+            var userId = httpcontext.HttpContext.Session.GetString("UsersId").ToString();
+
+            var user = await userManager.Users.Include(a => a.Section).FirstOrDefaultAsync(a => a.Id == userId);
+
+            string searchName = name.ToLower();
+
+            var users = await userManager.Users.Include(a => a.Section).Where(a => a.FullName.ToLower()
+               .Contains(searchName)).Where(a => a.SectionId == user.SectionId).ToListAsync();
+
+            return users;
+        }
+
+        public async Task<(bool, string, string)> AddDataSheetUserExistEnableButton(string name)
+        {
+
+            var userssId = httpcontext.HttpContext.Session.GetString("UsersId").ToString();
+
+            var userss = await userManager.Users.Include(a => a.Section).FirstOrDefaultAsync(a => a.Id == userssId);
+
+            var nameLow = name.ToLower();
+
+            var users = await userManager.Users.Where(u => u.FullName.ToLower().Contains(nameLow)).Include(a => a.Section).Where(a => a.SectionId == userss.SectionId).ToListAsync();
+
+            if (users.Count > 1)
+            {
+                return (false, null, null);
+            }
+            else if (users.Count == 1)
+            {
+
+                var user = users.First();
+
+                var userFullNameToLower = user.FullName.ToLower();
+
+                if (userFullNameToLower == nameLow)
+                {
+                    var userSection = user.Section.SectionName;
+
+                    var userFullName = user.FullName;
+
+                    return (true, userFullName, userSection);
+                }
+                else
+                {
+                    return (false, null, null);
+                }
+            }
+            else
+            {
+                return (false, null, null);
+            }
+
+        }
+
+        public async Task<IList<string>> GetAllRoles()
+        {
+
+            IList<IdentityRole> roles = await roleManager.Roles.ToListAsync();
+
+            List<string> roleNames = roles.Select(r => r.Name).ToList();
+
+            return roleNames;
+        }
+
         public async Task<int> CountAllUsers()
         {
 
             var users = userManager.Users.Count();
 
             return users;
-
         }
 
         public async Task<bool> DeleteUser(string id)
@@ -211,23 +295,71 @@ namespace EmployeeProject.Application.Services
         }
 
 
+        public async Task<AppUser> GetUserDetails()
+        {
+            var userId = httpcontext.HttpContext.Session.GetString("UsersId").ToString();
+
+            var user = await userManager.Users.Include(a => a.Section).FirstOrDefaultAsync(a => a.Id == userId);
+
+            return user;
+        }
+
 
         public async Task<bool> DeleteSection(int id)
         {
-            if (id != null)
+
+
+            //USER
+            var users = await userManager.Users.Where(a => a.SectionId == id).ToListAsync();
+
+            if (users != null)
             {
+                foreach (var user in users)
+                {
+                    user.SectionId = null;
+                    await userManager.UpdateAsync(user);
 
-                var section = await appUnitOfWork.repository<Section>().GetFirstOrDefaultAsync(a => a.SectionId == id);
-
-                appUnitOfWork.repository<Section>().Remove(section);
-
-                await appUnitOfWork.Complete();
-
-                return true;
+                    await appUnitOfWork.Complete();
+                }
             }
 
 
-            return false;
+
+            //DATASHEET
+            var dataSheets = await appUnitOfWork.repository<DataSheetBus>().AsQueryable().Where(a => a.SectionId == id).ToListAsync();
+
+            if (dataSheets != null)
+            {
+                foreach (var dataSheet in dataSheets)
+                {
+                    dataSheet.SectionId = null;
+                    appUnitOfWork.repository<DataSheetBus>().Update(dataSheet);
+
+                    await appUnitOfWork.Complete();
+                }
+            }
+ 
+
+
+            //LEGENDD
+            var legends = await appUnitOfWork.repository<Legend>().AsQueryable().FirstOrDefaultAsync(a => a.SectionId == id);
+
+            if (legends != null)
+            {
+                appUnitOfWork.repository<Legend>().Remove(legends);
+                await appUnitOfWork.Complete();
+            }
+
+
+            //SECTION
+            var section = await appUnitOfWork.repository<Section>().GetFirstOrDefaultAsync(a => a.SectionId == id);
+
+            appUnitOfWork.repository<Section>().Remove(section);
+
+            await appUnitOfWork.Complete();
+
+            return true;
+            
         }
 
         public async Task<bool> UpdateSection(int sectionId, string sectionName)
@@ -308,9 +440,19 @@ namespace EmployeeProject.Application.Services
             {
                 var section = appUnitOfWork.repository<Section>().AsQueryable().Where(a => a.SectionId == user.SectionId).FirstOrDefault();
 
-                var userSection = section.SectionName;
+                if (section != null)
+                {
+                    var userSection = section.SectionName;
 
-                return (true, userSection);
+                    return (true, userSection);
+                }
+                else
+                {
+                    string message = "No";
+
+                    return (false, message);
+                }
+
             }
             else
             {
@@ -320,6 +462,8 @@ namespace EmployeeProject.Application.Services
             }
 
         }
+
+
 
 
         public async Task<bool> AddDataSheet(DataSheetBusDTO dataSheetBusDTO)
@@ -496,7 +640,45 @@ namespace EmployeeProject.Application.Services
 
             var project = await appUnitOfWork.repository<Project>().AsQueryable().Where(a => a.ProjectName == dataSheetBusDTO.ProjectName).FirstOrDefaultAsync();
 
+            if(project == null)
+            {
+
+                Project project1 = new Project
+                {
+                    ProjectName = dataSheetBusDTO.ProjectName,
+                };
+
+                appUnitOfWork.repository<Project>().Add(project1);
+                await appUnitOfWork.Complete();
+
+                dataSheet.ProjectId = project1.ProjectId;
+            }
+            else
+            {
+                dataSheet.ProjectId = project.ProjectId;
+
+            }
+
             var activity = await appUnitOfWork.repository<Activity>().AsQueryable().Where(a => a.ActivityName == dataSheetBusDTO.ActivityName).FirstOrDefaultAsync();
+
+            if (activity == null)
+            {
+
+                Activity activity1 = new Activity
+                {
+                    ActivityName = dataSheetBusDTO.ActivityName,
+                };
+
+                appUnitOfWork.repository<Activity>().Add(activity1);
+                await appUnitOfWork.Complete();
+
+                dataSheet.ActivityId = activity1.ActivityId;
+            }
+            else
+            {
+                dataSheet.ActivityId = activity.ActivityId;
+            }
+
 
             var businessOrIt = await appUnitOfWork.repository<BusinessOrIt>().AsQueryable().Where(a => a.BusinessOrItName == dataSheetBusDTO.BusinessOrIt).FirstOrDefaultAsync();
             
@@ -505,11 +687,8 @@ namespace EmployeeProject.Application.Services
             if (dataSheet != null)
             {
                 dataSheet.AppUserId = user.Id;
-                dataSheet.ProjectId = project.ProjectId;
-                dataSheet.ActivityId = activity.ActivityId;
                 dataSheet.BusinessOrItId = businessOrIt.BusinessOrItId;
                 dataSheet.SectionId = section.SectionId;
-
                 dataSheet.StartDate = dataSheetBusDTO.StartDate;
                 dataSheet.EndDate = dataSheetBusDTO.EndDate;
                 dataSheet.HoursPerDay = dataSheetBusDTO.HoursPerDay;
@@ -607,11 +786,12 @@ namespace EmployeeProject.Application.Services
         //}
 
 
-        public async Task<IEnumerable<DataSheetBus>> GetAllDataSheetSort(string? name, int? year)
+        public async Task<(IEnumerable<DataSheetBus>, bool)> GetAllDataSheetSort(int? sectionId, string? name, int? year)
         {
-            var users = await userManager.Users
-                .Where(u => appUnitOfWork.repository<DataSheetBus>().AsQueryable().Any(d => d.AppUserId == u.Id))
-                .ToListAsync();
+
+            var userID = httpcontext.HttpContext.Session.GetString("UsersId");
+
+            var user = userManager.Users.FirstOrDefault(a => a.Id == userID);
 
             string userName = null;
 
@@ -620,23 +800,76 @@ namespace EmployeeProject.Application.Services
                 userName = name.ToLower();
             }
 
-            var data = await appUnitOfWork.repository<DataSheetBus>()
-                .AsQueryable()
-                .Where(d => (d.EndDate.Year == year || d.StartDate.Year == year) && ( d.AppUser.FullName.ToLower().Contains(userName) || string.IsNullOrEmpty(name)))
-                .Include(d => d.Section)
-                .Include(d => d.Project)
-                .Include(d => d.Activity)
-                .Include(d => d.BusinessOrIt)
-                .Include(d => d.AppUser)
-                .OrderBy(d => d.Section)
-                .ToListAsync();
+            
+            Section userSection = null;
 
-            return data;
+            if (sectionId != null)
+            {
+                userSection =  appUnitOfWork.repository<Section>().AsQueryable().FirstOrDefault(a => a.SectionId == sectionId);
+
+                if (user.SectionId == userSection.SectionId)
+                {
+
+                    var data = await appUnitOfWork.repository<DataSheetBus>()
+                    .AsQueryable()
+                    .Where(d => d.StartDate.Year == year || d.EndDate.Year == year)
+                    .Where(d => (userSection == null || d.Section.SectionName == userSection.SectionName) && ( d.AppUser.FullName.ToLower().Contains(userName) || string.IsNullOrEmpty(name)))
+                    .Include(d => d.Section)
+                    .Include(d => d.Project)
+                    .Include(d => d.Activity)
+                    .Include(d => d.BusinessOrIt)
+                    .Include(d => d.AppUser)
+                    .OrderBy(d => d.Section)
+                    .ToListAsync();
+
+                    return (data, true);
+                }
+                else
+                {
+                    var data = await appUnitOfWork.repository<DataSheetBus>()
+                    .AsQueryable()
+                    .Where(d => d.StartDate.Year == year || d.EndDate.Year == year)
+                    .Where(d => (userSection == null || d.Section.SectionName == userSection.SectionName) && (d.AppUser.FullName.ToLower().Contains(userName) || string.IsNullOrEmpty(name)))
+                    .Include(d => d.Section)
+                    .Include(d => d.Project)
+                    .Include(d => d.Activity)
+                    .Include(d => d.BusinessOrIt)
+                    .Include(d => d.AppUser)
+                    .OrderBy(d => d.Section)
+                    .ToListAsync();
+
+                    return (data, false);
+
+                }
+
+            }
+            else
+            {
+                var data = await appUnitOfWork.repository<DataSheetBus>()
+                    .AsQueryable()
+                    .Include(d => d.Section)
+                    .Include(d => d.Project)
+                    .Include(d => d.Activity)
+                    .Include(d => d.BusinessOrIt)
+                    .Include(d => d.AppUser)
+                    .OrderBy(d => d.Section)
+                    .Where(d => d.StartDate.Year == year || d.EndDate.Year == year)
+                    .Where(d => (string.IsNullOrEmpty(userName) || d.AppUser.FullName.ToLower().Contains(userName)) && d.SectionId == user.SectionId)
+                    .ToListAsync();
+
+                return (data, true);
+            }
+
         }
 
 
         public async Task<IEnumerable<DataSheetBus>> GetAllDataSheet()
         {
+
+            var userId = httpcontext.HttpContext.Session.GetString("UsersId").ToString();
+
+            var user = await userManager.Users.FirstOrDefaultAsync(a => a.Id == userId);
+            
             var data = await appUnitOfWork.repository<DataSheetBus>()
                 .AsQueryable()
                 .Include(a => a.Section)
@@ -649,13 +882,6 @@ namespace EmployeeProject.Application.Services
 
             return data;
         }
-
-
-
-
-
-
-
 
         public async Task<List<UserMonthlyStatistics>> GetUserMonthlyStatistics()
         {
@@ -715,6 +941,145 @@ namespace EmployeeProject.Application.Services
             }
             return userStats;
         }
+
+
+        public async Task<List<UserMonthlyStatistics>> GetUserMonthlyStatisticsSort(int? section, string? name, int year)
+        {
+            var datasheet = await GetAllDataSheet();
+            var holidays = await GetHolidays(year);
+
+            string userName = null;
+
+            if (!string.IsNullOrEmpty(name))
+            {
+                userName = name.ToLower();
+            }
+
+            Section userSection = null;
+
+            if (section != null)
+            {
+                userSection = appUnitOfWork.repository<Section>().AsQueryable().Where(a => a.SectionId == section).FirstOrDefault();
+
+                var userStats = datasheet
+               .Where(d => d.StartDate.Year == year || d.EndDate.Year == year)
+               .Where(d => (userName == null || d.AppUser.FullName.ToLower().Contains(userName)) && (userSection == null || d.Section.SectionName == userSection.SectionName))
+               .GroupBy(d => new { d.AppUserId, d.Section.SectionName })
+               .Select(g => new UserMonthlyStatistics
+               {
+                   AppUserId = g.Key.AppUserId,
+                   AppUserName = g.FirstOrDefault().AppUser.FullName,
+                   SectionId = g.FirstOrDefault().SectionId,
+                   SectionName = g.Key.SectionName,
+                   Low = 0,
+                   Med = 0,
+                   Max = 0,
+                   January = CalculateMonthlyHours(g, holidays, year, 1),
+                   February = CalculateMonthlyHours(g, holidays, year, 2),
+                   March = CalculateMonthlyHours(g, holidays, year, 3),
+                   April = CalculateMonthlyHours(g, holidays, year, 4),
+                   May = CalculateMonthlyHours(g, holidays, year, 5),
+                   June = CalculateMonthlyHours(g, holidays, year, 6),
+                   July = CalculateMonthlyHours(g, holidays, year, 7),
+                   August = CalculateMonthlyHours(g, holidays, year, 8),
+                   September = CalculateMonthlyHours(g, holidays, year, 9),
+                   October = CalculateMonthlyHours(g, holidays, year, 10),
+                   November = CalculateMonthlyHours(g, holidays, year, 11),
+                   December = CalculateMonthlyHours(g, holidays, year, 12)
+               }).ToList();
+
+                var legends = await appUnitOfWork.repository<Legend>().GetAllAsync();
+
+                foreach (var stat in userStats)
+                {
+                    var legend = legends.FirstOrDefault(l => l.SectionId == stat.SectionId);
+                    if (legend != null)
+                    {
+                        stat.Low = legend.LOW ?? 0;
+                        stat.Med = legend.MED ?? 0;
+                        stat.Max = legend.MAX ?? 0;
+                    }
+
+                    stat.TotalHours = (stat.January ?? 0) +
+                       (stat.February ?? 0) +
+                       (stat.March ?? 0) +
+                       (stat.April ?? 0) +
+                       (stat.May ?? 0) +
+                       (stat.June ?? 0) +
+                       (stat.July ?? 0) +
+                       (stat.August ?? 0) +
+                       (stat.September ?? 0) +
+                       (stat.October ?? 0) +
+                       (stat.November ?? 0) +
+                       (stat.December ?? 0);
+                }
+                return userStats;
+            }
+            else
+            {
+
+                var userID = httpcontext.HttpContext.Session.GetString("UsersId");
+
+                var user = userManager.Users.FirstOrDefault(a => a.Id == userID);
+
+                var userStats = datasheet
+               .Where(d => d.StartDate.Year == year || d.EndDate.Year == year)
+               .Where(d => (userName == null || d.AppUser.FullName.ToLower().Contains(userName)) && (d.Section.SectionName == user.Section.SectionName))
+               .GroupBy(d => new { d.AppUserId, d.Section.SectionName })
+               .Select(g => new UserMonthlyStatistics
+               {
+                   AppUserId = g.Key.AppUserId,
+                   AppUserName = g.FirstOrDefault().AppUser.FullName,
+                   SectionId = g.FirstOrDefault().SectionId,
+                   SectionName = g.Key.SectionName,
+                   Low = 0,
+                   Med = 0,
+                   Max = 0,
+                   January = CalculateMonthlyHours(g, holidays, year, 1),
+                   February = CalculateMonthlyHours(g, holidays, year, 2),
+                   March = CalculateMonthlyHours(g, holidays, year, 3),
+                   April = CalculateMonthlyHours(g, holidays, year, 4),
+                   May = CalculateMonthlyHours(g, holidays, year, 5),
+                   June = CalculateMonthlyHours(g, holidays, year, 6),
+                   July = CalculateMonthlyHours(g, holidays, year, 7),
+                   August = CalculateMonthlyHours(g, holidays, year, 8),
+                   September = CalculateMonthlyHours(g, holidays, year, 9),
+                   October = CalculateMonthlyHours(g, holidays, year, 10),
+                   November = CalculateMonthlyHours(g, holidays, year, 11),
+                   December = CalculateMonthlyHours(g, holidays, year, 12)
+               }).ToList();
+
+                var legends = await appUnitOfWork.repository<Legend>().GetAllAsync();
+
+                foreach (var stat in userStats)
+                {
+                    var legend = legends.FirstOrDefault(l => l.SectionId == stat.SectionId);
+                    if (legend != null)
+                    {
+                        stat.Low = legend.LOW ?? 0;
+                        stat.Med = legend.MED ?? 0;
+                        stat.Max = legend.MAX ?? 0;
+                    }
+
+                    stat.TotalHours = (stat.January ?? 0) +
+                       (stat.February ?? 0) +
+                       (stat.March ?? 0) +
+                       (stat.April ?? 0) +
+                       (stat.May ?? 0) +
+                       (stat.June ?? 0) +
+                       (stat.July ?? 0) +
+                       (stat.August ?? 0) +
+                       (stat.September ?? 0) +
+                       (stat.October ?? 0) +
+                       (stat.November ?? 0) +
+                       (stat.December ?? 0);
+                }
+                return userStats;
+            }
+
+
+        }
+
 
 
 
@@ -884,79 +1249,7 @@ namespace EmployeeProject.Application.Services
 
 
 
-        public async Task<List<UserMonthlyStatistics>> GetUserMonthlyStatisticsSort(int? section, string? name, int year)
-        {
-            var datasheet = await GetAllDataSheet();
-            var holidays = await GetHolidays(year);
 
-            string userName = null;
-
-            if (!string.IsNullOrEmpty(name))
-            {
-                userName = name.ToLower();
-            }
-
-            Section userSection = null;
-
-            if (section != null)
-            {
-                userSection = appUnitOfWork.repository<Section>().AsQueryable().Where(a => a.SectionId == section).FirstOrDefault();
-            }
-
-             var userStats = datasheet
-                .Where(d => d.StartDate.Year == year || d.EndDate.Year == year)
-                .Where(d => (userName == null || d.AppUser.FullName.ToLower().Contains(userName)) && (userSection == null || d.Section.SectionName == userSection.SectionName))
-                .GroupBy(d => new { d.AppUserId, d.Section.SectionName })
-                .Select(g => new UserMonthlyStatistics
-                {
-                    AppUserId = g.Key.AppUserId,
-                    AppUserName = g.FirstOrDefault().AppUser.FullName,
-                    SectionId = g.FirstOrDefault().SectionId,
-                    SectionName = g.Key.SectionName,
-                    Low = 0,
-                    Med = 0,
-                    Max = 0,
-                    January = CalculateMonthlyHours(g, holidays, year, 1),
-                    February = CalculateMonthlyHours(g, holidays, year, 2),
-                    March = CalculateMonthlyHours(g, holidays, year, 3),
-                    April = CalculateMonthlyHours(g, holidays, year, 4),
-                    May = CalculateMonthlyHours(g, holidays, year, 5),
-                    June = CalculateMonthlyHours(g, holidays, year, 6),
-                    July = CalculateMonthlyHours(g, holidays, year, 7),
-                    August = CalculateMonthlyHours(g, holidays, year, 8),
-                    September = CalculateMonthlyHours(g, holidays, year, 9),
-                    October = CalculateMonthlyHours(g, holidays, year, 10),
-                    November = CalculateMonthlyHours(g, holidays, year, 11),
-                    December = CalculateMonthlyHours(g, holidays, year, 12)
-                }).ToList();
-
-            var legends = await appUnitOfWork.repository<Legend>().GetAllAsync();
-
-            foreach (var stat in userStats)
-            {
-                var legend = legends.FirstOrDefault(l => l.SectionId == stat.SectionId);
-                if (legend != null)
-                {
-                    stat.Low = legend.LOW ?? 0;
-                    stat.Med = legend.MED ?? 0;
-                    stat.Max = legend.MAX ?? 0;
-                }
-
-                stat.TotalHours = (stat.January ?? 0) +
-                   (stat.February ?? 0) +
-                   (stat.March ?? 0) +
-                   (stat.April ?? 0) +
-                   (stat.May ?? 0) +
-                   (stat.June ?? 0) +
-                   (stat.July ?? 0) +
-                   (stat.August ?? 0) +
-                   (stat.September ?? 0) +
-                   (stat.October ?? 0) +
-                   (stat.November ?? 0) +
-                   (stat.December ?? 0);
-            }
-            return userStats;
-        }
 
 
         private double CalculateMonthlyHours(IEnumerable<DataSheetBus> records, IEnumerable<Holidays> holidays, int year, int month)
@@ -1179,32 +1472,62 @@ namespace EmployeeProject.Application.Services
 
 
 
-        public async Task<LegendDTO> Legend(int sectionId)
+        public async Task<LegendDTO> Legend(int? sectionId)
         {
+
             if (sectionId == null)
-                return null;
-
-            try
             {
-                var legend = await appUnitOfWork.repository<Legend>().AsQueryable()
-                    .Where(a => a.SectionId == sectionId)
-                    .FirstOrDefaultAsync();
 
-                if (legend == null)
-                    return null;
+                var userId = httpcontext.HttpContext.Session.GetString("UsersId").ToString();
 
-                return new LegendDTO
+                var user = await userManager.Users.FirstOrDefaultAsync(a => a.Id == userId);
+
+                try
                 {
-                    MAX = legend.MAX,
-                    MED = legend.MED,
-                    LOW = legend.LOW
-                };
+                    var legend = await appUnitOfWork.repository<Legend>().AsQueryable()
+                        .Where(a => a.SectionId == user.SectionId)
+                        .FirstOrDefaultAsync();
+
+                    if (legend == null)
+                        return null;
+
+                    return new LegendDTO
+                    {
+                        MAX = legend.MAX,
+                        MED = legend.MED,
+                        LOW = legend.LOW
+                    };
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error occurred in Legend: {ex.Message}");
+                    return null;
+                }
+
             }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error occurred in Legend: {ex.Message}");
-                return null;
-            }
+            else {
+                try
+                {
+                    var legend = await appUnitOfWork.repository<Legend>().AsQueryable()
+                        .Where(a => a.SectionId == sectionId)
+                        .FirstOrDefaultAsync();
+
+                    if (legend == null)
+                        return null;
+
+                    return new LegendDTO
+                    {
+                        MAX = legend.MAX,
+                        MED = legend.MED,
+                        LOW = legend.LOW
+                    };
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error occurred in Legend: {ex.Message}");
+                    return null;
+                }
+            }  
         }
 
         public async Task<bool> DeleteDataSheet(int dataSheetId)
@@ -1243,23 +1566,6 @@ namespace EmployeeProject.Application.Services
             }
 
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

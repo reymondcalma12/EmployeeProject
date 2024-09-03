@@ -26,16 +26,15 @@
 .usersBodyDiv2Inner {
     height: 95%;
     width: 98%;
-
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     overflow-y: auto;
     overflow-x: hidden;
     scrollbar-width: thin;
-    scrollbar-color: #425833 white;
-    align-items:flex-start;
-    justify-content:space-evenly;
+    scrollbar-color: #183B2B white;
+    align-items: flex-start;
+    justify-content: space-evenly;
 }
 
 .usersBodyDiv2InnerCards {
@@ -97,8 +96,7 @@
     display:flex;
     justify-content:center;
     align-items:center;
-    color:white;
-
+    color:#FFD700;
 }
 
 .usersBodyDiv2InnerCardsDiv2Inner2{
@@ -243,7 +241,7 @@
 .usersBodyDiv1Inner121 {
     height: 100%;
     width: 80%;
-    background-color: #345F49;
+    background-color: #144727;
     border-radius: .5rem;
     display: flex;
     flex-direction: row;

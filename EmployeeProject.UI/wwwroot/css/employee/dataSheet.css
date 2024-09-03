@@ -4,7 +4,6 @@
     font-family: 'Montserrat', sans-serif;
     display: flex;
     flex-direction: column;
-
    border-top:none;
 }
 
@@ -48,16 +47,24 @@
     background: #425833;
     position: sticky;
     top: 0;
-    color: white;
+    color: #FFD700;
     text-align: center;
 }
 
+
+.tbodyDataSheet tr:nth-child(even) {
+    background-color: white;
+}
+
+
 .tbodyDataSheet {
+    background: rgba(169, 195, 147, 0.3);
     text-align: center;
 }
 
 .thDataSheet {
-    padding: 10px;
+    padding: 20px 0;
+    font-weight: lighter;
 }
 
 .tbodyDataSheet {

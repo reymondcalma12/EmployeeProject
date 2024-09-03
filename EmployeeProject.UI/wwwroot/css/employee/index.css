@@ -33,6 +33,7 @@
 
 .employeeNavbarDiv1 a{
     font-size:15px;
+    color:gold;
 }
 
 .employeeNavbarDiv1 a:hover {
@@ -58,9 +59,8 @@
     justify-content:flex-end;
 }
 
-.employeeDropdown{
-
-    color:white;
+.employeeDropdown {
+    color: #FFD700;
 }
 .employeeDropdown:hover {
     color: #425833;
@@ -161,7 +161,8 @@ select {
     display: flex;
     justify-content: center;
     align-items: center;
-    color: white;
+    color: #FFD700
+;
 }
 .yearlyTotal {
     height: 100%;
@@ -170,7 +171,7 @@ select {
     display: flex;
     justify-content: center;
     align-items: center;
-    color: white;
+    color: #FFD700;
 }
 
 .dashboardBodyDiv2Inner1Div2 > div:not(.yearlyTotalNumber) {
@@ -318,8 +319,8 @@ select {
 
 .dashboardBodyDiv3 img {
     align-self:flex-end;
-    width: 100px;
-    height: 50px;
+    width: auto;
+    height: 60%;
     margin-right:2%
 }
 

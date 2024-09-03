@@ -68,11 +68,11 @@
         </div>
     </div>
 
-                                         @*PROFILE MODAL*@
+    @*PROFILE MODAL*@
     <div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="staticBackdropLabel" id="profileModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document" style="height:50vh;">
 
-            <div class="modal-content" style="height: 500px;">
+            <div class="modal-content" style="height: 450px;">
 
                 <div class="modal-header profileHeader">
                     <div class="profileHeaderDiv1">
@@ -136,32 +136,12 @@
 
                         </div>
 
-                        <div class="profileModalBodyDiv2Inner2">
 
-                            <div class="profileModalBodyDiv2Inner2Div1">
-                                <i class="fa fa-phone phoneProfile" aria-hidden="true"></i>
-                            </div>
-                            <div class="profileModalBodyDiv2Inner2Div2">
-                                <span style="margin-right:15%;">
-
-                                    @if (currentUser.PhoneNumber != null)
-                                    {
-                                        @currentUser.PhoneNumber
-                                    }
-                                    else
-                                    {
-                                        <span>No Number Yet</span>
-                                    }
-
-                                </span>
-                            </div>
-
-                        </div>
 
                         <div class="profileModalBodyDiv2Inner2">
 
                             <div class="profileModalBodyDiv2Inner2Div1">
-                                <i class="fa fa-sitemap siteProfile" aria-hidden="true"></i>
+                                <i class="fa fa-sitemap phoneProfile" aria-hidden="true"></i>
                             </div>
                             <div class="profileModalBodyDiv2Inner2Div2">
                                 <span style="margin-right:15%;">
@@ -197,146 +177,115 @@
 
 
 
+
     @*EDIT PROFILE MODAL*@
-
-
     <form method="post" enctype="multipart/form-data" asp-action="UpdateProfile" asp-controller="Employee">
-            <div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="staticBackdropLabel" id="profileModalEdit" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered" role="document" style="height:50vh;">
+        <div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="staticBackdropLabel" id="profileModalEdit" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document" style="height:50vh;">
 
-                    <div class="modal-content profileEditModalContent" style="height: 500px;">
+                <div class="modal-content profileEditModalContent" style="height: 450px;">
 
-                        <div class="modal-header profileHeader">
-                            <div class="profileHeaderDiv1">
-                                <i class="fa fa-times closeProfileModal" aria-hidden="true" data-bs-dismiss="modal" aria-label="Close"></i>
-                            </div>
-
-                            <div class="profileHeaderDiv2">
-
-                                @if (currentUser.profileString != null)
-                                {
-                                    <img src="~/profile/@currentUser.profileString" class="userProfilePic" />
-                                }
-                                else
-                                {
-                                    <img src="~/profile/default.jpg" class="userProfilePic" />
-                                }
-
-                                <label for="profileEditButton"><i class="fa fa-plus" aria-hidden="true"></i></label>
-                                <input type="file" id="profileEditButton" name="image" accept=".png, .jpg, .jpeg, .jfif"/>
-                            </div>
-
+                    <div class="modal-header profileHeader">
+                        <div class="profileHeaderDiv1">
+                            <i class="fa fa-times closeProfileModal" aria-hidden="true" data-bs-dismiss="modal" aria-label="Close"></i>
                         </div>
 
-                        <div class="modal-body profileModalBody">
+                        <div class="profileHeaderDiv2">
 
-                            <div class="profileModalBodyDiv1">
-                                <h5 style="width:80%;">
-                                    <input type="text" value="@currentUser.FullName" name="name" style="text-shadow: 0 4px 4px rgba(0, 0, 0, 0.25); width:100%" />
-                                </h5>
-                                <h6 style="font-weight:500;">
+                            @if (currentUser.profileString != null)
+                            {
+                                <img src="~/profile/@currentUser.profileString" class="userProfilePic" />
+                            }
+                            else
+                            {
+                                <img src="~/profile/default.jpg" class="userProfilePic" />
+                            }
 
-                                    @if (currentUser.position != null)
-                                    {
-                                        <input type="text" value="@currentUser.position" name="position" />
-                                    }
-                                    else
-                                    {
-                                        <input type="text" value="No Position Yet" name="position" />
-
-                                    }
-
-                                </h6>
-                            </div>
-                            <div class="profileModalBodyDiv2">
-
-                                <div class="profileModalBodyDiv2Inner1">
-
-                                    <div class="profileModalBodyDiv2Inner1Div1">
-                                        <i class="fa fa-envelope emailProfile" aria-hidden="true"></i>
-                                    </div>
-
-                                    <div class="profileModalBodyDiv2Inner1Div2">
-
-                                        <span style="margin-right:15%;width:80%;">
-                                            @if (currentUser.Email != null)
-                                            {
-                                                <input type="text" value="@currentUser.Email" style="width:100%;" name="email" />
-
-                                            }
-                                            else
-                                            {
-                                                <input type="text" value="No Email Yet" style="width:100%;" name="email" />
-                                            }
-                                        </span>
-
-                                    </div>
-
-                                </div>
-
-                                <div class="profileModalBodyDiv2Inner2">
-
-                                    <div class="profileModalBodyDiv2Inner2Div1">
-                                        <i class="fa fa-phone phoneProfile" aria-hidden="true"></i>
-                                    </div>
-                                    <div class="profileModalBodyDiv2Inner2Div2">
-                                        <span style="margin-right:15%;">
-
-                                            @if (currentUser.PhoneNumber != null)
-                                            {
-                                                <input type="text" value="@currentUser.PhoneNumber" name="number" />
-
-                                            }
-                                            else
-                                            {
-                                                <input type="text" value="No Number Yet" name="number" />
-
-                                            }
-
-                                        </span>
-                                    </div>
-
-                                </div>
-                                <div class="profileModalBodyDiv2Inner2">
-
-                                    <div class="profileModalBodyDiv2Inner2Div1">
-                                        <i class="fa fa-sitemap" aria-hidden="true"></i>
-                                    </div>
-                                    <div class="profileModalBodyDiv2Inner2Div2">
-                                        <span style="margin-right:15%;">
-                                        @if (currentUser.Section?.SectionName != null)
-                                        {
-
-
-                                            <p>@currentUser.Section?.SectionName</p>
-
-                                        }
-                                        else
-                                        {
-                                            <p>No Section</p>
-
-                                        }
-
-
-                                        </span>
-                                    </div>
-
-                                </div>
-
-                            </div>
-                            <div class="profileModalBodyDiv3">
-                                <button class="profileEditBtn" type="submit">
-                                    <i class="fa fa-check" aria-hidden="true"></i>
-                                    Save
-                                </button>
-                            </div>
-
+                            <label for="profileEditButton"><i class="fa fa-plus" aria-hidden="true"></i></label>
+                            <input type="file" id="profileEditButton" name="image" accept=".png, .jpg, .jpeg, .jfif" />
                         </div>
 
                     </div>
+
+                    <div class="modal-body profileModalBody">
+
+                        <div class="profileModalBodyDiv1">
+                            <h4 style="text-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);">@currentUser.FullName</h4>
+                            <h5 style="font-weight:500;">
+
+                                @if (currentUser.position != null)
+                                {
+                                    @currentUser.position
+                                }
+                                else
+                                {
+                                    <span>No Position Yet</span>
+                                }
+
+                            </h5>
+                        </div>
+                        <div class="profileModalBodyDiv2">
+
+                            <div class="profileModalBodyDiv2Inner1">
+
+                                <div class="profileModalBodyDiv2Inner1Div1">
+                                    <i class="fa fa-envelope emailProfile" aria-hidden="true"></i>
+                                </div>
+
+                                <div class="profileModalBodyDiv2Inner1Div2">
+
+                                    <span style="margin-right:15%;">
+                                        @if (currentUser.Email != null)
+                                        {
+                                            @currentUser.Email
+                                        }
+                                        else
+                                        {
+                                            <span>No Email Yet</span>
+                                        }
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                            <div class="profileModalBodyDiv2Inner2">
+
+                                <div class="profileModalBodyDiv2Inner2Div1">
+                                    <i class="fa fa-sitemap phoneProfile" aria-hidden="true"></i>
+                                </div>
+                                <div class="profileModalBodyDiv2Inner2Div2">
+                                    <span style="margin-right:15%;">
+
+                                        @if (currentUser.Section?.SectionName != null)
+                                        {
+                                            @currentUser.Section.SectionName
+                                        }
+                                        else
+                                        {
+                                            <span>No Section Yet</span>
+                                        }
+
+                                    </span>
+                                </div>
+
+                            </div>
+
+
+                        </div>
+                        <div class="profileModalBodyDiv3">
+                            <button class="profileEditBtn" type="submit">
+                                <i class="fa fa-check" aria-hidden="true"></i>
+                                Save
+                            </button>
+                        </div>
+
+                    </div>
+
                 </div>
             </div>
-        </form>
+        </div>
+    </form>
 
 
 
@@ -356,27 +305,18 @@
 <script src="~/js/signalr.min.js"></script>
 <script>
 
-    const currentYear = new Date().getFullYear();
 
-    const yearSelect = document.querySelector('.year');
-    for (let i = currentYear; i >= currentYear - 20; i--) {
-        const option = document.createElement('option');
-        option.value = i;
-        option.text = i;
-        yearSelect.add(option);
-    }
+    // const fileInput = document.getElementById('file-input');
 
-    const fileInput = document.getElementById('file-input');
+    // fileInput.addEventListener('change', function () {
+    //     const file = this.files[0];
+    //     const allowedTypes = ['image/png', 'image/jpeg', 'image/jpg', 'image/jfif'];
 
-    fileInput.addEventListener('change', function () {
-        const file = this.files[0];
-        const allowedTypes = ['image/png', 'image/jpeg', 'image/jpg', 'image/jfif'];
-
-        if (!allowedTypes.includes(file.type)) {
-            alert('Please select a PNG or JPEG image file.');
-            this.value = ''; 
-        }
-    });
+    //     if (!allowedTypes.includes(file.type)) {
+    //         alert('Please select a PNG or JPEG image file.');
+    //         this.value = ''; 
+    //     }
+    // });
 
 </script>
 </html>

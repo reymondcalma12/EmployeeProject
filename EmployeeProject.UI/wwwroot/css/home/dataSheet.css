@@ -36,6 +36,7 @@
     overflow-x: auto;
     scrollbar-width: thin;
     scrollbar-color: #1E4F3B white;
+    background: rgba(169, 195, 147, 0.3);
 }
 
 .tableDataSheet {
@@ -50,7 +51,7 @@
     background: #1E4F3B;
     position: sticky;
     top: 0;
-    color: white;
+    color: #FFD700;
     text-align: center;
 }
 
@@ -61,7 +62,7 @@
 
 .tbodyDataSheet {
     text-align: center;
-    background: rgba(169, 195, 147, 0.3);
+
 }
 
 
@@ -510,6 +511,12 @@
     color: white;
 }
 
+
+.addNewDataAddBtn:disabled{
+    background-color:gray;
+    cursor:not-allowed;
+}
+
 .workingHoursPerDayModalBody{
    display:flex;
    justify-content:space-around;
@@ -593,14 +600,22 @@
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    margin-left:30%;
+/*    margin-left:30%;*/
 }
 
-.modal-headerDiv2{
-    height:100%;
-    width:5%;
+.dataSheetSectionDropdown{
+    width:25%;
     display:flex;
-    justify-content:center;align-items:center;
+    justify-content:center;
+    align-items:center;
+}
+
+.modal-headerDiv2 {
+    height: 100%;
+    width: 5%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .tbodyDataSheet tr td:last-child{
@@ -614,7 +629,7 @@
     gap:5px;
 }
 .tbodyDataSheet tr:nth-child(even) {
-    background-color: #c2d7d3;
+    background-color: white;
 }
 
 .tbodyDataSheet .fa {
@@ -632,6 +647,8 @@
     background-color: #C8C8C8;
 }
 
+
+
 .tbodyDataSheet .fa-pencil:before {
     color: #F1E902;
 }
@@ -639,6 +656,11 @@
 .tbodyDataSheet .fa-trash:before {
     color: #E24848;
 }
+
+.tbodyDataSheet .fa-times:before {
+    color: #E24848;
+}
+
 
 .allworkingHoursModalBodyDiv1 .fa {
     height: 30px;

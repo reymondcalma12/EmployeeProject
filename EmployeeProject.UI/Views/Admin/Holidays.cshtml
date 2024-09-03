@@ -1,4 +1,7 @@
-﻿@using EmployeeProject.Application.DTOs.Admin
+﻿@using Microsoft.AspNetCore.Authorization
+@inject Microsoft.AspNetCore.Authorization.IAuthorizationService AuthorizationService
+
+@using EmployeeProject.Application.DTOs.Admin
 
 @model MovableHolidaysDTO
 
@@ -36,10 +39,10 @@
 
 <div class="holidaysBody">
     <div class="holidaysBodyDiv1">
-        <button class="addHolidayBtn" style="box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);" data-bs-toggle="modal" data-bs-target="#addHolidayModal"><i class="fa fa-plus addDataIcon" aria-hidden="true"></i>ADD HOLIDAY</button>
-
-
-
+         @if (User.IsInRole("Manager"))
+        {
+            <button class="addHolidayBtn" style="box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);" data-bs-toggle="modal" data-bs-target="#addHolidayModal"><i class="fa fa-plus addDataIcon" aria-hidden="true"></i>ADD HOLIDAY</button>
+        }
         <div class="holidaysBodyDiv1Inner">
             <h4 style="margin-top:2%; color:#425833;">SELECT YEAR</h4>
             <select class="year" id="holidayYear">
@@ -87,7 +90,7 @@
                 <div class="modal-header" style="height:50px; background:#1E4F3B; display:flex; border-radius:.5rem .5rem 0 0 ;">
 
                     <div class="modal-headerDiv1" style="width:95%; display:flex;justify-content:center;align-items:center;">
-                        <h5 style="color:white;">ADD MOVABLE HOLIDAYS</h5>
+                        <h5 style="color:gold;">ADD MOVABLE HOLIDAYS</h5>
                     </div>
                     <div class="modal-headerDiv2">
                         <i class="fa fa-times closeAddNewData" aria-hidden="true" data-bs-dismiss="modal" aria-label="Close"></i>
@@ -226,10 +229,12 @@
 
     <script>
 
-        const currentYear = new Date().getFullYear();
+        const startYear = 2024;
+        const endYear = 2044;
 
         const yearSelect = document.querySelector('.year');
-        for (let i = currentYear; i >= currentYear - 20; i--) {
+
+        for (let i = startYear; i <= endYear; i++) {
             const option = document.createElement('option');
             option.value = i;
             option.text = i;

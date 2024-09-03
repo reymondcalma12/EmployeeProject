@@ -71,7 +71,7 @@
     background: #1E4F3B;
     position: sticky;
     top: 0;
-    color: white;
+    color: #ffd700;
 }
 .trHoliday {
 
@@ -98,7 +98,7 @@
 
 
 .tbodyHoliday tr:nth-child(even) {
-    background-color: #c2d7d3;
+    background-color: white;
 }
 
 

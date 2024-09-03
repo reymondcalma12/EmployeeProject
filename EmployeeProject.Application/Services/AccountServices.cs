@@ -32,9 +32,8 @@ namespace EmployeeProject.Application.Services
                     FullName = userDTO.FullName,
                     UserName = userDTO.UserName,
                     SectionId = userDTO.SectionId,
-                    isNewUser = true,
                     Email = userDTO.UserName,
-                    
+                    position = userDTO.Position,
                 };
 
                 var result = await userManager.CreateAsync(user, userDTO.Password!);
@@ -46,7 +45,6 @@ namespace EmployeeProject.Application.Services
 
                     return true;
                 }
-
             }
 
             return false;

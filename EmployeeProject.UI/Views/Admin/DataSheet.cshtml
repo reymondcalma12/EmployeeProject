@@ -1,4 +1,7 @@
-﻿@using EmployeeProject.Application.DTOs.Admin
+﻿@using Microsoft.AspNetCore.Authorization
+@inject Microsoft.AspNetCore.Authorization.IAuthorizationService AuthorizationService
+
+@using EmployeeProject.Application.DTOs.Admin
 @model DataSheetDTO
 @{
     Layout = "_AdminLayout";
@@ -52,8 +55,13 @@
 <div class="dataSheetBody">
     <div class="dataSheetBodyDiv1">
         <div class="dataSheetBodyDiv1Inner1">
-            <button class="addData" data-bs-toggle="modal" data-bs-target="#addNewDataModal"><i class="fa fa-plus addDataIcon" aria-hidden="true"></i>ADD DATA</button>
-            <input type="text" class="dashboardSearch" style="box-shadow:none;" id="dataSheetSearch" placeholder="Search Resource Name..." autocomplete="off"/>
+
+            @if (User.IsInRole("Manager"))
+            {
+                <button class="addData" data-bs-toggle="modal" data-bs-target="#addNewDataModal"><i class="fa fa-plus addDataIcon" aria-hidden="true"></i>ADD DATA</button>
+            }
+           
+            <input type="text" class="dashboardSearch" style="box-shadow:none;" id="dataSheetSearch" placeholder="Search ..." autocomplete="off"/>
 
             <div class="autoFillSearchUsersDataSheetBody">
 
@@ -64,6 +72,16 @@
             </div>
 
             <div class="dashboardSearchBtn"><i class="fa fa-search" aria-hidden="true"></i></div>
+
+            <div class="dataSheetSectionDropdown">
+                @if (User.IsInRole("Project_Manager"))
+                {
+                    <select class="section" id="dataSheetSectionDropDown" style="width:150px;">
+                        <option>SECTION</option>
+                    </select>
+                }
+            </div>
+
             <div class="dataSheetYearClass">
                 <h4 style="margin-top:3%; color:#425833;">SELECT YEAR</h4>
                 <select class="year" id="dataSheetYear">
@@ -116,7 +134,7 @@
                 <div class="modal-header" style="height:60px; background:#1E4F3B; display:flex; border-radius:1rem 1rem 0 0 ;">
 
                     <div class="modal-headerDiv1" style="width:95%; display:flex;justify-content:center;align-items:center;">
-                        <h4 style="color:white;">ADD NEW DATA</h4>
+                        <h4 style="color:gold;">ADD NEW DATA</h4>
                     </div>
                     <div class="modal-headerDiv2">
                         <i class="fa fa-times closeAddNewData" aria-hidden="true" data-bs-dismiss="modal" aria-label="Close"></i>
@@ -210,7 +228,7 @@
                     </div>
          
                     <div class="addNewDataModalBodyDiv6">
-                        <button class="addNewDataAddBtn" style="border:none;" type="submit" >ADD</button>
+                        <button class="addNewDataAddBtn" style="border:none;" type="submit" id="addNewDataButton" disabled>ADD</button>
                     </div>
 
                 </div>
@@ -328,7 +346,7 @@
                     </div>
 
                     <div class="addNewDataModalBodyDiv6">
-                        <button class="addNewDataAddBtn" style="border:none;" type="submit">ADD</button>
+                        <button class="addNewDataAddBtn" style="border:none;" type="submit" id="updateDataSheetButton">SAVE</button>
                     </div>
 
                 </div>
@@ -374,7 +392,7 @@
                 <div class="modal-header" style="height:50px; background:#1E4F3B; display:flex; border-radius:.5rem .5rem 0 0 ;">
 
                     <div class="modal-headerDiv1" style="width:95%; display:flex;justify-content:center;align-items:center;">
-                        <h4 style="color:white;">ADD WORKING HOURS PER DAY</h4>
+                        <h4 style="color:gold;">ADD WORKING HOURS PER DAY</h4>
                     </div>
                     <div class="modal-headerDiv2">
                         <i class="fa fa-times closeAddNewData" aria-hidden="true" data-bs-dismiss="modal" aria-label="Close"></i>
@@ -410,7 +428,7 @@
 
             <div class="modal-header" style="height:50px; background:#1E4F3B; display:flex; border-radius:.5rem .5rem 0 0 ;">
                 <div class="modal-headerDiv1" style="width:95%; display:flex;justify-content:center;align-items:center;">
-                    <h4 style="color:white;">ALL WORKING HOURS PER DAY</h4>
+                    <h4 style="color:gold;">ALL WORKING HOURS PER DAY</h4>
                 </div>
                 <div class="modal-headerDiv2">
                     <i class="fa fa-times closeAddNewData" aria-hidden="true" data-bs-dismiss="modal" aria-label="Close"></i>
@@ -437,13 +455,13 @@
 <form asp-action="DeleteAllowed" method="post">
     <div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="staticBackdropLabel" id="deleteWrokingHoursModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document" style="height:50vh;">
-            <div class="modal-content" style="height: 240px; font-family: 'Montserrat', sans-serif; background-color:#DFEFD8;">
+            <div class="modal-content" style="height: 240px; font-family: 'Montserrat', sans-serif; background-color:#142d09;">
                 <div class="modal-body logoutModalBody">
 
                     <div class="logoutModalBody1" style="flex-direction:column">
 
-                        <h5 style="text-align:center;">Are you sure you want to Delete </h5>
-                        <h4 id="allowedHoursNameToDelete" style="text-align:center;"></h4>
+                        <h5 style="text-align:center; color:gold;">Are you sure you want to Delete </h5>
+                        <h4 id="allowedHoursNameToDelete" style="text-align:center;color:gold;"></h4>
                     </div>
                     <input type="hidden" name="sectionId" class="allowedHoursIdToDelete" />
 
@@ -466,19 +484,19 @@
 <form asp-action="UpdateAllowed" method="post">
     <div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="staticBackdropLabel" id="editworkingHoursModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document" style="height:50vh;">
-            <div class="modal-content" style="height: 240px; font-family: 'Montserrat', sans-serif; background-color:#DFEFD8;">
+            <div class="modal-content" style="height: 240px; font-family: 'Montserrat', sans-serif; background-color:#142d09;">
                 <div class="modal-body logoutModalBody">
 
                     <div class="logoutModalBody1" style="flex-direction:column">
 
-                        <input type="number" name="sectionName" class="allowedHoursNameToEdit addNewUserInput form-control" style="text-align:center; background-color:#425833; color:white;" />
+                        <input type="number" name="sectionName" class="allowedHoursNameToEdit addNewUserInput form-control" style="text-align:center; background-color:white; color:black;" />
 
                     </div>
 
 
                     <div class="logoutModalBody2">
                         <input type="hidden" name="sectionId" class="allowedHoursIdToEdit addNewUserInput" />
-                        <button type="submit" class="btn btn-success logoutYes updateSectionSave" style="background-color:#425833;"> Save</button>
+                        <button type="submit" class="btn btn-success logoutYes " > Save</button>
                         <button type="button" class="close btn btn-danger logoutNo" data-bs-dismiss="modal" aria-label="Close">
                             Cancel
                         </button>
@@ -497,11 +515,12 @@
 
 <script>
 
-    const currentYear = new Date().getFullYear();
-
+    const startYear = 2024;
+    const endYear = 2044;
 
     const yearSelect = document.querySelector('.year');
-    for (let i = currentYear; i >= currentYear - 20; i--) {
+
+    for (let i = startYear; i <= endYear; i++) {
         const option = document.createElement('option');
         option.value = i;
         option.text = i;

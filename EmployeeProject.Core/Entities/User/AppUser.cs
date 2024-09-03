@@ -20,6 +20,5 @@ namespace EmployeeProject.Core.Entities.User
         [ValidateNever]
         public Section? Section { get; set; }
 
-
     }
 }

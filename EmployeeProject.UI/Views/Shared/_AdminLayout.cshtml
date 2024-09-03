@@ -1,4 +1,7 @@
-﻿@using EmployeeProject.Core.Entities.User
+﻿@using Microsoft.AspNetCore.Authorization
+@inject Microsoft.AspNetCore.Authorization.IAuthorizationService AuthorizationService
+
+@using EmployeeProject.Core.Entities.User
 @using Microsoft.AspNetCore.Identity;
 @using Microsoft.EntityFrameworkCore;
 @inject SignInManager<AppUser> signManager;
@@ -50,7 +53,10 @@
                     <a class="btn btn-outline-success wad @(ViewContext.RouteData.Values["controller"]?.ToString() == "Admin" && ViewContext.RouteData.Values["action"]?.ToString() == "Index" ? "active" : "")"  onclick="changeColor(this)" asp-action="Index" asp-controller="Admin"><i class="fa fa-th-large" aria-hidden="true"></i><span>Dashboard</span></a>
                     <a class="btn btn-outline-success wad @(ViewContext.RouteData.Values["controller"]?.ToString() == "Admin" && ViewContext.RouteData.Values["action"]?.ToString() == "DataSheet" ? "active" : "")" onclick="changeColor(this)" asp-action="DataSheet" asp-controller="Admin"><i class="fa fa-file-text" aria-hidden="true"></i><span>Data Sheets</span></a>
                     <a class="btn btn-outline-success wad @(ViewContext.RouteData.Values["controller"]?.ToString() == "Admin" && ViewContext.RouteData.Values["action"]?.ToString() == "Holidays" ? "active" : "")" onclick="changeColor(this)" asp-action="Holidays" asp-controller="Admin"><i class="fa-solid fa-umbrella-beach"></i><span>Holidays</span></a>
+                    @if (User.IsInRole("Manager"))
+                    {
                     <a class="btn btn-outline-success wad @(ViewContext.RouteData.Values["controller"]?.ToString() == "Admin" && ViewContext.RouteData.Values["action"]?.ToString() == "Users" ? "active" : "")" onclick="changeColor(this)" asp-action="Users" asp-controller="Admin"><i class="fa fa-users" aria-hidden="true"></i><span>Users</span></a>
+                    }
                 </div>
                 <div class="div22">
                     <a class="btn btn-outline-success wad" data-bs-toggle="modal" data-bs-target="#exampleModalCenter"><i class="fa fa-sign-out" aria-hidden="true"></i><span>Logout</span></a>
@@ -74,7 +80,7 @@
     <div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="staticBackdropLabel" id="profileModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document" style="height:50vh;">
 
-            <div class="modal-content" style="height: 500px;">
+            <div class="modal-content" style="height: 450px;">
 
                 <div class="modal-header profileHeader">
                     <div class="profileHeaderDiv1">
@@ -137,32 +143,12 @@
 
                         </div>
 
-                        <div class="profileModalBodyDiv2Inner2">
 
-                            <div class="profileModalBodyDiv2Inner2Div1">
-                                <i class="fa fa-phone phoneProfile" aria-hidden="true"></i>
-                            </div>
-                            <div class="profileModalBodyDiv2Inner2Div2">
-                                <span style="margin-right:15%;">
-
-                                    @if (currentUser.PhoneNumber != null)
-                                    {
-                                        @currentUser.PhoneNumber
-                                    }
-                                    else
-                                    {
-                                        <span>No Number Yet</span>
-                                    }
-
-                                </span>
-                            </div>
-
-                        </div>
 
                         <div class="profileModalBodyDiv2Inner2">
 
                             <div class="profileModalBodyDiv2Inner2Div1">
-                                <i class="fa fa-sitemap" aria-hidden="true"></i>
+                                <i class="fa fa-sitemap phoneProfile" aria-hidden="true"></i>
                             </div>
                             <div class="profileModalBodyDiv2Inner2Div2">
                                 <span style="margin-right:15%;">
@@ -207,7 +193,7 @@
     <div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="staticBackdropLabel" id="profileModalEdit" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document" style="height:50vh;">
 
-            <div class="modal-content profileEditModalContent" style="height: 500px;">
+            <div class="modal-content profileEditModalContent" style="height: 450px;">
 
                 <div class="modal-header profileHeader">
                     <div class="profileHeaderDiv1">
@@ -231,94 +217,63 @@
 
                 </div>
 
-                <div class="modal-body profileModalBody">
+                    <div class="modal-body profileModalBody">
 
-                    <div class="profileModalBodyDiv1">
-                        <h5 style="width:80%;">
-                            <input type="text" value="@currentUser.FullName" name="name" style="text-shadow: 0 4px 4px rgba(0, 0, 0, 0.25); width:100%"/>
-                        </h5>
-                        <h6 style="font-weight:500;">
+                        <div class="profileModalBodyDiv1">
+                            <h4 style="text-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);">@currentUser.FullName</h4>
+                            <h5 style="font-weight:500;">
 
-                            @if (currentUser.position != null)
-                            {
-                                <input type="text" value="@currentUser.position" name="position"/>
-                            }
-                            else
-                            {
-                                <input type="text" value="No Position Yet" name="position"/>
-                              
-                            }
+                                @if (currentUser.position != null)
+                                {
+                                    @currentUser.position
+                                }
+                                else
+                                {
+                                    <span>No Position Yet</span>
+                                }
 
-                        </h6>
-                    </div>
-                    <div class="profileModalBodyDiv2">
-
-                        <div class="profileModalBodyDiv2Inner1">
-
-                            <div class="profileModalBodyDiv2Inner1Div1">
-                                <i class="fa fa-envelope emailProfile" aria-hidden="true"></i>
-                            </div>
-
-                            <div class="profileModalBodyDiv2Inner1Div2">
-
-                                <span style="margin-right:15%;width:80%;">
-                                    @if (currentUser.Email != null)
-                                    {
-                                        <input type="text" value="@currentUser.Email" style="width:100%;" name="email"/>
-             
-                                    }
-                                    else
-                                    {
-                                        <input type="text" value="No Email Yet" style="width:100%;" name="email"/>
-                                    }
-                                </span>
-
-                            </div>
-
+                            </h5>
                         </div>
+                        <div class="profileModalBodyDiv2">
 
-                        <div class="profileModalBodyDiv2Inner2">
+                            <div class="profileModalBodyDiv2Inner1">
 
-                            <div class="profileModalBodyDiv2Inner2Div1">
-                                <i class="fa fa-phone phoneProfile" aria-hidden="true"></i>
+                                <div class="profileModalBodyDiv2Inner1Div1">
+                                    <i class="fa fa-envelope emailProfile" aria-hidden="true"></i>
+                                </div>
+
+                                <div class="profileModalBodyDiv2Inner1Div2">
+
+                                    <span style="margin-right:15%;">
+                                        @if (currentUser.Email != null)
+                                        {
+                                            @currentUser.Email
+                                        }
+                                        else
+                                        {
+                                            <span>No Email Yet</span>
+                                        }
+                                    </span>
+
+                                </div>
+
                             </div>
-                            <div class="profileModalBodyDiv2Inner2Div2">
-                                <span style="margin-right:15%;">
 
-                                    @if (currentUser.PhoneNumber != null)
-                                    {
-                                        <input type="text" value="@currentUser.PhoneNumber" name="number"/>
-                          
-                                    }
-                                    else
-                                    {
-                                        <input type="text" value="No Number Yet" name="number"/>
-                                       
-                                    }
-
-                                </span>
-                            </div>
-
-                        </div>
                             <div class="profileModalBodyDiv2Inner2">
 
                                 <div class="profileModalBodyDiv2Inner2Div1">
-                            <i class="fa fa-sitemap" aria-hidden="true"></i>
+                                    <i class="fa fa-sitemap phoneProfile" aria-hidden="true"></i>
                                 </div>
                                 <div class="profileModalBodyDiv2Inner2Div2">
                                     <span style="margin-right:15%;">
 
                                         @if (currentUser.Section?.SectionName != null)
                                         {
-
-
-                                            <p>@currentUser.Section?.SectionName</p>
-
+                                            @currentUser.Section.SectionName
                                         }
                                         else
                                         {
-                                           <p>No Section</p>
-
+                                            <span>No Section Yet</span>
                                         }
 
                                     </span>
@@ -326,7 +281,8 @@
 
                             </div>
 
-                    </div>
+
+                        </div>
                     <div class="profileModalBodyDiv3">
                         <button class="profileEditBtn" type="submit">
                             <i class="fa fa-check" aria-hidden="true"></i>
@@ -383,8 +339,6 @@
     <script src="~/js/signalr.min.js"></script>
 
 <script>
-
-
     function changeColor(button) {
 
         var buttons = document.querySelectorAll('.wad');
@@ -415,7 +369,5 @@
             this.value = ''; // Clear the input field
         }
     });
-
-
 </script>
 </html>

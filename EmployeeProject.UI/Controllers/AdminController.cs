@@ -9,19 +9,20 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 namespace EmployeeProject.UI.Controllers
 {
 
-    [Authorize(Policy = "RequireManagerRole")]
+    [Authorize(Policy = "RequireManagerOrProjectManagerRole")]
     public class AdminController : BaseController<AdminController>
     {
         private readonly IUserAccount services;
         private readonly IAdminServices adminServices;
-        public AdminController(IUserAccount services, IAdminServices adminServices) { 
+        private readonly ILogger<AdminController> logger;
+        public AdminController(IUserAccount services, IAdminServices adminServices, ILogger<AdminController> logger) { 
             this.services = services;   
             this.adminServices = adminServices;
+            this.logger = logger;
         }
 
         public IActionResult Index(string success)
         {
-
             if (success != null) {
                 TempData["Login"] = success.ToString();
                 var model = new ChangePasswordDTO();
@@ -154,6 +155,8 @@ namespace EmployeeProject.UI.Controllers
 
 
 
+
+
         [HttpPost]
         public async Task<IActionResult> UpdateAllowed(int sectionId, int sectionName)
         {
@@ -175,6 +178,8 @@ namespace EmployeeProject.UI.Controllers
 
             return RedirectToAction("DataSheet");
         }
+
+
 
 
 
@@ -209,18 +214,27 @@ namespace EmployeeProject.UI.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> UpdateProfile(IFormFile image, string position, string name, string email, string number)
+        public async Task<IActionResult> UpdateProfile(IFormFile image)
         {
-            var result = await adminServices.UpdateProfile(image, position, name, email, number);
-
-            if (result)
+            try
             {
-                TempData["ProfileUpdated"] = "Profile Updated Successfully!";
-                return RedirectToAction("Index");
+                var result = await adminServices.UpdateProfile(image);
+                if (result)
+                {
+                    TempData["ProfileUpdated"] = "Profile Updated Successfully!";
+                    return RedirectToAction("Index");
+                }
+                return View();
             }
-
-            return View();
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "Error occured while processing, in ");
+                return Json(new { message = "failed" });
+            }
         }
+
+
+
 
         public async Task<IActionResult> DeleteUser(string userId)
         {
@@ -240,9 +254,11 @@ namespace EmployeeProject.UI.Controllers
 
             }
 
-
             return View();
         }
+
+
+
 
         public async Task<IActionResult> AddDataSheetUserExist(string name)
         {
@@ -257,6 +273,7 @@ namespace EmployeeProject.UI.Controllers
                 }
                 else
                 {
+
                     return Json(section);
                 }
 
@@ -266,7 +283,29 @@ namespace EmployeeProject.UI.Controllers
             return View();
         }
 
+        public async Task<IActionResult> AddDataSheetUserExistEnableButton(string name)
+        {
+            if (name != null)
+            {
+                var (result, fullName, section)  = await adminServices.AddDataSheetUserExistEnableButton(name);
 
+                if (result)
+                {
+
+                    return Json(new { result, fullName, section });
+                }
+                else
+                {
+
+                    return Json(new { result, fullName, section });
+                }
+
+            }
+
+            return View();
+        }
+
+        
         //public async Task<IActionResult> CheckNumberIfExist(int number)
         //{
         //    if (number != null)
@@ -289,7 +328,6 @@ namespace EmployeeProject.UI.Controllers
 
         //    return View();
         //}
-
 
 
 
