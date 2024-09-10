@@ -31,18 +31,9 @@ namespace EmployeeProject.Infrastructure.Data.Context
 
             var hasher = new PasswordHasher<AppUser>();
 
-            modelBuilder.Entity<AppUser>().HasData(
-            new AppUser{
-                Id = ADMIN_ID,
-                UserName = "reymondcalma12",
-                NormalizedUserName = "admin",
-                Email = "admin@gmail.com",
-                NormalizedEmail = "admin@gmail.com",
-                EmailConfirmed = false,
-                PasswordHash = hasher.HashPassword(null, "Admin123#"),
-                SecurityStamp = string.Empty
-            });
-
+            modelBuilder.Entity<Section>().HasData(
+                new Section { SectionId = 1, SectionName = "DEV" }
+            );
 
 
             modelBuilder.Entity<AllowedHours>().HasData(
@@ -67,7 +58,8 @@ namespace EmployeeProject.Infrastructure.Data.Context
 
             modelBuilder.Entity<IdentityRole>().HasData(
                 new { Id = "1", Name = "Employee", NormalizedName = "EMPLOYEE" },
-                new { Id = "2", Name = "Manager", NormalizedName = "MANAGER" }
+                new { Id = "2", Name = "Manager", NormalizedName = "MANAGER" },
+                new { Id = "3", Name = "Project_Manager", NormalizedName = "PROJECT_MANAGER" }
             );
 
             modelBuilder.Entity<HolidayStatus>().HasData(
@@ -75,6 +67,10 @@ namespace EmployeeProject.Infrastructure.Data.Context
                 new HolidayStatus { StatusId = 2, StatusName = "movable" }
             );
 
+            modelBuilder.Entity<BusinessOrIt>().HasData(
+                 new BusinessOrIt { BusinessOrItId = 1, BusinessOrItName = "Business" },
+                 new BusinessOrIt { BusinessOrItId = 2, BusinessOrItName = "IT" }
+             );
 
             modelBuilder.Entity<Holidays>().HasData(
                 new Holidays { FixedId = 1, FixedName = "New Year's Day", FixedDate = new DateOnly(2024, 1, 1), HolidayStatusId = 1 },
@@ -103,6 +99,47 @@ namespace EmployeeProject.Infrastructure.Data.Context
 
                 new Holidays { FixedId = 17, FixedName = "New Year's Eve", FixedDate = new DateOnly(2024, 12, 31) , HolidayStatusId = 1 }
             );
+
+
+            modelBuilder.Entity<MovableNames>().HasData(
+                new MovableNames { Id = 1, Name = "Additional Special Non-Working" },
+                new MovableNames { Id = 2, Name = "Chinese New Year" },
+
+                new MovableNames { Id = 3, Name = "Maunday Thursday " },
+                new MovableNames { Id = 4, Name = "Good Friday" },
+
+                new MovableNames { Id = 5, Name = "Black Saturday" },
+                new MovableNames { Id = 6, Name = "Eid al-Fitr" },
+
+                new MovableNames { Id = 7, Name = "Eid al-Adha" },
+                new MovableNames { Id = 8, Name = "National Heroes' Day" }
+
+            );
+
+
+            modelBuilder.Entity<IdentityUserRole<string>>().HasData(
+                new IdentityUserRole<string>
+                {
+                    UserId = ADMIN_ID,
+                    RoleId = "2" 
+                }
+            );
+
+            modelBuilder.Entity<AppUser>().HasData(
+                new AppUser
+                {
+                    Id = ADMIN_ID,
+                    UserName = "jcaso@princeretail.com",
+                    NormalizedUserName = "JCASO@PRINCERETAIL.COM",
+                    Email = "jcaso@princeretail.com",
+                    NormalizedEmail = "JCASO@PRINCERETAIL.COM",
+                    EmailConfirmed = false,
+                    PasswordHash = hasher.HashPassword(null, "1234578"),
+                    SecurityStamp = string.Empty,
+                    position = "Manager",
+                    SectionId = 1,
+                    FullName = "Joselito Caso",
+                });
 
         }
     }
