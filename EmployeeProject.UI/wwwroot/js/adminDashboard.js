@@ -101,9 +101,12 @@
                 .catch(function (err) {
                     return console.error(err.toString());
                 });
+            GetLegend(null);
         }
         else {
             bodyUser.hide();
+            GetLegend(null);
+
         }
 
     });
@@ -227,8 +230,6 @@
 
     connection.on("GetUserAddDataSheetResult", function (users) {
 
-        var container2 = $(".autoFillSearchUsers");
-
         var container4 = $(".autoFillSearchUsersDataSheet");
 
         var container5 = $(".autoFillSearchUsersDashboard");
@@ -236,7 +237,7 @@
         if (users.length > 0) {
 
 
-            container2.empty();
+
 
             container4.empty();
             container5.empty();
@@ -244,9 +245,6 @@
             users.forEach(function (user) {
 
 
-                let usershtml1 = `
-                     <div class="searchResult1" data-name="${user.fullName}">${user.fullName}</div>
-                `;
 
 
                 let usershtml5 = `
@@ -254,7 +252,6 @@
                     
                 `;
 
-                container2.append(usershtml1);
 
                 container4.append(usershtml5);
 
@@ -294,23 +291,7 @@
                 });
 
 
-                $(".searchResult1").on("click", function () {
 
-                    var userName = $(this).data("name")
-
-                    $("#userSearch").val(userName);
-
-                    $(".autoFillSearchUsersBody").hide();
-
-
-                    var search = $("#userSearch").val();
-
-                    connection.invoke("GetUserSearch", search, 0)
-                        .catch(function (err) {
-                            return console.error(err.toString());
-                        });
-
-                });
 
 
 
@@ -358,7 +339,7 @@
 
         }
         else {
-            container2.empty();
+
             container4.empty();
             container5.empty();
 
@@ -366,7 +347,6 @@
             <div class="searchResult">No User Found!</div>
                 `;
 
-            container2.append(htmls);
             container4.append(htmls);
             container5.append(htmls);
         }
@@ -377,11 +357,18 @@
 
         var container = $(".autoFillSearchDataSheet");
 
+
+        var container2 = $(".autoFillSearchUsers");
+
+
         var container3 = $(".autoFillSearchDataSheetUpdate");
+
 
         if (users.length > 0) {
 
             container.empty();
+
+            container2.empty();
 
             container3.empty();
 
@@ -391,6 +378,12 @@
                      <div class="searchResult" data-name="${user.fullName}">${user.fullName}</div>
                 `;
                 container.append(usershtml);
+
+
+                let usershtml1 = `
+                     <div class="searchResult1" data-name="${user.fullName}">${user.fullName}</div>
+                `;
+                container2.append(usershtml1);
 
 
                 let usershtml2 = `
@@ -480,7 +473,23 @@
                     });
                 });
 
+                $(".searchResult1").on("click", function () {
 
+                    var userName = $(this).data("name")
+
+                    $("#userSearch").val(userName);
+
+                    $(".autoFillSearchUsersBody").hide();
+
+
+                    var search = $("#userSearch").val();
+
+                    connection.invoke("GetUserSearch", search)
+                        .catch(function (err) {
+                            return console.error(err.toString());
+                        });
+
+                });
 
             });
 
@@ -488,6 +497,7 @@
         }
         else {
             container.empty();
+            container2.empty();
             container3.empty();
 
             var htmls = `
@@ -495,36 +505,25 @@
                 `;
 
             container.append(htmls);
+            container2.append(htmls);
             container3.append(htmls);
         }
 
     });
 
-    $("#userSearch, #userSection").on("input", function () {
+    $("#userSearch").on("input", function () {
 
         var search = $("#userSearch").val();
 
-        var sec = $("#userSection").val();
 
-        var section = parseInt(sec);
-
-        if (search.length > 0 && section == 0) {
+        if (search.length > 0 ) {
   
-            connection.invoke("GetUserSearch", search, 0)
+            connection.invoke("GetUserSearch", search)
                 .catch(function (err) {
                     return console.error(err.toString());
                 });
-        }
-        else if (search.length == 0 && section != 0) {
 
-            connection.invoke("GetUserSearch", null, section)
-                .catch(function (err) {
-                    return console.error(err.toString());
-                });
-        }
-        else if (search.length > 0 && section != 0){
-
-            connection.invoke("GetUserSearch", search, section)
+            connection.invoke("GetUserAddNewDataForSectionOnly", search)
                 .catch(function (err) {
                     return console.error(err.toString());
                 });
@@ -990,11 +989,12 @@
 
         var container = $(".tbodyDataSheet");
 
+
         if (datas.data.length > 0) {
 
             container.empty();
 
-            if (datas.success) {
+            if (datas.role == "Manager") {
                 datas.data.forEach(function (data) {
 
                     var startDate = new Date(data.startDate);
@@ -1105,7 +1105,7 @@
 
                 });
             }
-            else {
+            else if (datas.role == "Project_Manager"){
                 datas.data.forEach(function (data) {
 
                     var startDate = new Date(data.startDate);
@@ -1171,18 +1171,11 @@
 
                         container.append(shtml);
 
-
                     }
 
-
-
                 });
+
             }
-
-
-
-
-
 
         }
         else {
@@ -1829,11 +1822,14 @@
 /*    console.log(holidays);*/
 
     connection.on("HolidaysByYear", function (holi) {
+
+        console.log(holi);
+
         var container = $(".tbodyHoliday").empty();
 
-        if (holi.length > 0) {
+        if (holi.holiday.length > 0) {
 
-            var sortedHolidays = holi.sort(function (a, b) {
+            var sortedHolidays = holi.holiday.sort(function (a, b) {
 
                 var aMonth = new Date(a.fixedDate).getMonth();
                 var bMonth = new Date(b.fixedDate).getMonth();
@@ -1847,51 +1843,77 @@
                 }
             });
 
+            if (holi.role == "Manager") {
+                sortedHolidays.forEach(function (data) {
 
-            sortedHolidays.forEach(function (data) {
+                    var date = new Date(data.fixedDate);
+                    var fixedDate = date.toLocaleDateString("en-US", {
+                        month: "long",
+                        day: "numeric"
+                    });
 
-                var date = new Date(data.fixedDate);
-                var fixedDate = date.toLocaleDateString("en-US", {
-                    month: "long",
-                    day: "numeric"
+                    var html = `
+                    <tr>
+                        <td style="font-weight:bold;">${data.fixedName}</td>
+                        <td>${fixedDate}</td>
+                        <td>
+                          ${data.holidayStatus.statusName === 'movable' ? '<i class="fa fa-pencil edit-holiday" data-id="' + data.fixedId + '" data-name="' + data.fixedName + '" data-date="' + data.fixedDate + '" aria-hidden="true" data-bs-toggle="modal" data-bs-target="#updateHolidayModal"></i> <i class="fa fa-trash delete-holiday" data-name="' + data.fixedName + '" data-id="' + data.fixedId + '" aria-hidden="true" data-bs-toggle="modal" data-bs-target="#deleteHolidayModal"></i>' : ''}
+                         </td>
+                    </tr>
+                `;
+
+                    container.append(html);
+
+                    $(".edit-holiday").on("click", function () {
+
+                        var id = $(this).data("id");
+                        var date = $(this).data("date");
+                        var movableName = $(this).data("name");
+
+                        $("#holidayId").val(id);
+                        $("#updateHolidayDate").val(date);
+                        $("#updateHolidaySelect").val(movableName);
+
+
+                    });
+                    $(".delete-holiday").on("click", function () {
+
+                        var holidayId = $(this).data("id");
+                        var movableName = $(this).data("name");
+
+                        $(".holidayIdToDelete").val(holidayId);
+                        $("#holidayToDelete").text(movableName);
+
+                    });
+                });
+            }
+            else {
+
+                sortedHolidays.forEach(function (data) {
+
+                    var date = new Date(data.fixedDate);
+                    var fixedDate = date.toLocaleDateString("en-US", {
+                        month: "long",
+                        day: "numeric"
+                    });
+
+                    var html = `
+                    <tr>
+                        <td style="font-weight:bold;">${data.fixedName}</td>
+                        <td>${fixedDate}</td>
+                        <td>
+                          ${data.holidayStatus.statusName === 'movable' ? '<i class="fa fa-times edit-holiday"  aria-hidden="true"  style="pointer-events: none;"></i> <i class="fa fa-times delete-holiday"  aria-hidden="true" data-bs-toggle="modal" data-bs-target="#deleteHolidayModal" style="pointer-events: none;"></i>' : ''}
+                         </td>
+                    </tr>
+                `;
+
+                    container.append(html);
+
+
                 });
 
-                var html = `
-                <tr>
-                    <td style="font-weight:bold;">${data.fixedName}</td>
-                    <td>${fixedDate}</td>
-                    <td>
-                      ${data.holidayStatus.statusName === 'movable' ? '<i class="fa fa-pencil edit-holiday" data-id="' + data.fixedId + '" data-name="' + data.fixedName + '" data-date="' + data.fixedDate + '" aria-hidden="true" data-bs-toggle="modal" data-bs-target="#updateHolidayModal"></i> <i class="fa fa-trash delete-holiday" data-name="' + data.fixedName + '" data-id="' + data.fixedId + '" aria-hidden="true" data-bs-toggle="modal" data-bs-target="#deleteHolidayModal"></i>' : ''}
-                     </td>
-                </tr>
-            `;
+            }
 
-                container.append(html);
-
-                $(".edit-holiday").on("click", function () {
-
-                    var id = $(this).data("id");
-                    var date = $(this).data("date");
-                    var movableName = $(this).data("name");
-
-                    $("#holidayId").val(id);
-                    $("#updateHolidayDate").val(date);
-                    $("#updateHolidaySelect").val(movableName);
-
-                    
-                });
-                $(".delete-holiday").on("click", function () {
-
-                    var holidayId = $(this).data("id");
-                    var movableName = $(this).data("name");
-
-                    $(".holidayIdToDelete").val(holidayId);
-                    $("#holidayToDelete").text(movableName);
-
-                });
-
-
-            });
         }
         else {
             var htmls = `
@@ -1912,7 +1934,7 @@
 
     function GetReadyHoliday(year) {
 
-        connection.invoke("GetHolidays", currentYear)
+        connection.invoke("GetHolidaysToShow", currentYear)
             .catch(function (err) {
                 return console.error(err.toString());
             });
@@ -1958,9 +1980,10 @@
 
         if (name.length == 0 && section == "SECTION") {
 
-            $("#legendLow").text("");
-            $("#legendMed").text("");
-            $("#legendMax").text("");
+            //$("#legendLow").text("");
+            //$("#legendMed").text("");
+            //$("#legendMax").text("");
+            GetLegend(sectionId);
 
             connection.invoke("GetUsersMonthlyStatisticsSort", null, null, year)
                 .catch(function (err) {
@@ -1978,9 +2001,10 @@
         }
         else if (section == "SECTION" && name.length > 0) {
 
-            $("#legendLow").text("");
-            $("#legendMed").text("");
-            $("#legendMax").text("");
+            //$("#legendLow").text("");
+            //$("#legendMed").text("");
+            //$("#legendMax").text("");
+            GetLegend(sectionId);
 
             connection.invoke("GetUsersMonthlyStatisticsSort", null, name, year)
                 .catch(function (err) {
@@ -2059,7 +2083,7 @@
 
         var year = parseInt(years);
 
-        connection.invoke("GetHolidays", year)
+        connection.invoke("GetHolidaysToShow", year)
             .catch(function (err) {
                 return console.error(err.toString());
             });
@@ -2155,9 +2179,9 @@
 
         names.forEach(function (data) {
 
-            console.log(data);
             let html = `<option value="${data}">${data}</option>`;
             $("#addNewUserRoles").append(html);
+
         });
 
 

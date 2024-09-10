@@ -16,7 +16,7 @@
     width: 75%;
     display:flex;
     flex-direction:row;
-    justify-content:center;
+    justify-content:flex-start;
     align-items:center;
     background-color:transparent;
     position:relative;
@@ -79,6 +79,7 @@
     flex-direction: row;
     justify-content: center;
     align-items: center;
+    border-left: 1px solid #D9D9D9;
 }
 
 .logoutModalBody{
@@ -398,7 +399,6 @@
 .dashboardBodyDiv1Inner1Div1Div2 {
     height: 100%;
     width: 30%;
-    border-right: 1px solid #D9D9D9;
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;

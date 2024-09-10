@@ -64,6 +64,7 @@ namespace EmployeeProject.Application.Services
                     {
                         var userRoles = await userManager.GetRolesAsync(user);
                         var userRole = userRoles.FirstOrDefault();
+
                         await userManager.UpdateAsync(user);
                         if (userRole != null)
                         {

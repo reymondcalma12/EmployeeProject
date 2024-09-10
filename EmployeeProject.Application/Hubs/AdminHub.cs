@@ -1,5 +1,6 @@
 ﻿using EmployeeProject.Application.Interfaces;
 using Microsoft.AspNetCore.SignalR;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace EmployeeProject.Application.Hubs
 {
@@ -44,11 +45,11 @@ namespace EmployeeProject.Application.Hubs
             }
         }
 
-        public async Task GetUserSearch(string? name, int? section)
+        public async Task GetUserSearch(string? name)
         {
             try
             {
-                var allUsersSearch = await adminServices.GetUserSearch(name, section);
+                var allUsersSearch = await adminServices.GetUserSearch(name);
 
                 await Clients.Caller.SendAsync("ReceiveAllUsersSearch", allUsersSearch);
             }
@@ -189,9 +190,9 @@ namespace EmployeeProject.Application.Hubs
             try
             {
 
-                var (data, success) = await adminServices.GetAllDataSheetSort(sectionId, name, year);
+                var (data, role) = await adminServices.GetAllDataSheetSort(sectionId, name, year);
 
-                await Clients.Caller.SendAsync("GetAllDataSheetSort", new { Data = data, Success = success });
+                await Clients.Caller.SendAsync("GetAllDataSheetSort", new { Data = data, Role = role });
 
             }
             catch (Exception ex)
@@ -270,17 +271,16 @@ namespace EmployeeProject.Application.Hubs
 
 
 
-        public async Task GetHolidays(int year)
+        public async Task GetHolidaysToShow(int year)
         {
 
             try
             {
 
-                var holi = await adminServices.GetHolidays(year);
-
+                var (holi, role) = await adminServices.GetHolidaysToShow(year);
                 var holidays = holi.OrderBy(a => a.FixedDate);
 
-                await Clients.Caller.SendAsync("HolidaysByYear", holidays);
+                await Clients.Caller.SendAsync("HolidaysByYear", new { Holiday = holidays, Role = role });
                 
             }
             catch (Exception ex)

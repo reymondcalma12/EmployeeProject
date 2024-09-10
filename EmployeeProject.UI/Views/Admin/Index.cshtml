@@ -44,9 +44,15 @@
 
         <div class="dashboardBodyDiv1Inner1">
 
-            @if (User.IsInRole("Manager"))
+            @if (User.IsInRole("Project_Manager"))
             {
-                <select class="section" id="dashboardSectionDropDown">
+                <select class="section" id="dashboardSectionDropDown" >
+                    <option>SECTION</option>
+                </select>
+            }
+            else
+            {
+                <select class="section" id="dashboardSectionDropDown" style="background-color: transparent; box-shadow: 0 0px 0px rgba(0, 0, 0, 0.25); color:transparent;" disabled>
                     <option>SECTION</option>
                 </select>
             }

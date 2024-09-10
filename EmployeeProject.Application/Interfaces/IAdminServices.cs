@@ -30,7 +30,7 @@ namespace EmployeeProject.Application.Interfaces
         Task<AppUser> GetUserDetails();
         Task<IEnumerable<AppUser>> GetUserAddDataSheet(string name);
 
-        Task<IEnumerable<AppUser>> GetUserSearch(string? name, int? section);
+        Task<IEnumerable<AppUser>> GetUserSearch(string? name);
 
         Task<(bool, string, string)> AddDataSheetUserExistEnableButton(string name);
         Task<bool> DeleteUser(string id);
@@ -48,7 +48,7 @@ namespace EmployeeProject.Application.Interfaces
 
 
         Task<bool> AddSection(SectionDTO section);
-
+        Task<(IEnumerable<Holidays>, string)> GetHolidaysToShow(int year);
 
         Task<List<UserMonthlyStatistics>> GetUserMonthlyStatisticsEmployeeSort(int year);
 
@@ -68,7 +68,7 @@ namespace EmployeeProject.Application.Interfaces
 
         Task<IEnumerable<DataSheetBus>> GetAllDataSheet();
 
-        Task<(IEnumerable<DataSheetBus>, bool)> GetAllDataSheetSort(int? sectionId, string? name, int? year);
+        Task<(IEnumerable<DataSheetBus>, string)> GetAllDataSheetSort(int? sectionId, string? name, int? year);
 
         Task<IEnumerable<Holidays>> GetAllFixedHolidays();
 

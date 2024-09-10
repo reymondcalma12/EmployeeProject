@@ -58,9 +58,19 @@
 
             @if (User.IsInRole("Manager"))
             {
-                <button class="addData" data-bs-toggle="modal" data-bs-target="#addNewDataModal"><i class="fa fa-plus addDataIcon" aria-hidden="true"></i>ADD DATA</button>
+                <button class="addData" data-bs-toggle="modal" data-bs-target="#addNewDataModal"><i class="fa fa-plus addDataIcon" aria-hidden="true"></i>ADD DATA
+                </button>
             }
-           
+            else if (User.IsInRole("Project_Manager"))
+            {
+@*                 <button class="addData" data-bs-toggle="modal" data-bs-target="#addNewDataModal" style="background-color: white; box-shadow: 0 0px 0px rgba(0, 0, 0, 0.25);" disabled>
+                    <i class="fa fa-plus addDataIcon" aria-hidden="true"></i>ADD DATA
+                </button> *@
+                <select class="section" id="dataSheetSectionDropDown" style="width:150px; margin-right: 2%;">
+                    <option>SECTION</option>
+                </select>
+            }
+
             <input type="text" class="dashboardSearch" style="box-shadow:none;" id="dataSheetSearch" placeholder="Search ..." autocomplete="off"/>
 
             <div class="autoFillSearchUsersDataSheetBody">
@@ -74,12 +84,7 @@
             <div class="dashboardSearchBtn"><i class="fa fa-search" aria-hidden="true"></i></div>
 
             <div class="dataSheetSectionDropdown">
-                @if (User.IsInRole("Project_Manager"))
-                {
-                    <select class="section" id="dataSheetSectionDropDown" style="width:150px;">
-                        <option>SECTION</option>
-                    </select>
-                }
+
             </div>
 
             <div class="dataSheetYearClass">
