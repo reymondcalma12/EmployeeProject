@@ -4,6 +4,7 @@ using EmployeeProject.Infrastructure.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EmployeeProject.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240913084346_lastone2")]
+    partial class lastone2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -31,9 +34,6 @@ namespace EmployeeProject.Infrastructure.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ActivityId"));
 
                     b.Property<string>("ActivityName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Status")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ActivityId");
@@ -136,6 +136,11 @@ namespace EmployeeProject.Infrastructure.Migrations
                         {
                             AllowedHoursId = 16,
                             Number = 8f
+                        },
+                        new
+                        {
+                            AllowedHoursId = 17,
+                            Number = 8.5f
                         });
                 });
 
@@ -606,17 +611,17 @@ namespace EmployeeProject.Infrastructure.Migrations
                         {
                             Id = "a18be9c0-aa65-4af8-bd17-00bd9344e575",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "9bf45ef1-c501-4c38-b427-202a98e45f79",
+                            ConcurrencyStamp = "bea37cfa-51a9-4e03-a219-ed056d46b141",
                             Email = "jcaso@princeretail.com",
                             EmailConfirmed = false,
                             FullName = "Joselito Caso",
                             LockoutEnabled = false,
                             NormalizedEmail = "JCASO@PRINCERETAIL.COM",
                             NormalizedUserName = "JCASO@PRINCERETAIL.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEJeG2QsFFMr6cswoDeTwVI+ovi7NZxFEQ8FnDEP06WkpUwQV1G1uQQk46sRv/uW4aA==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEPIB9D1pBnqkaEgPjosXSdHMmcdB8HlVOWa+N/BohqFwra8uq/9m71G/NosbsxXapA==",
                             PhoneNumberConfirmed = false,
                             SectionId = 1,
-                            SecurityStamp = "54cf82e5-3014-40df-851a-eec3a784e401",
+                            SecurityStamp = "c2ce4eea-05c1-48aa-800f-73f891a5c6ee",
                             TwoFactorEnabled = false,
                             UserName = "jcaso@princeretail.com",
                             position = "Manager"

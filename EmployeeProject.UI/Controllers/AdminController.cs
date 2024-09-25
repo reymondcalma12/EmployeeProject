@@ -9,7 +9,7 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 namespace EmployeeProject.UI.Controllers
 {
 
-    [Authorize(Policy = "RequireManagerOrProjectManagerRole")]
+
     public class AdminController : BaseController<AdminController>
     {
         private readonly IUserAccount services;
@@ -60,7 +60,13 @@ namespace EmployeeProject.UI.Controllers
             return View(model);
         }
 
-      
+        public IActionResult Sections()
+        {
+
+            var model = new AdminUsersDTO();
+
+            return View(model);
+        }
 
         [HttpPost]
         public async Task<IActionResult> AddUser(AdminUsersDTO viewModel)
@@ -105,6 +111,53 @@ namespace EmployeeProject.UI.Controllers
 
             return RedirectToAction("Users");
         }
+
+
+        [HttpPost]
+        public async Task<IActionResult> AddProjects(string projectName)
+        {
+
+            if (projectName != null)
+            {
+                var result = await adminServices.AddProject(projectName);
+
+                if (result)
+                {
+                    TempData["AddProject"] = "Project Successfully Added!";
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+
+                }
+            }
+
+            return RedirectToAction("Users");
+        }
+
+        
+        [HttpPost]
+        public async Task<IActionResult> AddActivity(string activityName)
+        {
+
+            if (activityName != null)
+            {
+                var result = await adminServices.AddActivity(activityName);
+
+                if (result)
+                {
+                    TempData["AddActivity"] = "Activity Successfully Added!";
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+
+                }
+            }
+
+            return RedirectToAction("Users");
+        }
+
 
         [HttpPost]
         public async Task<IActionResult> UpdateSection(int sectionId, string sectionName)
@@ -152,6 +205,54 @@ namespace EmployeeProject.UI.Controllers
 
             return RedirectToAction("Users");
         }
+
+
+        
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateProject(int id, string projectName, string status)
+        {
+
+            if (id != null)
+            {
+                var result = await adminServices.UpdateProject(id, projectName, status);
+
+                if (result)
+                {
+                    TempData["UpdateProject"] = "Project Successfully Updated!";
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+
+                }
+            }
+
+            return RedirectToAction("DataSheet");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateActivity(int id, string activityName, string status)
+        {
+
+            if (id != null)
+            {
+                var result = await adminServices.UpdateActivity(id, activityName, status);
+
+                if (result)
+                {
+                    TempData["UpdateActivity"] = "Activity Successfully Updated!";
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+
+                }
+            }
+
+            return RedirectToAction("DataSheet");
+        }
+
 
 
 
@@ -244,7 +345,7 @@ namespace EmployeeProject.UI.Controllers
 
                 if (result)
                 {
-                    TempData["DeleteUser"] = "User Successfully Deleted!";
+                    TempData["DeleteUser"] = "User Successfully De Activated!";
                     return RedirectToAction("Users");
                 }
                 else

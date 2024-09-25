@@ -39,7 +39,7 @@
 
 <div class="holidaysBody">
     <div class="holidaysBodyDiv1">
-         @if (User.IsInRole("Manager"))
+         @if (User.IsInRole("Admin"))
         {
             <button class="addHolidayBtn" style="box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);" data-bs-toggle="modal" data-bs-target="#addHolidayModal"><i class="fa fa-plus addDataIcon" aria-hidden="true"></i>ADD HOLIDAY</button>
         }
@@ -98,22 +98,32 @@
                     </div>
 
                 </div>
-                <div class="modal-body addSectionBody" style="border-radius:0 0 .5rem .5rem; display:flex;flex-direction:column; border:1px solid gray; border-top:none;">
+                <div class="modal-body addSectionBody addMovableHolidayBody" style="border-radius:0 0 .5rem .5rem; display:flex;flex-direction:column; border:1px solid gray; border-top:none;">
 
-                    <div class="addSectionBodyDiv1">
+                    <div class="addSectionBodyDiv1" style="height:20%;"> 
 
                         <select class="form-control addNewUserInput"  id="addHolidaySelect" style="text-align:center;" asp-for="movableName">
 
                         </select>
 
-   
+ 
                     </div>
 
-                            <div class="" style="display:flex; align-items:center; justify-content:center; height:5%;width:100%;">
-                                 <span class="text-danger" asp-validation-for="movableName"></span>
-                            </div>
+                    <div class="" style="display:flex; align-items:center; justify-content:center; height:5%;width:100%;">
+                            <span class="text-danger" asp-validation-for="movableName"></span>
+                    </div>
 
-                    <div class="" style="display:flex; align-items:center; ;justify-content:center; height:30%;width:100%; flex-direction:row;">
+                <div class="addSectionBodyDiv1" style="height:20%;" >
+
+                    <input type="text" class="form-control addNewUserInput" id="addHolidayName" style="text-align:center; display:none" asp-for="movableNameForAdditional" placeholder="Holiday Name: "/>
+                
+                </div>
+                <div class="" style="display:flex; align-items:center; justify-content:center; height:5%;width:100%;" >
+                        <span class="text-danger" asp-validation-for="movableNameForAdditional" style="display:none;" id="holidayNameRequired"></span>
+                </div>
+
+
+                    <div class="" style="display:flex; align-items:center; ;justify-content:center; height:20%;width:100%; flex-direction:row;">
 
                         <span style="color:#425833; margin-right:5%;">Date: </span>
                         <input type="date" class="form-control addNewDataStartDate" id="addHolidayDate" asp-for="movableDate">
@@ -126,15 +136,13 @@
 
                     <div class="addSectionBodyDiv3" style="height:30%;">
 
-                        <button type="submit" class="addWorkingHoursPerDay" style="border:none;"><span style="font-size:20px">ADD</span></button>
+                        <button type="submit" class="addWorkingHoursPerDay holidayAddBtn" style="border:none;"><span style="font-size:20px">ADD</span></button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </form>
-
-
 
                 @*Update HOLIDAY*@
 <form asp-action="UpdateMovable" method="post">
@@ -149,7 +157,7 @@
                         <h5 style="color:white;">UPDATE MOVABLE HOLIDAYS</h5>
                     </div>
                     <div class="modal-headerDiv2">
-                        <i class="fa fa-times closeAddNewData" aria-hidden="true" data-bs-dismiss="modal" aria-label="Close"></i>
+                        <i class="fa fa-times closeAddNewData closeUpdateModal" aria-hidden="true" data-bs-dismiss="modal" aria-label="Close"></i>
                     </div>
 
                 </div>
@@ -167,6 +175,20 @@
                         <span class="text-danger" asp-validation-for="movableName"></span>
                     </div>
 
+                    <div class="addSectionBodyDiv1" style="height:20%;">
+
+                        <input type="text" class="form-control addNewUserInput" id="updateHolidayName" style="text-align:center; display:none" asp-for="movableNameForAdditional" placeholder="Holiday Name: " />
+
+                    </div>
+
+                    <div class="" style="display:flex; align-items:center; justify-content:center; height:5%;width:100%;">
+                        <span class="text-danger" asp-validation-for="movableNameForAdditional" style="display:none;" id="holidayNameRequired"></span>
+                    </div>
+
+
+
+
+
                     <div class="" style="display:flex; align-items:center; ;justify-content:center; height:30%;width:100%; flex-direction:row;">
 
                         <span style="color:#425833; margin-right:5%;">Date: </span>
@@ -180,7 +202,7 @@
 
                     <div class="addSectionBodyDiv3" style="height:30%;">
 
-                        <button type="submit" class="addWorkingHoursPerDay" style="border:none;"><span style="font-size:20px">SAVE</span></button>
+                        <button type="submit" class="addWorkingHoursPerDay holidayUpdateBtn" style="border:none;"><span style="font-size:20px">SAVE</span></button>
                     </div>
                 </div>
             </div>

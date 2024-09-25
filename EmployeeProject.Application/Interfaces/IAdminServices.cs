@@ -12,12 +12,21 @@ namespace EmployeeProject.Application.Interfaces
 {
     public interface IAdminServices
     {
+        Task<bool> AddProject(string name);
+        Task<bool> AddActivity(string name);
+
+        Task<bool> UpdateActivity(int id, string activityName, string status);
 
         Task<bool> UpdateProfile(IFormFile image);
 
+        Task<bool> UpdateProject(int id, string projectName, string status);
         Task<IEnumerable<AppUser>> GetAllUsers();
 
-        Task<int> CountAllUsers();
+        Task<int> CountAllUsers(); 
+        Task<IEnumerable<Activity>> GetActivities();
+        Task<IEnumerable<Activity>> GetActiveActivities();
+        Task<IEnumerable<Project>> GetProjects();
+        Task<IEnumerable<Project>> GetActiveProjects();
 
         Task<IEnumerable<Section>> GetSections();
 

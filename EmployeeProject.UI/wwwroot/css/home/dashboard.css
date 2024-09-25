@@ -417,3 +417,187 @@
     margin-right: 3%;
     box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
 }
+
+.projectsModal {
+    display: flex;
+    flex-direction: column;
+
+    height:100%;
+    width:100%;
+}
+
+.projectsModalDiv1{
+    height:20%;
+
+    display:flex;
+    flex-direction:row;
+}
+
+
+
+.projectsModalDiv1Inner1{
+    display:flex;
+    height:100%;
+    width:30%;
+
+    align-items:center;
+}
+
+.projectsModalDiv1Inner2 {
+    display: flex;
+    height: 100%;
+    width: 70%;
+
+    justify-content:flex-end;
+    align-items:center;
+}
+
+.projectsModalDiv1Inner2 h5{
+    color:#1E4F3B;
+    font-weight:bold;
+    margin-top:5%;
+}
+.editProjectsPencil{
+
+}
+
+.editProjectsPencil:before {
+    cursor:pointer;
+    color: gold;
+    background-color: gray;
+    padding: 8px;
+    border-radius: 5px;
+
+}
+
+.editProjectsPencil:hover {
+      background-color: black;
+
+}
+
+.projectsModalDiv2 {
+    height: 350px;
+    width: 100%;
+    border: 1px solid green;
+    overflow-y: auto;
+    overflow-x: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #183B2B white;
+    background-color: rgba(169, 195, 147, 0.3);
+    border-radius: 1rem;
+}
+.projectsModalDiv2Table {
+    height: 100%;
+    width: 100%;
+    border-bottom:none;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.projectsModalDiv2TableBody{
+    text-align:center;
+}
+
+.projectsModalDiv2TableBody td {
+    padding: 15px 0 15px 0;
+}
+
+.projectsModalDiv2TableBody tr:hover {
+    background-color:#1E4F3B;
+    color:gold;
+}
+
+.projectsModalDiv2TableBody tr td:nth-child(2) {
+
+    border-left:1px solid;
+
+}
+
+.projectsModalDiv2TableBody tr:nth-child(even) {
+    background-color: white;
+}
+
+.projectsModalDiv2TableBody tr:nth-child(even):hover {
+    background-color:#1E4F3B;
+    color:gold;
+}
+
+
+.activitiesModalDiv2TableBody {
+    text-align: center;
+}
+.activitiesModalDiv2TableBody td {
+    padding: 15px 0 15px 0;
+}
+
+    .activitiesModalDiv2TableBody tr td:nth-child(2) {
+        border-left: 1px solid;
+    }
+
+    .activitiesModalDiv2TableBody tr td:last-child {
+        border-left: 1px solid;
+    }
+
+
+    .activitiesModalDiv2TableBody tr:nth-child(even) {
+        background-color: white;
+    }
+
+    .activitiesModalDiv2TableBody tr:nth-child(even) {
+        background-color: white;
+    }
+
+        .activitiesModalDiv2TableBody tr:nth-child(even):hover {
+            background-color: #1E4F3B;
+            color: gold;
+        }
+
+.activitiesModalDiv2TableBody tr:hover {
+    background-color: #1E4F3B;
+    color: gold;
+}
+
+
+
+
+
+
+.projectsModalDiv2TableBody tr td:last-child {
+
+    border-left:1px solid;
+
+}
+
+.activitiesModalDiv2TableHead {
+    border-bottom: 1px solid green;
+    text-align: center;
+    background-color: #1E4F3B;
+    position: sticky;
+    top: 0;
+}
+.activitiesModalDiv2TableHead th {
+    padding: 10px;
+    color:gold;
+}
+
+
+
+.projectsModalDiv2TableHead {
+    border-bottom: 1px solid green;
+    text-align: center;
+    background-color: #1E4F3B;
+    position: sticky;
+    top: 0;
+}
+
+.projectsModalDiv2TableHead th {
+    padding: 10px;
+    color: gold;
+}
+
+.editActivitiesPencil:before {
+    cursor: pointer;
+    color: gold;
+    background-color: gray;
+    padding: 8px;
+    border-radius: 5px;
+}

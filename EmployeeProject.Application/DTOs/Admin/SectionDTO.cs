@@ -9,7 +9,7 @@ namespace EmployeeProject.Application.DTOs.Admin
 {
     public class SectionDTO
     {
-        [Required]
+        [Required(ErrorMessage = "Section Name is required.")]
         public string SectionName { get; set; }
 
     }

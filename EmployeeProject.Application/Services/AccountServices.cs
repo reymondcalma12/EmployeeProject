@@ -5,6 +5,7 @@ using EmployeeProject.Core.Entities.User;
 using EmployeeProject.Core.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using static System.Collections.Specialized.BitVector32;
 
 namespace EmployeeProject.Application.Services
 {
@@ -25,23 +26,35 @@ namespace EmployeeProject.Application.Services
 
         public async Task<bool> CreateAccount(RegisterDTO userDTO)
         {
+
+            var usersId = httpcontext.HttpContext.Session.GetString("UsersId").ToString();
+
+            var users = userManager.Users.FirstOrDefault(a => a.Id == usersId);
+
             if (userDTO != null)
             {
                 AppUser user = new()
                 {
                     FullName = userDTO.FullName,
                     UserName = userDTO.UserName,
-                    SectionId = userDTO.SectionId,
                     Email = userDTO.UserName,
                     position = userDTO.Position,
+                    SectionId = userDTO.UserRole != null ? userDTO.SectionId : users.SectionId
                 };
 
                 var result = await userManager.CreateAsync(user, userDTO.Password!);
 
-
                 if (result.Succeeded)
                 {
-                    await userManager.AddToRoleAsync(user, userDTO.UserRole);
+
+                    if (userDTO.UserRole != null)
+                    {
+                        await userManager.AddToRoleAsync(user, userDTO.UserRole);
+                    }
+                    else
+                    {
+                        await userManager.AddToRoleAsync(user, "Employee");
+                    }
 
                     return true;
                 }
@@ -60,26 +73,14 @@ namespace EmployeeProject.Application.Services
                     var user = userManager.Users.FirstOrDefault(a => a.UserName == loginDTO.Username);
                     httpcontext.HttpContext.Session.SetString("UsersId", user.Id);
 
-                    if (user.isNewUser == true) 
-                    {
-                        var userRoles = await userManager.GetRolesAsync(user);
-                        var userRole = userRoles.FirstOrDefault();
 
-                        await userManager.UpdateAsync(user);
-                        if (userRole != null)
-                        {
-                            return (true, userRole, true);
-                        }
-                    }
-                    else
+                    var userRoles = await userManager.GetRolesAsync(user);
+                    var userRole = userRoles.FirstOrDefault();
+                    if (userRole != null)
                     {
-                        var userRoles = await userManager.GetRolesAsync(user);
-                        var userRole = userRoles.FirstOrDefault();
-                        if (userRole != null)
-                        {
-                            return (true, userRole, false);
-                        }
+                        return (true, userRole, false);
                     }
+                    
                 }
             }
             return (false, null, false);
@@ -114,9 +115,6 @@ namespace EmployeeProject.Application.Services
                     if (changePasswordResult.Succeeded)
                     {
 
-                        user.isNewUser = false;
-
-                        await userManager.UpdateAsync(user);
 
                         return (true, userRole);
                     }

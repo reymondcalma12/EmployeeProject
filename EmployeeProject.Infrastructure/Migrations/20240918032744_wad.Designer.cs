@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EmployeeProject.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240807062917_one")]
-    partial class one
+    [Migration("20240918032744_wad")]
+    partial class wad
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -136,11 +136,6 @@ namespace EmployeeProject.Infrastructure.Migrations
                         {
                             AllowedHoursId = 16,
                             Number = 8f
-                        },
-                        new
-                        {
-                            AllowedHoursId = 17,
-                            Number = 8.5f
                         });
                 });
 
@@ -158,6 +153,18 @@ namespace EmployeeProject.Infrastructure.Migrations
                     b.HasKey("BusinessOrItId");
 
                     b.ToTable("BusinessOrIts");
+
+                    b.HasData(
+                        new
+                        {
+                            BusinessOrItId = 1,
+                            BusinessOrItName = "Business"
+                        },
+                        new
+                        {
+                            BusinessOrItId = 2,
+                            BusinessOrItName = "IT"
+                        });
                 });
 
             modelBuilder.Entity("EmployeeProject.Core.Entities.Model.DataSheetBus", b =>
@@ -190,7 +197,7 @@ namespace EmployeeProject.Infrastructure.Migrations
                     b.Property<int>("ProjectId")
                         .HasColumnType("int");
 
-                    b.Property<int>("SectionId")
+                    b.Property<int?>("SectionId")
                         .HasColumnType("int");
 
                     b.Property<DateOnly>("StartDate")
@@ -420,12 +427,55 @@ namespace EmployeeProject.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("Name")
-                        .HasColumnType("int");
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
                     b.ToTable("MovableNames");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Additional Special Non-Working"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Chinese New Year"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Maunday Thursday "
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "Good Friday"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Name = "Black Saturday"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Name = "Eid al-Fitr"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Name = "Eid al-Adha"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Name = "National Heroes' Day"
+                        });
                 });
 
             modelBuilder.Entity("EmployeeProject.Core.Entities.Model.Project", b =>
@@ -437,6 +487,9 @@ namespace EmployeeProject.Infrastructure.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProjectId"));
 
                     b.Property<string>("ProjectName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Status")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ProjectId");
@@ -458,6 +511,13 @@ namespace EmployeeProject.Infrastructure.Migrations
                     b.HasKey("SectionId");
 
                     b.ToTable("Sections");
+
+                    b.HasData(
+                        new
+                        {
+                            SectionId = 1,
+                            SectionName = "Developer"
+                        });
                 });
 
             modelBuilder.Entity("EmployeeProject.Core.Entities.User.AppUser", b =>
@@ -518,7 +578,7 @@ namespace EmployeeProject.Infrastructure.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
-                    b.Property<bool?>("isNewUser")
+                    b.Property<bool?>("deActivated")
                         .HasColumnType("bit");
 
                     b.Property<string>("position")
@@ -540,6 +600,27 @@ namespace EmployeeProject.Infrastructure.Migrations
                     b.HasIndex("SectionId");
 
                     b.ToTable("AspNetUsers", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "a18be9c0-aa65-4af8-bd17-00bd9344e575",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "70688e2f-2a69-41a7-981f-01a205386a65",
+                            Email = "jcaso@princeretail.com",
+                            EmailConfirmed = false,
+                            FullName = "Joselito Caso",
+                            LockoutEnabled = false,
+                            NormalizedEmail = "JCASO@PRINCERETAIL.COM",
+                            NormalizedUserName = "JCASO@PRINCERETAIL.COM",
+                            PasswordHash = "AQAAAAIAAYagAAAAEMKSt1giJ6FpHLtTK8Dr6fP96ygkl4EQ+TokfrW/Wa8zaeiF4qT8E0iV5QzVM1MGLQ==",
+                            PhoneNumberConfirmed = false,
+                            SectionId = 1,
+                            SecurityStamp = "4407f7ba-0f96-4861-b093-45f48f7f6cae",
+                            TwoFactorEnabled = false,
+                            UserName = "jcaso@princeretail.com",
+                            position = "Manager"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -580,6 +661,18 @@ namespace EmployeeProject.Infrastructure.Migrations
                             Id = "2",
                             Name = "Manager",
                             NormalizedName = "MANAGER"
+                        },
+                        new
+                        {
+                            Id = "3",
+                            Name = "Project_Manager",
+                            NormalizedName = "PROJECT_MANAGER"
+                        },
+                        new
+                        {
+                            Id = "4",
+                            Name = "Admin",
+                            NormalizedName = "ADMIN"
                         });
                 });
 
@@ -668,6 +761,13 @@ namespace EmployeeProject.Infrastructure.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = "a18be9c0-aa65-4af8-bd17-00bd9344e575",
+                            RoleId = "2"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
@@ -717,9 +817,7 @@ namespace EmployeeProject.Infrastructure.Migrations
 
                     b.HasOne("EmployeeProject.Core.Entities.Model.Section", "Section")
                         .WithMany()
-                        .HasForeignKey("SectionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("SectionId");
 
                     b.Navigation("Activity");
 

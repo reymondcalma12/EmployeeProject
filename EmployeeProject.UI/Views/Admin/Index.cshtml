@@ -15,9 +15,18 @@
 
     var profileUpdate = TempData["ProfileUpdated"] as String;
 
+    var addProject = TempData["AddProject"] as String;
+
+    var updateProject = TempData["UpdateProject"] as String;
+
+
+    var addActivity = TempData["AddActivity"] as String;
+
+    var updateActivity = TempData["UpdateActivity"] as String;
+
 }
 
-@if (!string.IsNullOrEmpty(changePass) || !string.IsNullOrEmpty(login) || !string.IsNullOrEmpty(profileUpdate))
+@if (!string.IsNullOrEmpty(changePass) || !string.IsNullOrEmpty(login) || !string.IsNullOrEmpty(profileUpdate) || !string.IsNullOrEmpty(addProject) || !string.IsNullOrEmpty(updateProject) || !string.IsNullOrEmpty(addActivity) || !string.IsNullOrEmpty(updateActivity))
 {
     <div class="alert alert-success d-flex justify-content-between align-items-center">
         @if (!string.IsNullOrEmpty(changePass))
@@ -33,6 +42,22 @@
         {
             <strong>@profileUpdate</strong>
         }
+        @if (!string.IsNullOrEmpty(addProject))
+        {
+            <strong>@addProject</strong>
+        }
+        @if (!string.IsNullOrEmpty(updateProject))
+        {
+            <strong>@updateProject</strong>
+        }
+        @if (!string.IsNullOrEmpty(addActivity))
+        {
+            <strong>@addActivity</strong>
+        }
+        @if (!string.IsNullOrEmpty(updateActivity))
+        {
+            <strong>@updateActivity</strong>
+        }
         <button type="button" class="close btn btn-outline-success" data-bs-dismiss="alert" aria-label="Close">
             <span aria-hidden="true">&times;</span>
         </button>
@@ -44,7 +69,7 @@
 
         <div class="dashboardBodyDiv1Inner1">
 
-            @if (User.IsInRole("Project_Manager"))
+            @if (User.IsInRole("Project_Manager") || User.IsInRole("Admin"))
             {
                 <select class="section" id="dashboardSectionDropDown" >
                     <option>SECTION</option>
@@ -144,7 +169,124 @@
     </div>
 </div>
 
-@if (!string.IsNullOrEmpty(newUser))
+
+
+
+
+@* <div class="modal fade addDataModal" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="staticBackdropLabel" id="activitiesModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+
+        <div class="modal-content " style="width:800px; height:520px;  font-family: 'Montserrat', sans-serif; border-radius:1.5rem;">
+
+            <div class="modal-header" style="height:60px; background:#1E4F3B; display:flex; border-radius:1rem 1rem 0 0 ;">
+
+                <div class="modal-headerDiv1" style="width:95%; display:flex;justify-content:center;align-items:center;">
+                    <h4 style="color:gold;">PROJECTS</h4>
+                </div>
+                <div class="modal-headerDiv2">
+                    <i class="fa fa-times closeAddNewData" aria-hidden="true" data-bs-dismiss="modal" aria-label="Close"></i>
+                </div>
+
+            </div>
+            <div class="modal-body addNewDataModalBody">
+
+                <div class="addNewDataModalBodyDiv1" style="flex-direction:column;">
+
+                    <input type="text" class="form-control addNewDataInput" placeholder="Resource Name:" asp-for="DataSheetBusDTO.UserName" id="addDataSheetResourceName" autocomplete="off" />
+
+                    <div class="autoFillSearchDataSheetBody">
+
+                        <div class="autoFillSearchDataSheet">
+
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="" style="height:10px; width:100%; display:flex; justify-content:space-evenly; align-items:center; ">
+                    <span asp-validation-for="DataSheetBusDTO.UserName" class="text-danger"></span>
+                </div>
+
+                <div class="addNewDataModalBodyDiv2" style="flex-wrap:wrap;">
+                    <input type="text" class="form-control addNewDataInput" placeholder="Project Name:" asp-for="DataSheetBusDTO.ProjectName" />
+                    <input type="text" class="form-control addNewDataInput" placeholder="Activity Name:" asp-for="DataSheetBusDTO.ActivityName" />
+
+                </div>
+
+                <div class="" style="height:10px; width:100%; display:flex; justify-content:space-evenly; align-items:center; ">
+                    <span asp-validation-for="DataSheetBusDTO.ProjectName" class="text-danger"></span>
+                    <span asp-validation-for="DataSheetBusDTO.ActivityName" class="text-danger"></span>
+                </div>
+
+                <div class="addNewDataModalBodyDiv3" style="flex-wrap:wrap;">
+
+                    <select class="form-control addNewDataInput" asp-for="DataSheetBusDTO.BusinessOrIt" id="addDataSheetBusinessDropdown">
+                        <option value="" disabled selected>Business Or IT:</option>
+                    </select>
+
+                    <input type="hidden" id="addDataSheetSection" asp-for="DataSheetBusDTO.SectioName" />
+                    <input type="text" class="form-control addNewDataInput" placeholder="SECTION:" disabled id="addDataSheetSectionDisplay" />
+
+                </div>
+
+                <div class="" style="height:10px; width:100%; display:flex; justify-content:space-evenly; align-items:center; ">
+                    <span asp-validation-for="DataSheetBusDTO.BusinessOrIt" class="text-danger"></span>
+                    <span asp-validation-for="DataSheetBusDTO.SectioName" class="text-danger"></span>
+                </div>
+
+                <div class="addNewDataModalBodyDiv4">
+                    <div class="addNewDataModalBodyDiv4Div1">
+                        <span> Start Date</span>
+                        <input type="date" class="form-control addNewDataStartDate" asp-for="DataSheetBusDTO.StartDate" id="startDate" />
+
+                    </div>
+
+                    <div class="addNewDataModalBodyDiv4Div2">
+                        <input type="date" class="form-control addNewDataEndDate" asp-for="DataSheetBusDTO.EndDate" id="endDate" />
+                        <span> End Date</span>
+                    </div>
+                </div>
+
+                <div class="" style="height:10px; width:100%; display:flex; justify-content:space-evenly; align-items:center; ">
+                    <span asp-validation-for="DataSheetBusDTO.StartDate" class="text-danger"></span>
+                    <span asp-validation-for="DataSheetBusDTO.EndDate" class="text-danger"></span>
+                </div>
+
+                <div class="addNewDataModalBodyDiv5">
+                    <div class="addNewDataModalBodyDiv5Div1">
+
+                        <button class="addNewDataSettingsBtn" onclick="preventFormSubmit(event)" data-bs-toggle="modal" data-bs-target="#addWorkingHoursPerDay"><i class="fa fa-cog addNewDataSettingsIcon" aria-hidden="true"></i></button>
+                        <span>Hours Per Day</span>
+
+                        <select class="addNewDataSelect" asp-for="DataSheetBusDTO.HoursPerDay" id="hoursperday">
+                        </select>
+
+                    </div>
+
+                    <div class="addNewDataModalBodyDiv5Div2">
+                        <input type="hidden" class="form-control addNewDataResult" asp-for="DataSheetBusDTO.HoursPerMonth" id="TotalHoursPerMonth" />
+                        <input type="number" class="form-control addNewDataResult" disabled id="TotalHoursPerMonthDisplay" />
+                        <span>Total Hours</span>
+                    </div>
+                </div>
+
+                <div class="addNewDataModalBodyDiv6">
+                    <button class="addNewDataAddBtn" style="border:none;" type="submit" id="addNewDataButton" disabled>ADD</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+ *@
+
+
+
+
+
+
+
+@* @if (!string.IsNullOrEmpty(newUser))
 {
 <script>
         window.addEventListener('DOMContentLoaded', function () {
@@ -190,7 +332,8 @@
         </div>
     </div>
 </form>
-}
+} *@
+
 @section Scripts{
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");

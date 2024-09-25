@@ -11,5 +11,9 @@ namespace EmployeeProject.Core.Entities.Model
 
         public string? ProjectName { get; set; }
 
+        public string? Status {  get; set; }
+
+
+
     }
 }

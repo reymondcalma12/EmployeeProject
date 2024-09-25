@@ -10,9 +10,14 @@ namespace EmployeeProject.Application.DTOs.Admin
     public class MovableHolidaysDTO
     {
 
-        public int? Id { get; set; } 
+        public int? Id { get; set; }
 
+        [Required]
         public string? movableName {  get; set; }
+
+
+        [Required]
+        public string? movableNameForAdditional { get; set; }
 
         [Required]
         public DateOnly? movableDate { get; set;}

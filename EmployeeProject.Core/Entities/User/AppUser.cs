@@ -9,7 +9,7 @@ namespace EmployeeProject.Core.Entities.User
     {
         public string? FullName { get; set; }
 
-        public bool? isNewUser { get; set; }
+        public bool? deActivated { get; set; }
 
         public string? position { get; set; }
 

@@ -27,12 +27,13 @@ namespace EmployeeProject.Infrastructure.Data.Context
         {
             base.OnModelCreating(modelBuilder);
 
+            const string ManagerId = "a18be9c0-aa65-4af8-bd17-00bd9344e575";
             const string ADMIN_ID = "a18be9c0-aa65-4af8-bd17-00bd9344e575";
 
             var hasher = new PasswordHasher<AppUser>();
 
             modelBuilder.Entity<Section>().HasData(
-                new Section { SectionId = 1, SectionName = "DEV" }
+                new Section { SectionId = 1, SectionName = "Developer" }
             );
 
 
@@ -52,14 +53,15 @@ namespace EmployeeProject.Infrastructure.Data.Context
                 new AllowedHours { AllowedHoursId = 13, Number = 6.5f },
                 new AllowedHours { AllowedHoursId = 14, Number = 7 },
                 new AllowedHours { AllowedHoursId = 15, Number = 7.5f },
-                new AllowedHours { AllowedHoursId = 16, Number = 8 },
-                  new AllowedHours { AllowedHoursId = 17, Number = 8.5f }
+                new AllowedHours { AllowedHoursId = 16, Number = 8 }
             );
 
             modelBuilder.Entity<IdentityRole>().HasData(
                 new { Id = "1", Name = "Employee", NormalizedName = "EMPLOYEE" },
                 new { Id = "2", Name = "Manager", NormalizedName = "MANAGER" },
-                new { Id = "3", Name = "Project_Manager", NormalizedName = "PROJECT_MANAGER" }
+                new { Id = "3", Name = "Project_Manager", NormalizedName = "PROJECT_MANAGER" },
+                new { Id = "4", Name = "Admin", NormalizedName = "ADMIN" }
+
             );
 
             modelBuilder.Entity<HolidayStatus>().HasData(
@@ -117,29 +119,53 @@ namespace EmployeeProject.Infrastructure.Data.Context
             );
 
 
+            //modelBuilder.Entity<IdentityUserRole<string>>().HasData(
+            //    new IdentityUserRole<string>
+            //    {
+            //        UserId = ADMIN_ID,
+            //        RoleId = "4"
+            //    }
+            //);
+
             modelBuilder.Entity<IdentityUserRole<string>>().HasData(
                 new IdentityUserRole<string>
                 {
-                    UserId = ADMIN_ID,
-                    RoleId = "2" 
+                    UserId = ManagerId,
+                    RoleId = "2"
                 }
             );
 
             modelBuilder.Entity<AppUser>().HasData(
                 new AppUser
                 {
-                    Id = ADMIN_ID,
+                    Id = ManagerId,
                     UserName = "jcaso@princeretail.com",
                     NormalizedUserName = "JCASO@PRINCERETAIL.COM",
                     Email = "jcaso@princeretail.com",
                     NormalizedEmail = "JCASO@PRINCERETAIL.COM",
                     EmailConfirmed = false,
                     PasswordHash = hasher.HashPassword(null, "1234578"),
-                    SecurityStamp = string.Empty,
+                    SecurityStamp = Guid.NewGuid().ToString(),
                     position = "Manager",
                     SectionId = 1,
                     FullName = "Joselito Caso",
                 });
+
+            //modelBuilder.Entity<AppUser>().HasData(
+            //    new AppUser
+            //    {
+            //        Id = ADMIN_ID,
+            //        UserName = "ictdev@princeretail.com",
+            //        NormalizedUserName = "ICTDEV@PRINCERETAIL.COM",
+            //        Email = "ictdev@princeretail.com",
+            //        NormalizedEmail = "ICTDEV@PRINCERETAIL.COM",
+            //        EmailConfirmed = false,
+            //        PasswordHash = hasher.HashPassword(null, "1234578"),
+            //        SecurityStamp = Guid.NewGuid().ToString(),
+            //        position = "Admin",
+            //        SectionId = null,
+            //        FullName = "ICT DEV",
+            //    });
 
         }
     }

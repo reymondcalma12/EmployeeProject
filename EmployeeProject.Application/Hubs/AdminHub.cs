@@ -30,6 +30,86 @@ namespace EmployeeProject.Application.Hubs
             }
         }
 
+        public async Task GetUserSearch(string? name)
+        {
+            try
+            {
+                var allUsersSearch = await adminServices.GetUserSearch(name);
+
+                await Clients.Caller.SendAsync("ReceiveAllUsersSearch", allUsersSearch);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error occurred in GetAllUsers: {ex.Message}");
+                await Clients.Others.SendAsync("Error", "An error occurred while fetching users.");
+            }
+        }
+
+
+
+        public async Task GetProjects()
+        {
+            try
+            {
+                var projects = await adminServices.GetProjects();
+
+                await Clients.Caller.SendAsync("AllProjects", projects);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error occurred in GetAllUsers: {ex.Message}");
+                await Clients.Others.SendAsync("Error", "An error occurred while fetching users.");
+            }
+        }
+
+        public async Task GetActiveProjects()
+        {
+            try
+            {
+                var projects = await adminServices.GetActiveProjects();
+
+                await Clients.Caller.SendAsync("AllActiveProjects", projects);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error occurred in GetAllUsers: {ex.Message}");
+                await Clients.Others.SendAsync("Error", "An error occurred while fetching users.");
+            }
+        }
+
+
+        public async Task GetActivities()
+        {
+            try
+            {
+                var activities = await adminServices.GetActivities();
+
+                await Clients.Caller.SendAsync("AllActivities", activities);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error occurred in GetAllUsers: {ex.Message}");
+                await Clients.Others.SendAsync("Error", "An error occurred while fetching users.");
+            }
+        }
+
+        public async Task GetActiveActivities()
+        {
+            try
+            {
+                var activities = await adminServices.GetActiveActivities();
+
+                await Clients.Caller.SendAsync("AllActiveActivities", activities);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error occurred in GetAllUsers: {ex.Message}");
+                await Clients.Others.SendAsync("Error", "An error occurred while fetching users.");
+            }
+        }
+
+
+
         public async Task GetAllRoles()
         {
             try
@@ -45,20 +125,6 @@ namespace EmployeeProject.Application.Hubs
             }
         }
 
-        public async Task GetUserSearch(string? name)
-        {
-            try
-            {
-                var allUsersSearch = await adminServices.GetUserSearch(name);
-
-                await Clients.Caller.SendAsync("ReceiveAllUsersSearch", allUsersSearch);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error occurred in GetAllUsers: {ex.Message}");
-                await Clients.Others.SendAsync("Error", "An error occurred while fetching users.");
-            }
-        }
 
         public async Task GetUserAddDataSheet(string name)
         {

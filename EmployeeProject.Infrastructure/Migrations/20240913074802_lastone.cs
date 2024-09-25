@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace EmployeeProject.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class one : Migration
+    public partial class lastone : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -85,7 +85,7 @@ namespace EmployeeProject.Infrastructure.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<int>(type: "int", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -98,7 +98,8 @@ namespace EmployeeProject.Infrastructure.Migrations
                 {
                     ProjectId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ProjectName = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    ProjectName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Status = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -312,7 +313,7 @@ namespace EmployeeProject.Infrastructure.Migrations
                     ProjectId = table.Column<int>(type: "int", nullable: false),
                     ActivityId = table.Column<int>(type: "int", nullable: false),
                     BusinessOrItId = table.Column<int>(type: "int", nullable: false),
-                    SectionId = table.Column<int>(type: "int", nullable: false),
+                    SectionId = table.Column<int>(type: "int", nullable: true),
                     StartDate = table.Column<DateOnly>(type: "date", nullable: false),
                     EndDate = table.Column<DateOnly>(type: "date", nullable: false),
                     HoursPerDay = table.Column<float>(type: "real", nullable: false),
@@ -349,8 +350,7 @@ namespace EmployeeProject.Infrastructure.Migrations
                         name: "FK_DataSheetBuses_Sections_SectionId",
                         column: x => x.SectionId,
                         principalTable: "Sections",
-                        principalColumn: "SectionId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "SectionId");
                 });
 
             migrationBuilder.InsertData(
@@ -383,7 +383,18 @@ namespace EmployeeProject.Infrastructure.Migrations
                 values: new object[,]
                 {
                     { "1", null, "Employee", "EMPLOYEE" },
-                    { "2", null, "Manager", "MANAGER" }
+                    { "2", null, "Manager", "MANAGER" },
+                    { "3", null, "Project_Manager", "PROJECT_MANAGER" },
+                    { "4", null, "Admin", "ADMIN" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "BusinessOrIts",
+                columns: new[] { "BusinessOrItId", "BusinessOrItName" },
+                values: new object[,]
+                {
+                    { 1, "Business" },
+                    { 2, "IT" }
                 });
 
             migrationBuilder.InsertData(
@@ -394,6 +405,31 @@ namespace EmployeeProject.Infrastructure.Migrations
                     { 1, "fixed" },
                     { 2, "movable" }
                 });
+
+            migrationBuilder.InsertData(
+                table: "MovableNames",
+                columns: new[] { "Id", "Name" },
+                values: new object[,]
+                {
+                    { 1, "Additional Special Non-Working" },
+                    { 2, "Chinese New Year" },
+                    { 3, "Maunday Thursday " },
+                    { 4, "Good Friday" },
+                    { 5, "Black Saturday" },
+                    { 6, "Eid al-Fitr" },
+                    { 7, "Eid al-Adha" },
+                    { 8, "National Heroes' Day" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Sections",
+                columns: new[] { "SectionId", "SectionName" },
+                values: new object[] { 1, "Developer" });
+
+            migrationBuilder.InsertData(
+                table: "AspNetUsers",
+                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "FullName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SectionId", "SecurityStamp", "TwoFactorEnabled", "UserName", "isNewUser", "position", "profileString" },
+                values: new object[] { "a18be9c0-aa65-4af8-bd17-00bd9344e575", 0, "fb54dcbd-55eb-46dd-bd5f-f52acd2f4966", "jcaso@princeretail.com", false, "Joselito Caso", false, null, "JCASO@PRINCERETAIL.COM", "JCASO@PRINCERETAIL.COM", "AQAAAAIAAYagAAAAEKFrBQwE/iSKo2TzygHyPTzHo2UHIxKKiMZVjeXvuQ0pRWvQr1MBySp7bTNYiN+pKg==", null, false, 1, "", false, "jcaso@princeretail.com", null, "Manager", null });
 
             migrationBuilder.InsertData(
                 table: "Holidays",
@@ -418,6 +454,11 @@ namespace EmployeeProject.Infrastructure.Migrations
                     { 16, new DateOnly(2024, 12, 30), "Rizal Day", 1 },
                     { 17, new DateOnly(2024, 12, 31), "New Year's Eve", 1 }
                 });
+
+            migrationBuilder.InsertData(
+                table: "AspNetUserRoles",
+                columns: new[] { "RoleId", "UserId" },
+                values: new object[] { "2", "a18be9c0-aa65-4af8-bd17-00bd9344e575" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",

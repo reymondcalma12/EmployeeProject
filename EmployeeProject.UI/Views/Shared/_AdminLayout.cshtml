@@ -26,6 +26,7 @@
     <link rel="stylesheet" href="~/css/home/dataSheet.css" />
     <link rel="stylesheet" href="~/css/home/holidays.css" />
     <link rel="stylesheet" href="~/css/home/users.css" />
+    <link rel="stylesheet" href="~/css/home/Sections.css" />
     <link rel="stylesheet" href=" https://cdn.datatables.net/2.0.8/css/dataTables.dataTables.min.css" />
 
    <style>
@@ -52,11 +53,20 @@
                 <div class="div21">
                     <a class="btn btn-outline-success wad @(ViewContext.RouteData.Values["controller"]?.ToString() == "Admin" && ViewContext.RouteData.Values["action"]?.ToString() == "Index" ? "active" : "")"  onclick="changeColor(this)" asp-action="Index" asp-controller="Admin"><i class="fa fa-th-large" aria-hidden="true"></i><span>Dashboard</span></a>
                     <a class="btn btn-outline-success wad @(ViewContext.RouteData.Values["controller"]?.ToString() == "Admin" && ViewContext.RouteData.Values["action"]?.ToString() == "DataSheet" ? "active" : "")" onclick="changeColor(this)" asp-action="DataSheet" asp-controller="Admin"><i class="fa fa-file-text" aria-hidden="true"></i><span>Data Sheets</span></a>
+                    @if(User.IsInRole("Manager")){
+                    <a class="btn btn-outline-success wad" data-bs-toggle="modal" data-bs-target="#projectsModal"><i class="fa fa-folder-open"></i><span>Projects</span></a>
+                    }
+                    @if(User.IsInRole("Admin")){
+                        <a class="btn btn-outline-success wad" data-bs-toggle="modal" data-bs-target="#activitiesModal"><i class="fa fa-check-square"></i><span>Activities</span></a>
+                        <a class="btn btn-outline-success sidebarSections wad @(ViewContext.RouteData.Values["controller"]?.ToString() == "Admin" && ViewContext.RouteData.Values["action"]?.ToString() == "Sections" ? "active" : "")" onclick="changeColor(this)" asp-action="Sections" asp-controller="Admin"><i class="fa fa-sitemap sidebarSiteMap" aria-hidden="true"></i><span>Sections</span></a>
+
+                    }
                     <a class="btn btn-outline-success wad @(ViewContext.RouteData.Values["controller"]?.ToString() == "Admin" && ViewContext.RouteData.Values["action"]?.ToString() == "Holidays" ? "active" : "")" onclick="changeColor(this)" asp-action="Holidays" asp-controller="Admin"><i class="fa-solid fa-umbrella-beach"></i><span>Holidays</span></a>
-                    @if (User.IsInRole("Manager"))
+                    @if (User.IsInRole("Manager") || User.IsInRole("Admin"))
                     {
                     <a class="btn btn-outline-success wad @(ViewContext.RouteData.Values["controller"]?.ToString() == "Admin" && ViewContext.RouteData.Values["action"]?.ToString() == "Users" ? "active" : "")" onclick="changeColor(this)" asp-action="Users" asp-controller="Admin"><i class="fa fa-users" aria-hidden="true"></i><span>Users</span></a>
                     }
+                    <partial name="partial"/>
                 </div>
                 <div class="div22">
                     <a class="btn btn-outline-success wad" data-bs-toggle="modal" data-bs-target="#exampleModalCenter"><i class="fa fa-sign-out" aria-hidden="true"></i><span>Logout</span></a>
@@ -73,6 +83,326 @@
         </div>
     
     </div>
+
+
+                   @*ACTIVITIES*@
+
+    <div class="modal fade addDataModal" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="staticBackdropLabel" id="activitiesModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+
+            <div class="modal-content " style="width:800px; height:520px;  font-family: 'Montserrat', sans-serif; border-radius:1.5rem;">
+
+                <div class="modal-header" style="height:60px; background:#1E4F3B; display:flex; border-radius:1rem 1rem 0 0 ;">
+
+                    <div class="modal-headerDiv1" style="width:95%; display:flex;justify-content:center;align-items:center;">
+                        <h4 style="color:gold;">ACTIVITIES</h4>
+                    </div>
+                    <div class="modal-headerDiv2">
+                        <i class="fa fa-times closeAddNewData" aria-hidden="true" data-bs-dismiss="modal" aria-label="Close"></i>
+                    </div>
+
+                </div>
+                <div class="modal-body projectsModal">
+
+                    <div class="projectsModalDiv1">
+
+                        <div class="projectsModalDiv1Inner1">
+                                <button class="addData " data-bs-toggle="modal" data-bs-target="#addActivity1" style="height:50px;">
+                                <i class="fa fa-plus addDataIcon" aria-hidden="true"></i>A C T I V I T Y
+                            </button>
+                        </div>
+
+                        <div class="projectsModalDiv1Inner2">
+                        </div>
+
+                    </div>
+                    <div class="projectsModalDiv2">
+                        <table class="projectsModalDiv2Table">
+                            <thead class="activitiesModalDiv2TableHead">
+                                <tr>
+                                    <th>ACTIVITY NAME</th>
+                                    <th>STATUS</th>
+                                    <th>ACTIONS</th>
+                                </tr>
+                            </thead>
+                            <tbody class="activitiesModalDiv2TableBody">
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+    @*UPDATE ACTIVITY*@
+    <form asp-action="UpdateActivity" asp-controller="Admin">
+        <div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="staticBackdropLabel" id="updateProject" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document" style="height:50vh;">
+
+                <div class="modal-content" style="height: 340px; border-radius:.5rem;">
+
+                    <div class="modal-header" style="height:50px; background:#1E4F3B; display:flex; border-radius:.5rem .5rem 0 0 ;">
+
+                        <div class="modal-headerDiv1" style="width:95%; display:flex;justify-content:center;align-items:center;">
+                            <h4 style="color:gold;">UPDATE ACTIVITY</h4>
+                        </div>
+                        <div class="modal-headerDiv2">
+                            <i class="fa fa-times closeAddNewData" aria-hidden="true" data-bs-dismiss="modal" aria-label="Close"></i>
+                        </div>
+
+                    </div>
+                    <div class="modal-body addSectionBody" style="border-radius:0 0 .5rem .5rem; display:flex;flex-direction:column; ">
+
+
+
+                        <div class="addSectionBodyDiv2">
+                            <input type="hidden" name="id" id="activityId" />
+                            <input type="text" style="text-align:center;" class="form-control-lg addNewUserInput updateProject" placeholder="Project Name:" autocomplete="off" name="activityName" id="updateActivityName" />
+
+
+                        </div>
+                        <div class="addSectionBodyDiv2">
+
+                            <select class="form-control-lg addNewUserInput updateProject" autocomplete="off" name="status" id="updateActivityStatus" style="text-align:center;">
+                                <option selected disabled>SELECT STATUS</option>
+                                <option value="ACTIVE"> ACTIVE</option>
+                                <option value="INACTIVE"> INACTIVE</option>
+                                <option value="COMPLETE"> COMPLETE</option>
+                            </select>
+
+
+                        </div>
+
+                        <div class="" style="height:10%;width:100%; text-align:center;">
+                        </div>
+
+                        <div class="addSectionBodyDiv3">
+
+                            <button type="submit" class="addWorkingHoursPerDay" style="border:none;" id="updateProjectBtn"><span style="font-size:20px">UPDATE</span></button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                @*PROJECTS*@
+    <div class="modal fade addDataModal" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="staticBackdropLabel" id="projectsModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+
+            <div class="modal-content " style="width:800px; height:520px;  font-family: 'Montserrat', sans-serif; border-radius:1.5rem;">
+
+                <div class="modal-header" style="height:60px; background:#1E4F3B; display:flex; border-radius:1rem 1rem 0 0 ;">
+
+                    <div class="modal-headerDiv1" style="width:95%; display:flex;justify-content:center;align-items:center;">
+                        <h4 style="color:gold;">P R O J E C T S</h4>
+                    </div>
+                    <div class="modal-headerDiv2">
+                        <i class="fa fa-times closeAddNewData" aria-hidden="true" data-bs-dismiss="modal" aria-label="Close"></i>
+                    </div>
+
+                </div>
+                <div class="modal-body projectsModal">
+
+                    <div class="projectsModalDiv1">
+
+                        <div class="projectsModalDiv1Inner1">
+                            <button class="addData " data-bs-toggle="modal" data-bs-target="#addProject1" style="height:50px;">
+                                <i class="fa fa-plus addDataIcon" aria-hidden="true"></i>P R O J E C T
+                            </button>
+                        </div>
+
+                        <div class="projectsModalDiv1Inner2">
+     
+                        </div>
+
+                    </div>
+                    <div class="projectsModalDiv2">
+                        <table class="projectsModalDiv2Table">
+                            <thead class="projectsModalDiv2TableHead">
+                                <tr>
+                                    <th>PROJECT NAME</th>
+                                    <th>STATUS</th>
+                                    <th>ACTIONS</th>
+                                </tr>
+                            </thead>
+                            <tbody class="projectsModalDiv2TableBody">
+   
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    @*UPDATE PROJECT*@
+    <form asp-action="UpdateProject" asp-controller="Admin">
+        <div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="staticBackdropLabel" id="updateProject1" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document" style="height:50vh;">
+
+                <div class="modal-content" style="height: 340px; border-radius:.5rem;">
+
+                    <div class="modal-header" style="height:50px; background:#1E4F3B; display:flex; border-radius:.5rem .5rem 0 0 ;">
+
+                        <div class="modal-headerDiv1" style="width:95%; display:flex;justify-content:center;align-items:center;">
+                            <h4 style="color:gold;">UPDATE PROJECT</h4>
+                        </div>
+                        <div class="modal-headerDiv2">
+                            <i class="fa fa-times closeAddNewData" aria-hidden="true" data-bs-dismiss="modal" aria-label="Close"></i>
+                        </div>
+
+                    </div>
+                    <div class="modal-body addSectionBody" style="border-radius:0 0 .5rem .5rem; display:flex;flex-direction:column; ">
+
+
+
+                        <div class="addSectionBodyDiv2">
+                            <input type="hidden" name="id" id="projectId"/>
+                            <input type="text" style="text-align:center;" class="form-control-lg addNewUserInput updateProject" placeholder="Project Name:" autocomplete="off" name="projectName" id="updateProjectName" />
+
+
+                        </div>
+                        <div class="addSectionBodyDiv2">
+
+                            <select class="form-control-lg addNewUserInput updateProject" autocomplete="off" name="status" id="updateProjectStatus" style="text-align:center;">
+                                <option selected disabled>SELECT STATUS</option>
+                                <option value="ACTIVE"> ACTIVE</option>
+                                <option value="INACTIVE"> INACTIVE</option>
+                                <option value="COMPLETE"> COMPLETE</option>
+                            </select>
+
+
+                        </div>
+
+                        <div class="" style="height:10%;width:100%; text-align:center;">
+                        </div>
+
+                        <div class="addSectionBodyDiv3">
+
+                            <button type="submit" class="addWorkingHoursPerDay" style="border:none;" id="updateProjectBtn"><span style="font-size:20px">UPDATE</span></button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+
+
+    @*ADD PROJECT*@
+    <form asp-action="AddProjects" asp-controller="Admin">
+    <div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="staticBackdropLabel" id="addProject1" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document" style="height:50vh;">
+
+            <div class="modal-content" style="height: 340px; border-radius:.5rem;">
+
+                <div class="modal-header" style="height:50px; background:#1E4F3B; display:flex; border-radius:.5rem .5rem 0 0 ;">
+
+                    <div class="modal-headerDiv1" style="width:95%; display:flex;justify-content:center;align-items:center;">
+                        <h4 style="color:gold;">ADD PROJECT</h4>
+                    </div>
+                    <div class="modal-headerDiv2">
+                        <i class="fa fa-times closeAddNewData" aria-hidden="true" data-bs-dismiss="modal" aria-label="Close"></i>
+                    </div>
+
+                </div>
+                <div class="modal-body addSectionBody" style="border-radius:0 0 .5rem .5rem; display:flex;flex-direction:column;">
+
+
+
+                    <div class="addSectionBodyDiv2">
+
+                        <input type="text" class="form-control-lg addNewUserInput addProject" placeholder="Project Name:" autocomplete="off" name="projectName" id="addProject"/>
+
+
+                    </div>
+
+                    <div class="" style="height:10%;width:100%; text-align:center;">
+                        
+                    </div>
+
+                    <div class="addSectionBodyDiv3">
+
+                        <button type="submit" class="addWorkingHoursPerDay" style="border:none;" disabled id="addProjectBtn"><span style="font-size:20px">ADD</span></button>
+                    </div> 
+
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+
+    @*ADD ACTIVITY*@
+    <form asp-action="AddActivity" asp-controller="Admin">
+        <div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="staticBackdropLabel" id="addActivity1" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document" style="height:50vh;">
+
+                <div class="modal-content" style="height: 340px; border-radius:.5rem;">
+
+                    <div class="modal-header" style="height:50px; background:#1E4F3B; display:flex; border-radius:.5rem .5rem 0 0 ;">
+
+                        <div class="modal-headerDiv1" style="width:95%; display:flex;justify-content:center;align-items:center;">
+                            <h4 style="color:gold;">ADD ACTIVITY</h4>
+                        </div>
+                        <div class="modal-headerDiv2">
+                            <i class="fa fa-times closeAddNewData" aria-hidden="true" data-bs-dismiss="modal" aria-label="Close"></i>
+                        </div>
+
+                    </div>
+                    <div class="modal-body addSectionBody" style="border-radius:0 0 .5rem .5rem; display:flex;flex-direction:column;">
+
+
+
+                        <div class="addSectionBodyDiv2">
+
+                            <input type="text" class="form-control-lg addNewUserInput addActivity" placeholder="ACTIVITY Name:" autocomplete="off" name="activityName" id="addActivity" />
+
+
+                        </div>
+
+                        <div class="" style="height:10%;width:100%; text-align:center;">
+                        </div>
+
+                        <div class="addSectionBodyDiv3">
+
+                            <button type="submit" class="addWorkingHoursPerDay addActivityBtn" style="border:none;" disabled id="addActivityBtn"><span style="font-size:20px">ADD</span></button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+
+
+
+
 
 
 
@@ -181,11 +511,6 @@
             </div>
         </div>
     </div>
-
-
-
-
-
 
 
                                             @*EDIT PROFILE MODAL*@

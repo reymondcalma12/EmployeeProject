@@ -76,6 +76,10 @@ namespace EmployeeProject.UI.Controllers
                     {
                         return RedirectToAction("Index", "Admin", new { success = "Login SuccessFully!" });
                     }
+                    else if (userRole == "Admin")
+                    {
+                        return RedirectToAction("Index", "Admin", new { success = "Login SuccessFully!" });
+                    }
                     else if (userRole == "Employee")
                     {
                         return RedirectToAction("Index", "Employee", new { success = "Login SuccessFully!" });

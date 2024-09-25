@@ -66,26 +66,110 @@ namespace EmployeeProject.Application.Services
 
                 await appUnitOfWork.Complete();
                 return true;
-    
             }
             else
             {
                 return false;
             }
+        }
+
+
+        public async Task<bool> AddProject(string name)
+        {
+
+            Project project = new Project
+            {
+                ProjectName = name,
+                Status = "ACTIVE"
+            };
+
+            appUnitOfWork.repository<Project>().Add(project);
+
+            await appUnitOfWork.Complete();
+
+            return true;
+
+        }
+
+        public async Task<bool> AddActivity(string name)
+        {
+
+            Activity activity = new Activity
+            {
+                ActivityName = name
+            };
+
+            appUnitOfWork.repository<Activity>().Add(activity);
+
+            await appUnitOfWork.Complete();
+
+            return true;
 
         }
 
 
+        public async Task<IEnumerable<AppUser>> GetUserSearch(string? name)
+        {
+            var userId = httpcontext.HttpContext.Session.GetString("UsersId").ToString();
+
+            var user = await userManager.Users.FirstOrDefaultAsync(a => a.Id == userId);
+
+            var userRoles = await userManager.GetRolesAsync(user);
+            var userRole = userRoles.FirstOrDefault().ToString();
+
+            if (userRole == "Manager")
+            {
+                string searchName = name.ToLower();
+
+                var users = await userManager.Users.Include(a => a.Section).Where(a => a.FullName.ToLower()
+                   .Contains(searchName))
+                    .Where(a => a.SectionId == user.SectionId)
+                         .Where(a => a.deActivated != true)
+                   .OrderBy(a => a.Section).ToListAsync();
+                return users;
+
+            }
+            else
+            {
+                string searchName = name.ToLower();
+
+                var users = await userManager.Users.Include(a => a.Section).Where(a => a.FullName.ToLower()
+                   .Contains(searchName))
+                         .Where(a => a.deActivated != true)
+                   .OrderBy(a => a.Section).ToListAsync();
+                return users;
+
+            }
+        }
 
         public async Task<IEnumerable<AppUser>> GetAllUsers()
         {
 
-            var userID = httpcontext.HttpContext.Session.GetString("UsersId");
-            var user = userManager.Users.FirstOrDefault(a => a.Id == userID);
+            var userId = httpcontext.HttpContext.Session.GetString("UsersId").ToString();
 
-            var allUsers = await userManager.Users.Include(a => a.Section).Where(a => a.SectionId == user.SectionId).OrderBy(a => a.Section).ToListAsync();
+            var user = await userManager.Users.FirstOrDefaultAsync(a => a.Id == userId);
 
-            return  allUsers;
+            var userRoles = await userManager.GetRolesAsync(user);
+            var userRole = userRoles.FirstOrDefault().ToString();
+
+            if (userRole == "Manager")
+            {
+
+                var users = await userManager.Users.Include(a => a.Section)
+                    .Where(a => a.SectionId == user.SectionId)
+                    .Where(a => a.deActivated != true)
+                   .OrderBy(a => a.Section).ToListAsync();
+                return users;
+
+            }
+            else
+            {
+                var users = await userManager.Users.Include(a => a.Section)
+                   .Where(a => a.deActivated != true)
+                   .OrderBy(a => a.Section).ToListAsync();
+                return users;
+
+            }
 
         }
 
@@ -127,31 +211,7 @@ namespace EmployeeProject.Application.Services
 
 
 
-        public async Task<IEnumerable<AppUser>> GetUserSearch(string? name)
-        {
-            var userId = httpcontext.HttpContext.Session.GetString("UsersId").ToString();
-
-            var user =  await userManager.Users.FirstOrDefaultAsync(a => a.Id == userId);
-
-
-            if (!string.IsNullOrEmpty(name))
-            {
-                string searchName = name.ToLower();
-
-                var users = await userManager.Users.Include(a => a.Section).Where(a => a.FullName.ToLower()
-                   .Contains(searchName))
-                    .Where(a => a.SectionId == user.SectionId)
-                   .OrderBy(a => a.Section).ToListAsync();
-                return users;
-
-            }
-            else
-            {
-
-                return null;
-
-            }
-        }
+  
 
 
         public async Task<IEnumerable<AppUser>> GetUserAddDataSheet(string name)
@@ -190,15 +250,30 @@ namespace EmployeeProject.Application.Services
         public async Task<IEnumerable<AppUser>> GetUserAddNewDataForSectionOnly(string name)
         {
             var userId = httpcontext.HttpContext.Session.GetString("UsersId").ToString();
-
             var user = await userManager.Users.Include(a => a.Section).FirstOrDefaultAsync(a => a.Id == userId);
+
+            var userRoles = await userManager.GetRolesAsync(user);
+            var userRole = userRoles.FirstOrDefault().ToString();
 
             string searchName = name.ToLower();
 
-            var users = await userManager.Users.Include(a => a.Section).Where(a => a.FullName.ToLower()
-               .Contains(searchName)).Where(a => a.SectionId == user.SectionId).ToListAsync();
+            if (userRole == "Manager")
+            {
+                var users = await userManager.Users.Include(a => a.Section).Where(a => a.FullName.ToLower()
+                .Contains(searchName)).Where(a => a.deActivated != true).Where(a => a.SectionId == user.SectionId).ToListAsync();
 
-            return users;
+                return users;
+            }
+            else
+            {
+                var users = await userManager.Users.Include(a => a.Section).Where(a => a.deActivated != true).Where(a => a.FullName.ToLower()
+                .Contains(searchName)).ToListAsync();
+
+                return users;
+            }
+
+
+    
         }
 
         public async Task<(bool, string, string)> AddDataSheetUserExistEnableButton(string name)
@@ -210,7 +285,7 @@ namespace EmployeeProject.Application.Services
 
             var nameLow = name.ToLower();
 
-            var users = await userManager.Users.Where(u => u.FullName.ToLower().Contains(nameLow)).Include(a => a.Section).Where(a => a.SectionId == userss.SectionId).ToListAsync();
+            var users = await userManager.Users.Where(u => u.FullName.ToLower().Contains(nameLow)).Include(a => a.Section).Where(a => a.SectionId == userss.SectionId).Where(a => a.deActivated != true).ToListAsync();
 
             if (users.Count > 1)
             {
@@ -255,10 +330,25 @@ namespace EmployeeProject.Application.Services
 
         public async Task<int> CountAllUsers()
         {
+            var userId = httpcontext.HttpContext.Session.GetString("UsersId").ToString();
+            var user = await userManager.Users.FirstOrDefaultAsync(a => a.Id == userId);
 
-            var users = userManager.Users.Count();
+            var userRoles = await userManager.GetRolesAsync(user);
+            var userRole = userRoles.FirstOrDefault().ToString();
 
-            return users;
+            if (userRole == "Manager")
+            {
+                var users = userManager.Users.Where(a => a.SectionId == user.SectionId).Where(a => a.deActivated != true).Count();
+
+                return users;
+            }
+            else
+            {
+                var users = userManager.Users.Where(a => a.deActivated != true).Count();
+
+                return users;
+            }
+
         }
 
         public async Task<bool> DeleteUser(string id)
@@ -270,12 +360,15 @@ namespace EmployeeProject.Application.Services
 
                 if (user != null)
                 {
-                    var result = await userManager.DeleteAsync(user);
 
-                    if (result.Succeeded)
-                    {
-                        return true;
-                    }
+                    user.deActivated = true;
+
+                    await userManager.UpdateAsync(user);
+
+                    appUnitOfWork.Complete();
+
+                    return true;
+              
 
                 }
  
@@ -319,6 +412,33 @@ namespace EmployeeProject.Application.Services
             return user;
         }
 
+        public async Task<IEnumerable<Project>> GetProjects()
+        {
+            var projects = await appUnitOfWork.repository<Project>().AsQueryable().OrderBy(a => a.Status).ToListAsync();
+
+            return projects;
+        }
+        public async Task<IEnumerable<Project>> GetActiveProjects()
+        {
+            var projects = await appUnitOfWork.repository<Project>().AsQueryable().Where(a => a.Status == "ACTIVE").ToListAsync();
+
+            return projects;
+        }
+
+
+        public async Task<IEnumerable<Activity>> GetActivities()
+        {
+            var activities = await appUnitOfWork.repository<Activity>().AsQueryable().OrderBy(a => a.Status).ToListAsync();
+
+            return activities;
+        }
+
+        public async Task<IEnumerable<Activity>> GetActiveActivities()
+        {
+            var activities = await appUnitOfWork.repository<Activity>().AsQueryable().Where(a => a.Status == "ACTIVE").ToListAsync();
+
+            return activities;
+        }
 
         public async Task<bool> DeleteSection(int id)
         {
@@ -601,51 +721,6 @@ namespace EmployeeProject.Application.Services
         }
 
 
-
-
-        //public async Task<List<object>> GetAllMovableHolidays(int year)
-        //{
-
-        //    var holidaysFromDB = await appUnitOfWork.repository<MovableHoliday>().AsQueryable()
-        //        .Where(h =>
-        //            (h.Additional_Special_NonWorking.HasValue && h.Additional_Special_NonWorking.Value.Year == year) ||
-        //            (h.Chinese_New_Year.HasValue && h.Chinese_New_Year.Value.Year == year) ||
-        //            (h.Maunday_Thursday.HasValue && h.Maunday_Thursday.Value.Year == year) ||
-        //            (h.Good_Friday.HasValue && h.Good_Friday.Value.Year == year) ||
-        //            (h.Black_Saturday.HasValue && h.Black_Saturday.Value.Year == year) ||
-        //            (h.Eid_al_Fitr.HasValue && h.Eid_al_Fitr.Value.Year == year) ||
-        //            (h.Eid_al_Adha.HasValue && h.Eid_al_Adha.Value.Year == year) ||
-        //            (h.National_Heroes_Day.HasValue && h.National_Heroes_Day.Value.Year == year))
-        //        .ToListAsync();
-
-        //    if (holidaysFromDB.Count > 0)
-        //    {
-        //        var holidayNames = typeof(MovableHoliday).GetProperties().Select(p => p.Name).ToList();
-
-        //        List<object> movableHolidays = new List<object>();
-
-        //        foreach (var holiday in holidaysFromDB)
-        //        {
-        //            dynamic holidayObject = new ExpandoObject();
-        //            holidayObject.HolidayName = string.Join(", ", holidayNames);
-
-        //            foreach (var propertyName in holidayNames)
-        //            {
-        //                var propertyValue = typeof(MovableHoliday).GetProperty(propertyName)?.GetValue(holiday);
-        //                ((IDictionary<string, object>)holidayObject)[propertyName] = propertyValue;
-        //            }
-
-        //            movableHolidays.Add(holidayObject);
-        //        }
-
-        //        return movableHolidays;
-        //    }
-        //    else
-        //    {
-        //        return null;
-        //    }
-        //}
-
         public async Task<bool> UpdateDataSheet(DataSheetBusDTO dataSheetBusDTO)
         {
        
@@ -717,11 +792,6 @@ namespace EmployeeProject.Application.Services
 
             return true;
         }
-
-
-
-
-
 
 
 
@@ -891,9 +961,13 @@ namespace EmployeeProject.Application.Services
                     .Include(d => d.Activity)
                     .Include(d => d.BusinessOrIt)
                     .Include(d => d.AppUser)
-                    .OrderBy(d => d.Section)
-                    .Where(d => d.StartDate.Year == year || d.EndDate.Year == year)
-                    .Where(d => (string.IsNullOrEmpty(userName) || d.AppUser.FullName.ToLower().Contains(userName)) && d.SectionId == user.SectionId)
+                    .OrderBy(d => d.AppUser.FullName)
+                    .Where(d => (d.StartDate.Year == year || d.EndDate.Year == year) && d.SectionId == user.SectionId)
+                    .Where(d => string.IsNullOrEmpty(userName) ||
+                    d.AppUser.FullName.ToLower().Contains(userName) ||
+                    d.Project.ProjectName.ToLower().Contains(userName) ||
+                    d.Activity.ActivityName.ToLower().Contains(userName) ||
+                    d.BusinessOrIt.BusinessOrItName.ToLower().Contains(userName))
                     .ToListAsync();
 
                 return (data, userRole);
@@ -905,7 +979,6 @@ namespace EmployeeProject.Application.Services
 
         public async Task<IEnumerable<DataSheetBus>> GetAllDataSheet()
         {
-
             var userId = httpcontext.HttpContext.Session.GetString("UsersId").ToString();
 
             var user = await userManager.Users.FirstOrDefaultAsync(a => a.Id == userId);
@@ -1244,10 +1317,7 @@ namespace EmployeeProject.Application.Services
                    (stat.October ?? 0) +
                    (stat.November ?? 0) +
                    (stat.December ?? 0);
-
             }
-
-
             return userStats;
         }
 
@@ -1314,11 +1384,6 @@ namespace EmployeeProject.Application.Services
 
             return userStats;
         }
-
-
-
-
-
 
         public async Task<IEnumerable<Holidays>> GetAllFixedHolidays()
         {
@@ -1720,12 +1785,12 @@ namespace EmployeeProject.Application.Services
 
         public async Task<bool> AddMovable(MovableHolidaysDTO model)
         {
-
-            if (model != null)
+            if (model.movableNameForAdditional != null)
             {
+
                 Holidays holiday = new Holidays
                 {
-                    FixedName = model.movableName,
+                    FixedName = model.movableNameForAdditional,
                     FixedDate = (DateOnly)model.movableDate,
                     HolidayStatusId = 2
                 };
@@ -1739,8 +1804,21 @@ namespace EmployeeProject.Application.Services
             }
             else
             {
-                return false;
+                Holidays holiday = new Holidays
+                {
+                    FixedName = model.movableName,
+                    FixedDate = (DateOnly)model.movableDate,
+                    HolidayStatusId = 2
+                };
+
+
+                appUnitOfWork.repository<Holidays>().Add(holiday);
+
+                await appUnitOfWork.Complete();
+
+                return true;
             }
+
         }
 
 
@@ -1748,9 +1826,22 @@ namespace EmployeeProject.Application.Services
         public async Task<bool> UpdateMovable(MovableHolidaysDTO model)
         {
 
-            if (model != null)
+            if (model.movableNameForAdditional != null)
             {
 
+                var holiday = appUnitOfWork.repository<Holidays>().AsQueryable().FirstOrDefault(h => h.FixedId == model.Id);
+
+                holiday.FixedName = model.movableNameForAdditional;
+                holiday.FixedDate = (DateOnly)model.movableDate;
+
+                appUnitOfWork.repository<Holidays>().Update(holiday);
+
+                await appUnitOfWork.Complete();
+
+                return true;
+            }
+            else
+            {
                 var holiday = appUnitOfWork.repository<Holidays>().AsQueryable().FirstOrDefault(h => h.FixedId == model.Id);
 
                 holiday.FixedName = model.movableName;
@@ -1762,10 +1853,42 @@ namespace EmployeeProject.Application.Services
 
                 return true;
             }
-            else
-            {
-                return false;
-            }
+        }
+
+
+
+        public async Task<bool> UpdateProject(int id, string projectName, string status)
+        {
+
+            var project = await appUnitOfWork.repository<Project>().AsQueryable().FirstOrDefaultAsync(h => h.ProjectId == id);
+
+            project.ProjectName = projectName;
+            project.Status = status;    
+
+            appUnitOfWork.repository<Project>().Update(project);
+
+            await appUnitOfWork.Complete();
+
+            return true;
+
+        }
+
+
+        public async Task<bool> UpdateActivity(int id, string activityName, string status)
+        {
+
+            var activity = await appUnitOfWork.repository<Activity>().AsQueryable().FirstOrDefaultAsync(h => h.ActivityId == id);
+
+            activity.ActivityName = activityName;
+            activity.Status = status;
+
+
+            appUnitOfWork.repository<Activity>().Update(activity);
+
+            await appUnitOfWork.Complete();
+
+            return true;
+
         }
 
 

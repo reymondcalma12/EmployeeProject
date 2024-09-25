@@ -392,7 +392,7 @@
 }
 
 .addNewUserModalBody > div:nth-child(odd) {
-    height: 10%;
+    height: 15%;
     width: 100%;
 
 }

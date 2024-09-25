@@ -1,4 +1,5 @@
 ﻿using EmployeeProject.Application.DTOs.Account;
+using EmployeeProject.Core.Entities.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,9 +10,9 @@ namespace EmployeeProject.Application.DTOs.Admin
 {
     public class AdminDashboardDTO
     {
-        public ChangePasswordDTO ChangePasswordDTO { get; set; }
+        public Project Project { get; set; }
 
-        public UserMonthlyStatistics UserMonthlyStatistics { get; set; }
+        public Activity Activity { get; set; }
 
     }
 }

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EmployeeProject.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240807071155_three")]
-    partial class three
+    [Migration("20240918050826_wada")]
+    partial class wada
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -34,6 +34,9 @@ namespace EmployeeProject.Infrastructure.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ActivityId"));
 
                     b.Property<string>("ActivityName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Status")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ActivityId");
@@ -136,11 +139,6 @@ namespace EmployeeProject.Infrastructure.Migrations
                         {
                             AllowedHoursId = 16,
                             Number = 8f
-                        },
-                        new
-                        {
-                            AllowedHoursId = 17,
-                            Number = 8.5f
                         });
                 });
 
@@ -158,6 +156,18 @@ namespace EmployeeProject.Infrastructure.Migrations
                     b.HasKey("BusinessOrItId");
 
                     b.ToTable("BusinessOrIts");
+
+                    b.HasData(
+                        new
+                        {
+                            BusinessOrItId = 1,
+                            BusinessOrItName = "Business"
+                        },
+                        new
+                        {
+                            BusinessOrItId = 2,
+                            BusinessOrItName = "IT"
+                        });
                 });
 
             modelBuilder.Entity("EmployeeProject.Core.Entities.Model.DataSheetBus", b =>
@@ -190,7 +200,7 @@ namespace EmployeeProject.Infrastructure.Migrations
                     b.Property<int>("ProjectId")
                         .HasColumnType("int");
 
-                    b.Property<int>("SectionId")
+                    b.Property<int?>("SectionId")
                         .HasColumnType("int");
 
                     b.Property<DateOnly>("StartDate")
@@ -427,6 +437,48 @@ namespace EmployeeProject.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("MovableNames");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Additional Special Non-Working"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Chinese New Year"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Maunday Thursday "
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "Good Friday"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Name = "Black Saturday"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Name = "Eid al-Fitr"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Name = "Eid al-Adha"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Name = "National Heroes' Day"
+                        });
                 });
 
             modelBuilder.Entity("EmployeeProject.Core.Entities.Model.Project", b =>
@@ -438,6 +490,9 @@ namespace EmployeeProject.Infrastructure.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProjectId"));
 
                     b.Property<string>("ProjectName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Status")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ProjectId");
@@ -459,6 +514,13 @@ namespace EmployeeProject.Infrastructure.Migrations
                     b.HasKey("SectionId");
 
                     b.ToTable("Sections");
+
+                    b.HasData(
+                        new
+                        {
+                            SectionId = 1,
+                            SectionName = "Developer"
+                        });
                 });
 
             modelBuilder.Entity("EmployeeProject.Core.Entities.User.AppUser", b =>
@@ -519,7 +581,7 @@ namespace EmployeeProject.Infrastructure.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
-                    b.Property<bool?>("isNewUser")
+                    b.Property<bool?>("deActivated")
                         .HasColumnType("bit");
 
                     b.Property<string>("position")
@@ -547,17 +609,20 @@ namespace EmployeeProject.Infrastructure.Migrations
                         {
                             Id = "a18be9c0-aa65-4af8-bd17-00bd9344e575",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "78289165-690c-4a2f-8251-3af05ccc00d0",
-                            Email = "admin@gmail.com",
+                            ConcurrencyStamp = "9bf45ef1-c501-4c38-b427-202a98e45f79",
+                            Email = "jcaso@princeretail.com",
                             EmailConfirmed = false,
+                            FullName = "Joselito Caso",
                             LockoutEnabled = false,
-                            NormalizedEmail = "admin@gmail.com",
-                            NormalizedUserName = "admin",
-                            PasswordHash = "AQAAAAIAAYagAAAAECweJTBi0DKLno8KP55myqbyyqnN7SH6qPX5S+JscvYsTQp6nKq7eVbM2pQs7QlIxA==",
+                            NormalizedEmail = "JCASO@PRINCERETAIL.COM",
+                            NormalizedUserName = "JCASO@PRINCERETAIL.COM",
+                            PasswordHash = "AQAAAAIAAYagAAAAEJeG2QsFFMr6cswoDeTwVI+ovi7NZxFEQ8FnDEP06WkpUwQV1G1uQQk46sRv/uW4aA==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "",
+                            SectionId = 1,
+                            SecurityStamp = "54cf82e5-3014-40df-851a-eec3a784e401",
                             TwoFactorEnabled = false,
-                            UserName = "reymondcalma12"
+                            UserName = "jcaso@princeretail.com",
+                            position = "Manager"
                         });
                 });
 
@@ -599,6 +664,18 @@ namespace EmployeeProject.Infrastructure.Migrations
                             Id = "2",
                             Name = "Manager",
                             NormalizedName = "MANAGER"
+                        },
+                        new
+                        {
+                            Id = "3",
+                            Name = "Project_Manager",
+                            NormalizedName = "PROJECT_MANAGER"
+                        },
+                        new
+                        {
+                            Id = "4",
+                            Name = "Admin",
+                            NormalizedName = "ADMIN"
                         });
                 });
 
@@ -687,6 +764,13 @@ namespace EmployeeProject.Infrastructure.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = "a18be9c0-aa65-4af8-bd17-00bd9344e575",
+                            RoleId = "2"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
@@ -736,9 +820,7 @@ namespace EmployeeProject.Infrastructure.Migrations
 
                     b.HasOne("EmployeeProject.Core.Entities.Model.Section", "Section")
                         .WithMany()
-                        .HasForeignKey("SectionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("SectionId");
 
                     b.Navigation("Activity");
 

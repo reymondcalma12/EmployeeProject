@@ -23,8 +23,97 @@
             }
         }
     });
-
     
+    $(".sidebarSections").on("click", function () {
+        $('#buttonToOpen').trigger('click');
+        $('#addSection').modal('show'); 
+    });
+
+
+    $(".addProject").on("input", function () {
+        var projectName = $(".addProject").val();
+
+        if (projectName.length > 0) {
+            $("#addProjectBtn").prop("disabled", false);
+        }
+        else {
+            $("#addProjectBtn").prop("disabled", true);
+
+        }
+    });
+
+
+
+    $(".addActivity").on("input", function () {
+        var activityName = $(".addActivity").val();
+
+        if (activityName.length > 0) {
+            $(".addActivityBtn").prop("disabled", false);
+        }
+        else {
+            $(".addActivityBtn").prop("disabled", true);
+
+        }
+    });
+
+
+    $(".addSectionText").on("input", function () {
+        var name = $(".addSectionText").val();
+
+        if (name.length > 0) {
+            $(".addSectionBtn").prop("disabled", false);
+            $(".addSectionBtn").css("background-color", "#183B2B");
+            $(".addSectionBtn").css("cursor", "pointer");
+        }
+        else {
+            $(".addSectionBtn").prop("disabled", true);
+            $(".addSectionBtn").css("background-color", "gray");
+            $(".addSectionBtn").css("cursor", "not-allowed");
+
+        }
+    });
+
+    $("#addLegendSection, #addLegendLow, #addLegendMed, #addLegendHigh").on("input", function () {
+
+        var name = $("#addLegendSection").val();
+        var la = $("#addLegendLow").val();
+        var ma = $("#addLegendMed").val();
+        var ha = $("#addLegendHigh").val();
+
+        var low = parseInt(la);
+        var med = parseInt(ma);
+        var high = parseInt(ha);
+
+        if (name.length > 0 && !isNaN(low) && !isNaN(med) && !isNaN(high)) {
+
+            $(".addLEgendBtn").prop("disabled", false);
+            $(".addLEgendBtn").css("background-color", "#183B2B");
+            $(".addLEgendBtn").css("cursor", "pointer");
+
+        }
+        else {
+
+            $(".addLEgendBtn").prop("disabled", true);
+            $(".addLEgendBtn").css("background-color", "gray");
+            $(".addLEgendBtn").css("cursor", "not-allowed");
+
+        }
+
+    });
+    
+
+    $(".updateProject").on("input", function () {
+        var projectName = $(".updateProject").val();
+
+        if (projectName.length > 0) {
+            $("#addProjectBtn").prop("disabled", false);
+        }
+        else {
+            $("#addProjectBtn").prop("disabled", true);
+
+        }
+    });
+
 
     $("#addNewEmailUser").on("focusout", function () {
         var email = $("#addNewEmailUser").val();
@@ -565,7 +654,7 @@
                     <div class="usersBodyDiv2InnerCardsDiv2">
                       <div class="usersBodyDiv2InnerCardsDiv2Inner1">
                         <h5>${user.fullName}</h5>
-                        <h6>${user.section?.sectionName || "Section Deleted"}</h6>
+                        <h6>${user.section?.sectionName || "Project Manager"}</h6>
                       </div>
                       <div class="usersBodyDiv2InnerCardsDiv2Inner2">
                         <button id="usersModal" class="user-modal-btn" data-name="${user.fullName}" data-position="${user.position}" data-email="${user.email}" data-number="${user.phoneNumber}" data-profilestring="${user.profileString}" data-section="${user.section?.sectionName || ' No Section Yet'}" data-bs-toggle="modal" data-bs-target="#usersProfileModal"><i class="fa fa-user-circle" aria-hidden="true"></i></button>
@@ -668,7 +757,7 @@
                     <div class="usersBodyDiv2InnerCardsDiv2">
                       <div class="usersBodyDiv2InnerCardsDiv2Inner1">
                         <h5>${user.fullName}</h5>
-                        <h6>${user.section?.sectionName}</h6>
+                         <h6>${user.section?.sectionName || "Project Manager"}</h6>
                       </div>
                       <div class="usersBodyDiv2InnerCardsDiv2Inner2">
                         <button id="usersModal" class="user-modal-btn" data-name="${user.fullName}" data-position="${user.position}" data-email="${user.email}" data-number="${user.phoneNumber}" data-profilestring="${user.profileString}" data-section="${user.section?.sectionName || ' No Section Yet'}" data-bs-toggle="modal" data-bs-target="#usersProfileModal"><i class="fa fa-user-circle" aria-hidden="true"></i></button>
@@ -1105,7 +1194,7 @@
 
                 });
             }
-            else if (datas.role == "Project_Manager"){
+            else if (datas.role == "Project_Manager" || datas.role == "Admin") {
                 datas.data.forEach(function (data) {
 
                     var startDate = new Date(data.startDate);
@@ -1823,8 +1912,6 @@
 
     connection.on("HolidaysByYear", function (holi) {
 
-        console.log(holi);
-
         var container = $(".tbodyHoliday").empty();
 
         if (holi.holiday.length > 0) {
@@ -1843,7 +1930,7 @@
                 }
             });
 
-            if (holi.role == "Manager") {
+            if (holi.role == "Admin") {
                 sortedHolidays.forEach(function (data) {
 
                     var date = new Date(data.fixedDate);
@@ -1870,9 +1957,27 @@
                         var date = $(this).data("date");
                         var movableName = $(this).data("name");
 
-                        $("#holidayId").val(id);
-                        $("#updateHolidayDate").val(date);
-                        $("#updateHolidaySelect").val(movableName);
+
+
+                        if (movableNames.includes(movableName)) {
+                            $("#holidayId").val(id);
+                            $("#updateHolidayDate").val(date);
+                            $("#updateHolidaySelect").val(movableName);
+                        }
+                        else {
+                            $("#holidayId").val(id);
+                            $("#updateHolidayDate").val(date);
+                            $("#updateHolidaySelect").val("Additional Special Non-Working");
+                            $("#updateHolidayName").val(movableName);
+
+                            $("#updateHolidayName").css("display", "block");
+                            $("#holidayNameRequired").css("display", "block");
+                            $(".holidayUpdateBtn").prop("disabled", false);
+                            $(".holidayUpdateBtn").css("background-color", "#05513b");
+                            $(".holidayUpdateBtn").css("cursor", "pointer");
+                        }
+                
+                    
 
 
                     });
@@ -1885,6 +1990,8 @@
                         $("#holidayToDelete").text(movableName);
 
                     });
+
+
                 });
             }
             else {
@@ -2092,6 +2199,12 @@
     });
 
 
+    function GetProjects() {
+        connection.invoke("GetProjects")
+            .catch(function (err) {
+                return console.error(err.toString());
+            });
+    }
 
     function GetAllDataSheet() {
         connection.invoke("GetAllDataSheet")
@@ -2116,15 +2229,24 @@
             });
     }
 
+    const movableNames = [];
+
     connection.on("MovableNames", function (names) {
 
         var container = $("#addHolidaySelect");
 
         var container1 = $("#updateHolidaySelect");
 
-        /*   console.log(names);*/
+        let html1 = `<option disabled selected>SELECT</option>`;
+
         container.empty();
+        container.append(html1);
+
+  
+
         names.forEach(function (data) {
+
+            movableNames.push(data.name);
 
             let html = `
                   <option value="${data.name}">${data.name}</option>
@@ -2136,7 +2258,115 @@
         });
 
 
+        container.on("change", function () {
+            var value = $(this).val(); // Use $(this) to reference the current element
+
+            if (value == "Additional Special Non-Working") {
+                $("#addHolidayName").css("display", "block");
+                $("#holidayNameRequired").css("display", "block");
+                $(".holidayAddBtn").prop("disabled", true);
+                $(".holidayAddBtn").css("background-color", "gray");
+                $(".holidayAddBtn").css("cursor", "not-allowed");
+
+            } else {
+                $("#addHolidayName").css("display", "none");
+                $("#holidayNameRequired").css("display", "none");
+                $(".holidayAddBtn").prop("disabled", false);
+                $(".holidayAddBtn").css("background-color", "#05513b");
+                $(".holidayAddBtn").css("cursor", "pointer");
+                $("#addHolidayName").val("");
+
+            }
+        });
+
+
+
+        container1.on("change", function () {
+
+            var value = $(this).val();
+
+            if (value == "Additional Special Non-Working") {
+
+                $("#updateHolidayName").css("display", "block");
+                $("#holidayNameRequired").css("display", "block");
+                $(".holidayUpdateBtn").prop("disabled", true);
+                $(".holidayUpdateBtn").css("background-color", "gray");
+                $(".holidayUpdateBtn").css("cursor", "not-allowed");
+
+            }
+            //else if (!validOptions.includes(value)) {
+
+            //    $("#updateHolidayName").css("display", "none");
+            //    $("#holidayNameRequired").css("display", "none");
+            //    $(".holidayUpdateBtn").prop("disabled", false);
+            //    $(".holidayUpdateBtn").css("background-color", "#05513b");
+            //    $(".holidayUpdateBtn").css("cursor", "pointer");
+            //    $("#updateHolidayName").val("");
+
+            //}
+            else {
+                $("#updateHolidayName").css("display", "none");
+                $("#holidayNameRequired").css("display", "none");
+                $(".holidayUpdateBtn").prop("disabled", false);
+                $(".holidayUpdateBtn").css("background-color", "#05513b");
+                $(".holidayUpdateBtn").css("cursor", "pointer");
+                $("#updateHolidayName").val("");
+
+            }
+
+
+        });
+
+
     });
+
+    
+    $(".closeUpdateModal").on("click", function () {
+
+        $("#updateHolidayName").css("display", "none");
+        $("#holidayNameRequired").css("display", "none");
+        $(".holidayUpdateBtn").prop("disabled", false);
+        $(".holidayUpdateBtn").css("background-color", "#05513b");
+        $(".holidayUpdateBtn").css("cursor", "pointer");
+        $("#updateHolidayName").val("");
+    });
+
+
+
+    $("#addHolidayName").on("input", function(){
+
+        var name = $("#addHolidayName").val();
+
+        if (name.length > 0) {
+            $(".holidayAddBtn").prop("disabled", false);
+            $(".holidayAddBtn").css("background-color", "#05513b");
+            $(".holidayAddBtn").css("cursor", "pointer");
+        }
+        else {
+            $(".holidayAddBtn").prop("disabled", true);
+            $(".holidayAddBtn").css("background-color", "gray");
+            $(".holidayAddBtn").css("cursor", "not-allowed");
+
+        }
+    });
+
+    $("#updateHolidayName").on("input", function () {
+
+        var name = $("#updateHolidayName").val();
+
+        if (name.length > 0) {
+            $(".holidayUpdateBtn").prop("disabled", false);
+            $(".holidayUpdateBtn").css("background-color", "#05513b");
+            $(".holidayUpdateBtn").css("cursor", "pointer");
+        }
+        else {
+            $(".holidayUpdateBtn").prop("disabled", true);
+            $(".holidayUpdateBtn").css("background-color", "gray");
+            $(".holidayUpdateBtn").css("cursor", "not-allowed");
+
+        }
+    });
+
 
     connection.on("Business", function (names) {
 
@@ -2179,13 +2409,160 @@
 
         names.forEach(function (data) {
 
-            let html = `<option value="${data}">${data}</option>`;
-            $("#addNewUserRoles").append(html);
-
+            if (data === "Manager" || data === "Project_Manager") {
+                let html = `<option value="${data}">${data}</option>`;
+                $("#addNewUserRoles").append(html);
+            }
         });
 
 
     });
+
+    $("#addNewUserRoles").on("change", function () {
+
+        var value = $("#addNewUserRoles").val();
+
+        if (value == "Manager") {
+
+            $("#addNewUserSectionDrop").css("display", "block");
+            $("#addNewUserSectionDropValidation").css("display", "block");
+            $("#addNewUserRoles").css("width", "103px");
+
+        }
+        else {
+            
+            $("#addNewUserSectionDrop").css("display", "none");
+            $("#addNewUserSectionDropValidation").css("display", "none");
+            $("#addNewUserRoles").css("width", "173px");
+        }
+
+    });
+
+
+    connection.on("AllProjects", function (projects) {
+
+        var containerForDisplayingProjects = $(".projectsModalDiv2TableBody");
+
+        projects.forEach(function (data) {
+
+            let htmlForDisplay = `
+                <tr>
+                    <td>${data.projectName}</td>
+                    <td>${data.status}</td>
+                    <td>
+                        <i class="fa fa-pencil editProjectsPencil" aria-hidden="true" data-bs-toggle="modal" data-bs-target="#updateProject1" data-id="${data.projectId}" data-name="${data.projectName}" data-status="${data.status}"></i>
+                    </td>
+                </tr>
+            `;
+
+            containerForDisplayingProjects.append(htmlForDisplay);
+
+
+            $(".editProjectsPencil").on("click", function () {
+
+                var id = $(this).data("id");
+                var projectName= $(this).data("name");
+                var status = $(this).data("status");
+
+                $("#projectId").val(id);
+                $("#updateProjectName").val(projectName);
+                $("#updateProjectStatus").val(status);
+   
+            });
+
+        });
+    });
+
+    connection.on("AllActiveProjects", function (projects) {
+
+        var container = $("#addDataSheetProjectsDropdown");
+
+        var container1 = $("#updateDataSheetProjectName");
+
+        projects.forEach(function (data) {
+
+            let html = `
+                  <option value="${data.projectName}">${data.projectName}</option>
+            `;
+
+
+            container.append(html);
+            container1.append(html);
+
+
+        });
+    });
+
+
+
+
+    connection.on("AllActivities", function (activities) {
+
+        var container = $("#addDataSheetActivitiesDropdown");
+        var container1 = $("#updateDataSheetActivityName");
+
+        var containerForDisplayingActivties = $(".activitiesModalDiv2TableBody");
+
+
+        activities.forEach(function (data) {
+
+            if (data.status == "ACTIVE") {
+                let html = `
+                  <option value="${data.activityName}">${data.activityName}</option>
+                 `;
+
+                container.append(html);
+                container1.append(html);
+
+            }
+
+
+            let htmlForDisplay = `
+                <tr>
+                    <td>${data.activityName}</td>
+                    <td>${data.status}</td>
+                    <td>
+                        <i class="fa fa-pencil editActivitiesPencil" aria-hidden="true" data-bs-toggle="modal" data-bs-target="#updateProject" data-id="${data.activityId}" data-name="${data.activityName}" data-status="${data.status}"></i>
+                    </td>
+                </tr>
+            `;
+
+
+
+            containerForDisplayingActivties.append(htmlForDisplay);
+
+            $(".editActivitiesPencil").on("click", function () {
+
+                var id = $(this).data("id");
+                var projectName = $(this).data("name");
+                var status = $(this).data("status");
+
+
+                $("#activityId").val(id);
+                $("#updateActivityName").val(projectName);
+                $("#updateActivityStatus").val(status);
+
+
+            });
+
+
+        });
+    });
+
+
+
+
+
+
+
+
+    function GetActivities() {
+        connection.invoke("GetActivities")
+            .catch(function (err) {
+                return console.error(err.toString());
+            });
+    }
+
 
 
     function GetUserDetails() {
@@ -2202,8 +2579,28 @@
             });
     }
 
-    connection.start().then(function () {
+    function GetActiveActivities() {
+        connection.invoke("GetActiveActivities")
+            .catch(function (err) {
+                return console.error(err.toString());
+            });
+    }
 
+    function GetActiveProjects() {
+        connection.invoke("GetActiveProjects")
+            .catch(function (err) {
+                return console.error(err.toString());
+            });
+    }
+
+
+
+    connection.start().then(function () {
+        GetActiveActivities();
+        GetActiveProjects();
+
+        GetActivities();
+        GetProjects();
         GetUserDetails();
         GetAllRoles();
 
