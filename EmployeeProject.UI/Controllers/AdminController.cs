@@ -9,7 +9,7 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 namespace EmployeeProject.UI.Controllers
 {
 
-
+    [Authorize(Policy = "RequireManager,ProjectManagerRoleOrAdmin")]
     public class AdminController : BaseController<AdminController>
     {
         private readonly IUserAccount services;
@@ -30,7 +30,6 @@ namespace EmployeeProject.UI.Controllers
             }
             else
             {
-
                 var model = new ChangePasswordDTO();
                 return View(model);
             }
@@ -44,6 +43,24 @@ namespace EmployeeProject.UI.Controllers
 
             return View(models);
         }
+
+        public IActionResult Projects(string? name)
+        {
+
+            if (name != null )
+            {
+                TempData["ProjectName"] = name.ToString();
+
+                return View();
+            }
+            else
+            {
+                return View();
+            }
+
+
+        }
+
         public IActionResult Holidays()
         {
 
@@ -114,12 +131,12 @@ namespace EmployeeProject.UI.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> AddProjects(string projectName)
+        public async Task<IActionResult> AddProjects(string projectName, string projectManagerName)
         {
 
             if (projectName != null)
             {
-                var result = await adminServices.AddProject(projectName);
+                var result = await adminServices.AddProject(projectName, projectManagerName);
 
                 if (result)
                 {
@@ -210,12 +227,12 @@ namespace EmployeeProject.UI.Controllers
         
 
         [HttpPost]
-        public async Task<IActionResult> UpdateProject(int id, string projectName, string status)
+        public async Task<IActionResult> UpdateProject(int id, string projectName, string status, string projectManagerName)
         {
 
             if (id != null)
             {
-                var result = await adminServices.UpdateProject(id, projectName, status);
+                var result = await adminServices.UpdateProject(id, projectName, status, projectManagerName);
 
                 if (result)
                 {

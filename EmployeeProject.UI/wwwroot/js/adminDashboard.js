@@ -2,9 +2,9 @@
 
     let connection = new signalR.HubConnectionBuilder().withUrl("/adminHub").build();
 
-
-
     const currentYear = new Date().getFullYear();
+
+    let projectManagerProjectId = 0;
 
     let sectionLegends = [];
 
@@ -30,10 +30,11 @@
     });
 
 
-    $(".addProject").on("input", function () {
+    $(".addProject, .addProjectPmanager").on("input change", function () {
         var projectName = $(".addProject").val();
+        var projectManagerName = $(".addProjectPmanager").val();
 
-        if (projectName.length > 0) {
+        if (projectName.length > 0 && projectManagerName.length > 0) {
             $("#addProjectBtn").prop("disabled", false);
         }
         else {
@@ -654,7 +655,7 @@
                     <div class="usersBodyDiv2InnerCardsDiv2">
                       <div class="usersBodyDiv2InnerCardsDiv2Inner1">
                         <h5>${user.fullName}</h5>
-                        <h6>${user.section?.sectionName || "Project Manager"}</h6>
+                        <h6>${user.position}</h6>
                       </div>
                       <div class="usersBodyDiv2InnerCardsDiv2Inner2">
                         <button id="usersModal" class="user-modal-btn" data-name="${user.fullName}" data-position="${user.position}" data-email="${user.email}" data-number="${user.phoneNumber}" data-profilestring="${user.profileString}" data-section="${user.section?.sectionName || ' No Section Yet'}" data-bs-toggle="modal" data-bs-target="#usersProfileModal"><i class="fa fa-user-circle" aria-hidden="true"></i></button>
@@ -757,7 +758,7 @@
                     <div class="usersBodyDiv2InnerCardsDiv2">
                       <div class="usersBodyDiv2InnerCardsDiv2Inner1">
                         <h5>${user.fullName}</h5>
-                         <h6>${user.section?.sectionName || "Project Manager"}</h6>
+                         <h6>${user.position}</h6>
                       </div>
                       <div class="usersBodyDiv2InnerCardsDiv2Inner2">
                         <button id="usersModal" class="user-modal-btn" data-name="${user.fullName}" data-position="${user.position}" data-email="${user.email}" data-number="${user.phoneNumber}" data-profilestring="${user.profileString}" data-section="${user.section?.sectionName || ' No Section Yet'}" data-bs-toggle="modal" data-bs-target="#usersProfileModal"><i class="fa fa-user-circle" aria-hidden="true"></i></button>
@@ -1486,105 +1487,6 @@
         $("#updateDataSheetTotalHoursDisplay").val(totalWorkHours);
 
     });
-
-
-
-
-    //const movableNames = [];
-    //connection.on("MovableHolidays", function (movable) {
-    //    movable.forEach(function (data) {
-
-    //        const holidayNames = data.HolidayName.split(",").map(name => name.trim());
-
-    //        holidayNames.forEach(name => {
-
-    //            if (name !== 'MovableId') {
-    //                movableNames.push({
-    //                    holidayName: name,
-    //                    date: data[name]
-    //                });
-    //            }
-    //        });
-    //    });
-
-    //    var container = $(".tbodyHoliday");
-
-    //    movableNames.forEach((aa) => {
-
-    //        var date = new Date(aa.date);
-    //        var moveDate = date.toLocaleDateString("en-US", {
-    //            month: "long",
-    //            day: "numeric",
-    //               year: "numeric"
-    //        });
-
-    //        let html = `<tr>
-    //                  <td>${aa.holidayName}</td>
-    //                <td>${moveDate}</td>
-    //                <td>
-    //                    <i class="fa fa-pencil" aria-hidden="true"></i>
-    //                    <i class="fa fa-trash" aria-hidden="true"></i>
-    //                </td>
-    //            </tr>`;
-
-    //        container.append(html);
-    //    });
-    //});
-
-
-
-
-
-    //connection.on("UsersMonthlyStatistics", function (users) {
-
-    //    var container = $(".tbodyDashboard");
-
-    //    if (users.length > 0) {
-
-    //        container.empty();
-
-
-
-    //        users.forEach(function (user) {
-    //    /*            console.log(user);*/
-
-
-    //            let html = `
-    //                 <tr>
-    //                    <td>${user.sectionName}</td>
-    //                    <td>${user.appUserName}</td>
-    //                    <td  style="${getBackgroundColor(user.january, user.low, user.med, user.max)};">${user.january}</td>
-    //                    <td  style="${getBackgroundColor(user.february, user.low, user.med, user.max)};">${user.february} </td>
-    //                    <td  style="${getBackgroundColor(user.march, user.low, user.med, user.max)};">${user.march} </td>
-    //                    <td  style="${getBackgroundColor(user.april, user.low, user.med, user.max)};">${user.april} </td>
-    //                    <td  style="${getBackgroundColor(user.may, user.low, user.med, user.max)};">${user.may} </td>
-    //                    <td  style="${getBackgroundColor(user.june, user.low, user.med, user.max)};">${user.june} </td>
-    //                    <td  style="${getBackgroundColor(user.july, user.low, user.med, user.max)};">${user.july} </td>
-    //                    <td  style="${getBackgroundColor(user.august, user.low, user.med, user.max)};">${user.august} </td>
-    //                    <td  style="${getBackgroundColor(user.september, user.low, user.med, user.max)};">${user.september} </td>
-    //                    <td  style="${getBackgroundColor(user.october, user.low, user.med, user.max)};">${user.october} </td>
-    //                    <td style="${getBackgroundColor(user.november, user.low, user.med, user.max)};">${user.november} </td>
-    //                    <td  style="${getBackgroundColor(user.december, user.low, user.med, user.max)};">${user.december} </td>
-    //                    <td >${user.totalHours} </td>
-    //                </tr>
-    //            `;
-
-    //            container.append(html);
-
-    //        });
-    //    }
-    //    else {
-
-    //        container.empty();
-
-    //       let htmls = `<div style="width: 80%; height: 60%; position: absolute;display:flex; justify-content:center; align-items:center;">
-    //            <h1 style="color:#425833;">No Data</h1>
-    //        </div>`;
-
-    //        container.append(htmls);
-    //    }
-
-    //});
 
 
     connection.on("UsersMonthlyStatisticsSort", function (users) {
@@ -2438,6 +2340,39 @@
 
     });
 
+    $("#addNewUserSectionDrop").on("change", function () {
+
+        var text = $("#addNewUserSectionDrop option:selected").text();
+
+        if (text == "BEST") {
+            $("#addNewPositionUserDisabled").val("Project Manager");
+            $("#addNewPositionUser").val("Project Manager");
+            $("#addNewUserRole").val("Project_Manager");
+        }
+        else {
+            $("#addNewPositionUserDisabled").val("Manager");
+            $("#addNewPositionUser").val("Manager");
+            $("#addNewUserRole").val("Manager");
+        }
+
+
+
+        //if (value == "Manager") {
+
+        //    $("#addNewUserSectionDrop").css("display", "block");
+        //    $("#addNewUserSectionDropValidation").css("display", "block");
+        //    $("#addNewUserRoles").css("width", "103px");
+
+        //}
+        //else {
+
+        //    $("#addNewUserSectionDrop").css("display", "none");
+        //    $("#addNewUserSectionDropValidation").css("display", "none");
+        //    $("#addNewUserRoles").css("width", "173px");
+        //}
+
+    });
+
 
     connection.on("AllProjects", function (projects) {
 
@@ -2445,12 +2380,15 @@
 
         projects.forEach(function (data) {
 
+
+
             let htmlForDisplay = `
                 <tr>
                     <td>${data.projectName}</td>
-                    <td>${data.status}</td>
+                    <td>${data.appUser.fullName}</td>
+                    <td>${data.projects_ActivitiesStatus.statusName}</td>
                     <td>
-                        <i class="fa fa-pencil editProjectsPencil" aria-hidden="true" data-bs-toggle="modal" data-bs-target="#updateProject1" data-id="${data.projectId}" data-name="${data.projectName}" data-status="${data.status}"></i>
+                        <i class="fa fa-pencil editProjectsPencil" aria-hidden="true" data-bs-toggle="modal" data-bs-target="#updateProject1" data-pmname="${data.appUserId}" data-id="${data.projectId}" data-name="${data.projectName}" data-status="${data.projects_ActivitiesStatus.statusName}"></i>
                     </td>
                 </tr>
             `;
@@ -2463,11 +2401,13 @@
                 var id = $(this).data("id");
                 var projectName= $(this).data("name");
                 var status = $(this).data("status");
+                var pmName = $(this).data("pmname");
 
                 $("#projectId").val(id);
                 $("#updateProjectName").val(projectName);
                 $("#updateProjectStatus").val(status);
-   
+                $("#updateProjectManagerName ").val(pmName);
+                
             });
 
         });
@@ -2506,7 +2446,9 @@
 
         activities.forEach(function (data) {
 
-            if (data.status == "ACTIVE") {
+
+
+            if (data.projects_ActivitiesStatus.statusName == "ACTIVE") {
                 let html = `
                   <option value="${data.activityName}">${data.activityName}</option>
                  `;
@@ -2520,9 +2462,9 @@
             let htmlForDisplay = `
                 <tr>
                     <td>${data.activityName}</td>
-                    <td>${data.status}</td>
+                    <td>${data.projects_ActivitiesStatus.statusName}</td>
                     <td>
-                        <i class="fa fa-pencil editActivitiesPencil" aria-hidden="true" data-bs-toggle="modal" data-bs-target="#updateProject" data-id="${data.activityId}" data-name="${data.activityName}" data-status="${data.status}"></i>
+                        <i class="fa fa-pencil editActivitiesPencil" aria-hidden="true" data-bs-toggle="modal" data-bs-target="#updateProject" data-id="${data.activityId}" data-name="${data.activityName}" data-status="${data.projects_ActivitiesStatus.statusName}"></i>
                     </td>
                 </tr>
             `;
@@ -2550,11 +2492,152 @@
     });
 
 
+    connection.on("AllProjectManager", function (pmanagers) {
+
+        var container = $("#addProjectPmanager");
+        var container1 = $("#updateProjectManagerName");
+        container.empty();
+        container1.empty();
+
+        let top = `
+               <option selected disabled>Select Project Manager</option>
+        `;
+
+        container.append(top);
+        container1.append(top);
+
+        pmanagers.forEach(function (data) {
+
+            let html = `
+                  <option value="${data.id}">${data.fullName}</option>
+            `;
+
+            container.append(html);
+            container1.append(html);
+
+        });
+
+    });
+
+    connection.on("AllProjectManagersProject", function (projects) {
+
+        var container = $(".projectManagerProjectsTableBody");
+
+        container.empty();
+
+        projects.forEach(function (data) {
+
+            let htmlForDisplay = `
+                <tr class="projectsPage" data-id="${data.projectId}" data-name="${data.projectName}" data-bs-dismiss="modal">
+                    <td>
+                            ${data.projectName}
+                 
+                    </td>
+                    <td>${data.projects_ActivitiesStatus.statusName}</td>               
+                </tr>
+            `;
+
+            container.append(htmlForDisplay);
 
 
 
+        });
+
+        $(".projectsPage").on("click", function () {
+
+            var id = $(this).data("id");
+
+            var name = $(this).data("name");
+
+            projectManagerProjectId = id;
+
+            let years = $("#projectsYear").val();
+
+            let year = parseInt(years);
+
+            connection.invoke("GetUserMonthlyStatisticsSortProjects", id, year, null, null)
+                .catch(function (err) {
+                    return console.error(err.toString());
+                });
+
+            $("#ProjectTitle").empty();
+
+            $("#ProjectTitle").html(name);
+
+        });
+
+    });
 
 
+    connection.on("UserMonthlyStatisticsSortProjects", function (users) {
+
+        var container = $(".tbodyProjects").empty();
+
+
+        if (users.length > 0) {
+
+            container.empty();
+
+            users.forEach(function (user) {
+
+                let html = `
+                     <tr>
+                        <td>${user.sectionName}</td>
+                        <td>${user.appUserName}</td>
+                        <td  style="${getBackgroundColor(user.january, user.low, user.med, user.max)};">${user.january}</td>
+                        <td  style="${getBackgroundColor(user.february, user.low, user.med, user.max)};">${user.february} </td>
+                        <td  style="${getBackgroundColor(user.march, user.low, user.med, user.max)};">${user.march} </td>
+                        <td  style="${getBackgroundColor(user.april, user.low, user.med, user.max)};">${user.april} </td>
+                        <td  style="${getBackgroundColor(user.may, user.low, user.med, user.max)};">${user.may} </td>
+                        <td  style="${getBackgroundColor(user.june, user.low, user.med, user.max)};">${user.june} </td>
+                        <td  style="${getBackgroundColor(user.july, user.low, user.med, user.max)};">${user.july} </td>
+                        <td  style="${getBackgroundColor(user.august, user.low, user.med, user.max)};">${user.august} </td>
+                        <td  style="${getBackgroundColor(user.september, user.low, user.med, user.max)};">${user.september} </td>
+                        <td  style="${getBackgroundColor(user.october, user.low, user.med, user.max)};">${user.october} </td>
+                        <td style="${getBackgroundColor(user.november, user.low, user.med, user.max)};">${user.november} </td>
+                        <td  style="${getBackgroundColor(user.december, user.low, user.med, user.max)};">${user.december} </td>
+                        <td >${user.totalHours} </td>
+                    </tr>
+                `;
+
+                container.append(html);
+
+            });
+        }
+        else {
+
+            container.empty();
+
+            let htmls = `<div style="width: 80%; height: 60%; position: absolute;display:flex; justify-content:center; align-items:center;">
+                <h1 style="color:#425833;"><span style="font-weight:bold;">No Data Found!</h1>
+            </div>`;
+
+            container.append(htmls);
+        }
+
+    });
+
+
+    $("#projectsYear").on("change", function () {
+
+        if (projectManagerProjectId != 0) {
+
+            let years = $("#projectsYear").val();
+
+            let year = parseInt(years);
+
+            connection.invoke("GetUserMonthlyStatisticsSortProjects", projectManagerProjectId, year, null, null)
+                .catch(function (err) {
+                    return console.error(err.toString());
+                });
+
+        }
+        else {
+            $("#resultProject").css("left", "35%");
+            $("#resultProject").html("S E L E C T &nbsp; P R O J E C T &nbsp; F I R S T!");
+        }
+
+    });
 
     function GetActivities() {
         connection.invoke("GetActivities")
@@ -2593,9 +2676,24 @@
             });
     }
 
+    function GetAllProjectManager() {
+        connection.invoke("GetAllProjectManager")
+            .catch(function (err) {
+                return console.error(err.toString());
+            });
+    }
 
+    function GetProjectManagersProject() {
+        connection.invoke("GetProjectManagerProject")
+            .catch(function (err) {
+                return console.error(err.toString());
+            });
+    }
 
     connection.start().then(function () {
+        GetAllProjectManager();
+        GetProjectManagersProject();
+
         GetActiveActivities();
         GetActiveProjects();
 

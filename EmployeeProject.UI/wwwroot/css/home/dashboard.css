@@ -512,6 +512,12 @@
 
 }
 
+.projectsModalDiv2TableBody tr td:nth-child(3) {
+
+    border-left:1px solid;
+
+}
+
 .projectsModalDiv2TableBody tr:nth-child(even) {
     background-color: white;
 }

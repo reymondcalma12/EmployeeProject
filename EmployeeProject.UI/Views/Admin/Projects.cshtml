@@ -1,0 +1,143 @@
+﻿@{
+    Layout = "_AdminLayout";
+
+
+}
+
+<div class="modal fade addDataModal" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="staticBackdropLabel" id="projectManagerProjectsBtn" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+
+        <div class="modal-content " style="width:800px; height:520px;  font-family: 'Montserrat', sans-serif; border-radius:1.5rem;">
+
+            <div class="modal-header" style="height:60px; background:#1E4F3B; display:flex; border-radius:1rem 1rem 0 0 ;">
+
+                <div class="modal-headerDiv1" style="width:95%; display:flex;justify-content:center;align-items:center;">
+                    <h4 style="color:gold;">P R O J E C T S</h4>
+                </div>
+                <div class="modal-headerDiv2">
+                    <i class="fa fa-times closeAddNewData" aria-hidden="true" data-bs-dismiss="modal" aria-label="Close"></i>
+                </div>
+
+            </div>
+            <div class="modal-body projectsModal justify-content-center align-items-center">
+
+
+                <div class="projectsModalDiv2" style="border-radius:0.1rem; height:400px; border:1px solid #1E4F3B;">
+                    <table class="projectsModalDiv2Table">
+                        <thead class="activitiesModalDiv2TableHead">
+                            <tr>
+                                <th>P R O J E C T &nbsp N A M E</th>
+                                <th>S T A T U S</th>
+                            </tr>
+                        </thead>
+                        <tbody class="projectManagerProjectsTableBody text-center">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="dashboardBody">
+
+    @if (User.IsInRole("Project_Manager"))
+    {
+        <div class="dashboardBodyDiv1">
+
+            <div class="dashboardBodyDiv1Inner1" style="width:90%;">
+
+                <button class="addData " data-bs-toggle="modal" data-bs-target="#projectManagerProjectsBtn" style="height:50px;" id="projectmanagerBtn">
+                    P R O J E C T S
+                </button>
+
+                <div class="dashboardBodyDiv1Inner1Div2 d-flex justify-content-center align-items-center" style="width:90%;height:100%;text-align:center;font-family: 'Montserrat', sans-serif;color: black;">
+
+
+                    <h5 style="font-weight:bold;" id="ProjectTitle">
+                        P R O J E C T &nbsp N A M E
+                    </h5>
+                    
+                </div>
+            </div>
+
+            <div class="dashboardBodyDiv1Inner2" style="width: 10%; border:none;">
+
+                <select class="year" id="projectsYear">
+                </select>
+            </div>
+
+        </div>
+
+        <div class="dashboardBodyDiv2">
+            <div class="dashboardBodyDiv2Inner">
+
+                <table class="dashbBoardTable">
+
+                    <thead class="theadDashboard">
+
+                        <tr class="trDashboard">
+                            <th class="thDashboard">SECTION</th>
+                            <th class="thDashboard">RESOURCE NAME</th>
+                            <th class="thDashboard">JAN</th>
+                            <th class="thDashboard">FEB</th>
+                            <th class="thDashboard">MAR</th>
+                            <th class="thDashboard">APR</th>
+                            <th class="thDashboard">MAY</th>
+                            <th class="thDashboard">JUN</th>
+                            <th class="thDashboard">JUL</th>
+                            <th class="thDashboard">AUG</th>
+                            <th class="thDashboard">SEP</th>
+                            <th class="thDashboard">OCT</th>
+                            <th class="thDashboard">NOV</th>
+                            <th class="thDashboard">DEC</th>
+                            <th class="thDashboard">TOTAL</th>
+                        </tr>
+                    </thead>
+                    <tbody class="tbodyProjects text-center">
+                        @*SIGNALR*@
+                            <tr>
+                                <td>
+                                <h1 style="color:#425833; position: absolute; top:45%; left:40%;" id="resultProject">S E L E C T &nbsp P R O J E C T</h1>
+
+                                </td>
+                            </tr>
+              
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
+
+</div>
+
+
+
+
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="https://cdn.datatables.net/2.0.8/js/dataTables.min.js"></script>
+
+    <script>
+        const startYear = 2024;
+        const endYear = 2044;
+
+        const yearSelect = document.querySelector('.year');
+
+        for (let i = startYear; i <= endYear; i++) {
+            const option = document.createElement('option');
+            option.value = i;
+            option.text = i;
+            yearSelect.add(option);
+        }
+
+    </script>
+}
+
+

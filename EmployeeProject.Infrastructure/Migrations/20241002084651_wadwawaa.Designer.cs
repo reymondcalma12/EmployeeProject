@@ -4,6 +4,7 @@ using EmployeeProject.Infrastructure.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EmployeeProject.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241002084651_wadwawaa")]
+    partial class wadwawaa
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -648,17 +651,17 @@ namespace EmployeeProject.Infrastructure.Migrations
                         {
                             Id = "a18be9c0-aa65-4af8-bd17-00bd9344e575",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "23b76b5c-9f4e-47da-852c-469062f84819",
+                            ConcurrencyStamp = "91081229-0154-4875-8a72-64825e6f414d",
                             Email = "jcaso@princeretail.com",
                             EmailConfirmed = false,
                             FullName = "Joselito Caso",
                             LockoutEnabled = false,
                             NormalizedEmail = "JCASO@PRINCERETAIL.COM",
                             NormalizedUserName = "JCASO@PRINCERETAIL.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAELoKgeO+uai0xjc60ceB1G2MptQM7TPj9BlFaX7vSIGSsBv5X1JY+q9kSErwiazwlw==",
+                            PasswordHash = "AQAAAAIAAYagAAAAECuIJ+LeJdOlUP7FyKpoGmkc2vK9dq+hEOViVGXW0ZzTO73TmytKvMMZknpiIEHcAg==",
                             PhoneNumberConfirmed = false,
                             SectionId = 1,
-                            SecurityStamp = "683b56e7-69d5-43bd-a623-e54cb913e86c",
+                            SecurityStamp = "1af1cfc5-f697-4bf1-b946-cd7785594f2f",
                             TwoFactorEnabled = false,
                             UserName = "jcaso@princeretail.com",
                             position = "Manager"

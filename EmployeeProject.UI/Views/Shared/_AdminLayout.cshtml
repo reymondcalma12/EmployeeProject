@@ -54,7 +54,12 @@
                     <a class="btn btn-outline-success wad @(ViewContext.RouteData.Values["controller"]?.ToString() == "Admin" && ViewContext.RouteData.Values["action"]?.ToString() == "Index" ? "active" : "")"  onclick="changeColor(this)" asp-action="Index" asp-controller="Admin"><i class="fa fa-th-large" aria-hidden="true"></i><span>Dashboard</span></a>
                     <a class="btn btn-outline-success wad @(ViewContext.RouteData.Values["controller"]?.ToString() == "Admin" && ViewContext.RouteData.Values["action"]?.ToString() == "DataSheet" ? "active" : "")" onclick="changeColor(this)" asp-action="DataSheet" asp-controller="Admin"><i class="fa fa-file-text" aria-hidden="true"></i><span>Data Sheets</span></a>
                     @if(User.IsInRole("Manager")){
-                    <a class="btn btn-outline-success wad" data-bs-toggle="modal" data-bs-target="#projectsModal"><i class="fa fa-folder-open"></i><span>Projects</span></a>
+                        <a class="btn btn-outline-success wad" data-bs-toggle="modal" data-bs-target="#projectsModal"><i class="fa fa-folder-open"></i><span>Projects</span></a>
+                    }
+                    else if (User.IsInRole("Project_Manager"))
+                    {
+                        <a class="btn btn-outline-success wad @(ViewContext.RouteData.Values["controller"]?.ToString() == "Admin" && ViewContext.RouteData.Values["action"]?.ToString() == "Projects" ? "active" : "")" onclick="changeColor(this)" asp-action="Projects" asp-controller="Admin"><i class="fa fa-folder-open"></i><span>Projects</span></a>
+
                     }
                     @if(User.IsInRole("Admin")){
                         <a class="btn btn-outline-success wad" data-bs-toggle="modal" data-bs-target="#activitiesModal"><i class="fa fa-check-square"></i><span>Activities</span></a>
@@ -66,7 +71,7 @@
                     {
                     <a class="btn btn-outline-success wad @(ViewContext.RouteData.Values["controller"]?.ToString() == "Admin" && ViewContext.RouteData.Values["action"]?.ToString() == "Users" ? "active" : "")" onclick="changeColor(this)" asp-action="Users" asp-controller="Admin"><i class="fa fa-users" aria-hidden="true"></i><span>Users</span></a>
                     }
-                    <partial name="partial"/>
+   
                 </div>
                 <div class="div22">
                     <a class="btn btn-outline-success wad" data-bs-toggle="modal" data-bs-target="#exampleModalCenter"><i class="fa fa-sign-out" aria-hidden="true"></i><span>Logout</span></a>
@@ -162,13 +167,13 @@
 
                         <div class="addSectionBodyDiv2">
                             <input type="hidden" name="id" id="activityId" />
-                            <input type="text" style="text-align:center;" class="form-control-lg addNewUserInput updateProject" placeholder="Project Name:" autocomplete="off" name="activityName" id="updateActivityName" />
+                            <input type="text" style="text-align:center;" class="form-control addNewUserInput updateProject" placeholder="Project Name:" autocomplete="off" name="activityName" id="updateActivityName" />
 
 
                         </div>
                         <div class="addSectionBodyDiv2">
 
-                            <select class="form-control-lg addNewUserInput updateProject" autocomplete="off" name="status" id="updateActivityStatus" style="text-align:center;">
+                            <select class="form-control addNewUserInput updateProject" autocomplete="off" name="status" id="updateActivityStatus" style="text-align:center;">
                                 <option selected disabled>SELECT STATUS</option>
                                 <option value="ACTIVE"> ACTIVE</option>
                                 <option value="INACTIVE"> INACTIVE</option>
@@ -242,6 +247,7 @@
                             <thead class="projectsModalDiv2TableHead">
                                 <tr>
                                     <th>PROJECT NAME</th>
+                                    <th>PROJECT MANAGER NAME</th>
                                     <th>STATUS</th>
                                     <th>ACTIONS</th>
                                 </tr>
@@ -281,13 +287,17 @@
 
                         <div class="addSectionBodyDiv2">
                             <input type="hidden" name="id" id="projectId"/>
-                            <input type="text" style="text-align:center;" class="form-control-lg addNewUserInput updateProject" placeholder="Project Name:" autocomplete="off" name="projectName" id="updateProjectName" />
+                            <input type="text" style="text-align:center;" class="form-control addNewUserInput updateProject" placeholder="Project Name:" autocomplete="off" name="projectName" id="updateProjectName" />
 
 
                         </div>
                         <div class="addSectionBodyDiv2">
+                            <select class="form-control addNewUserInput updateProjectManagerName" name="projectManagerName" id="updateProjectManagerName" style="text-align:center;">
+                            </select>
+                        </div>
+                        <div class="addSectionBodyDiv2">
 
-                            <select class="form-control-lg addNewUserInput updateProject" autocomplete="off" name="status" id="updateProjectStatus" style="text-align:center;">
+                            <select class="form-control addNewUserInput updateProject" autocomplete="off" name="status" id="updateProjectStatus" style="text-align:center;">
                                 <option selected disabled>SELECT STATUS</option>
                                 <option value="ACTIVE"> ACTIVE</option>
                                 <option value="INACTIVE"> INACTIVE</option>
@@ -336,13 +346,19 @@
 
                     <div class="addSectionBodyDiv2">
 
-                        <input type="text" class="form-control-lg addNewUserInput addProject" placeholder="Project Name:" autocomplete="off" name="projectName" id="addProject"/>
+                            <input type="text" style="text-align:center;" class="form-control addNewUserInput addProject" placeholder="Project Name:" autocomplete="off" name="projectName" id="addProject" />
 
 
                     </div>
 
-                    <div class="" style="height:10%;width:100%; text-align:center;">
-                        
+
+                    <div class="addSectionBodyDiv2">
+
+                            <select class="form-control addNewUserInput addProjectPmanager" autocomplete="off" name="projectManagerName" id="addProjectPmanager" style="text-align:center;">
+          
+                        </select> 
+
+
                     </div>
 
                     <div class="addSectionBodyDiv3">
@@ -380,7 +396,7 @@
 
                         <div class="addSectionBodyDiv2">
 
-                            <input type="text" class="form-control-lg addNewUserInput addActivity" placeholder="ACTIVITY Name:" autocomplete="off" name="activityName" id="addActivity" />
+                            <input type="text" class="form-control addNewUserInput addActivity" placeholder="ACTIVITY Name:" autocomplete="off" name="activityName" id="addActivity" />
 
 
                         </div>
@@ -481,7 +497,7 @@
                                 <i class="fa fa-sitemap phoneProfile" aria-hidden="true"></i>
                             </div>
                             <div class="profileModalBodyDiv2Inner2Div2">
-                                <span style="margin-right:15%;">
+                                <span style="margin-right:25%;">
 
                                     @if (currentUser.Section?.SectionName != null)
                                     {
@@ -590,7 +606,7 @@
                                     <i class="fa fa-sitemap phoneProfile" aria-hidden="true"></i>
                                 </div>
                                 <div class="profileModalBodyDiv2Inner2Div2">
-                                    <span style="margin-right:15%;">
+                                    <span style="margin-right:25%;">
 
                                         @if (currentUser.Section?.SectionName != null)
                                         {

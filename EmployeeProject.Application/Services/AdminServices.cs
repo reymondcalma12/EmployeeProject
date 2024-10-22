@@ -44,6 +44,9 @@ namespace EmployeeProject.Application.Services
             this.roleManager = roleManager; 
         }
 
+
+
+
         public async Task<bool> UpdateProfile(IFormFile image)
         {
 
@@ -72,15 +75,39 @@ namespace EmployeeProject.Application.Services
                 return false;
             }
         }
-
-
-        public async Task<bool> AddProject(string name)
+        public async Task<List<AppUser>> GetAllProjectManager()
         {
+
+            var projectManagerRole = "Project_Manager";
+
+            var usersInRole = await userManager.GetUsersInRoleAsync(projectManagerRole);
+
+            return usersInRole.ToList();
+        }
+
+
+        public async Task<List<Project>> GetProjectManagersProject()
+        {
+
+            var userId = httpcontext.HttpContext.Session.GetString("UsersId").ToString();
+
+            var user = await userManager.Users.FirstOrDefaultAsync(a => a.Id == userId);
+
+            var projects = await appUnitOfWork.repository<Project>().AsQueryable().Where(a => a.AppUserId == user.Id).Include(a => a.Projects_ActivitiesStatus).OrderBy(a => a.Projects_ActivitiesStatus.StatusName).ToListAsync();
+
+            return projects;
+        }
+
+        public async Task<bool> AddProject(string name, string projectManagerName)
+        {
+
+            var status = await appUnitOfWork.repository<Projects_ActivitiesStatus>().AsQueryable().FirstOrDefaultAsync(a => a.StatusName == "ACTIVE"); 
 
             Project project = new Project
             {
                 ProjectName = name,
-                Status = "ACTIVE"
+                AppUserId = projectManagerName,
+                Projects_ActivitiesStatusId = status.StatusId
             };
 
             appUnitOfWork.repository<Project>().Add(project);
@@ -94,9 +121,12 @@ namespace EmployeeProject.Application.Services
         public async Task<bool> AddActivity(string name)
         {
 
+            var status = await appUnitOfWork.repository<Projects_ActivitiesStatus>().AsQueryable().FirstOrDefaultAsync(a => a.StatusName == "ACTIVE");
+
             Activity activity = new Activity
             {
-                ActivityName = name
+                ActivityName = name,
+                Projects_ActivitiesStatusId = status.StatusId
             };
 
             appUnitOfWork.repository<Activity>().Add(activity);
@@ -414,13 +444,13 @@ namespace EmployeeProject.Application.Services
 
         public async Task<IEnumerable<Project>> GetProjects()
         {
-            var projects = await appUnitOfWork.repository<Project>().AsQueryable().OrderBy(a => a.Status).ToListAsync();
+            var projects = await appUnitOfWork.repository<Project>().AsQueryable().Include(a => a.AppUser).Include(a => a.Projects_ActivitiesStatus).OrderBy(a => a.Projects_ActivitiesStatus.StatusName).ToListAsync();
 
             return projects;
         }
         public async Task<IEnumerable<Project>> GetActiveProjects()
         {
-            var projects = await appUnitOfWork.repository<Project>().AsQueryable().Where(a => a.Status == "ACTIVE").ToListAsync();
+            var projects = await appUnitOfWork.repository<Project>().AsQueryable().Where(a => a.Projects_ActivitiesStatus.StatusName == "ACTIVE").ToListAsync();
 
             return projects;
         }
@@ -428,14 +458,14 @@ namespace EmployeeProject.Application.Services
 
         public async Task<IEnumerable<Activity>> GetActivities()
         {
-            var activities = await appUnitOfWork.repository<Activity>().AsQueryable().OrderBy(a => a.Status).ToListAsync();
+            var activities = await appUnitOfWork.repository<Activity>().AsQueryable().Include(a => a.Projects_ActivitiesStatus).OrderBy(a => a.Projects_ActivitiesStatus.StatusName).ToListAsync();
 
             return activities;
         }
 
         public async Task<IEnumerable<Activity>> GetActiveActivities()
         {
-            var activities = await appUnitOfWork.repository<Activity>().AsQueryable().Where(a => a.Status == "ACTIVE").ToListAsync();
+            var activities = await appUnitOfWork.repository<Activity>().AsQueryable().Where(a => a.Projects_ActivitiesStatus.StatusName == "ACTIVE").ToListAsync();
 
             return activities;
         }
@@ -846,50 +876,6 @@ namespace EmployeeProject.Application.Services
             return date.DayOfWeek >= DayOfWeek.Monday && date.DayOfWeek <= DayOfWeek.Friday;
         }
 
-        //public async Task<IEnumerable<DataSheetBus>> GetAllDataSheetSort(string? name, int? year)
-        //{
-        //    var userId = httpcontext.HttpContext.Session.GetString("UsersId")?.ToString();
-
-        //    if (!string.IsNullOrEmpty(name))
-        //    {
-        //        var userName = name.ToLower();
-        //        var users = await userManager.Users
-        //            .Where(a => a.FullName.ToLower().Contains(userName))
-        //            .Where(a => a.Id != userId)
-
-        //            .ToListAsync();
-
-        //        var data = await appUnitOfWork.repository<DataSheetBus>()
-        //            .AsQueryable()
-        //            .Where(a => users.Any(u => a.AppUserId == u.Id))
-        //            .Where(a => a.EndDate.Year == year || a.StartDate.Year == year)
-        //            .Include(a => a.Section)
-        //            .Include(a => a.Project)
-        //            .Include(a => a.Activity)
-        //            .Include(a => a.BusinessOrIt)
-        //            .Include(a => a.AppUser)
-        //            .OrderBy(a => a.Section)
-        //            .ToListAsync();
-
-        //        return data;
-        //    }
-        //    else
-        //    {
-        //        var data = await appUnitOfWork.repository<DataSheetBus>()
-        //            .AsQueryable()
-        //            .Where(a => a.EndDate.Year == year || a.StartDate.Year == year)
-        //            .Include(a => a.Section)
-        //            .Include(a => a.Project)
-        //            .Include(a => a.Activity)
-        //            .Include(a => a.BusinessOrIt)
-        //            .Include(a => a.AppUser)
-        //            .OrderBy(a => a.Section)
-        //            .ToListAsync();
-
-        //        return data;
-        //    }
-        //}
-
 
 
         public async Task<(IEnumerable<DataSheetBus>, string)> GetAllDataSheetSort(int? sectionId, string? name, int? year)
@@ -912,7 +898,7 @@ namespace EmployeeProject.Application.Services
           
             Section userSection = null;
 
-            if (userRole == "Project_Manager")
+            if (userRole == "Project_Manager" || userRole == "Admin")
             {
 
                 if (sectionId != null)
@@ -922,7 +908,12 @@ namespace EmployeeProject.Application.Services
                     var data = await appUnitOfWork.repository<DataSheetBus>()
                         .AsQueryable()
                         .Where(d => d.StartDate.Year == year || d.EndDate.Year == year)
-                        .Where(d => (userSection == null || d.Section.SectionName == userSection.SectionName) && (d.AppUser.FullName.ToLower().Contains(userName) || string.IsNullOrEmpty(name)))
+                        .Where(d => userSection == null || d.Section.SectionName == userSection.SectionName)
+                        .Where(d => string.IsNullOrEmpty(userName) ||
+                        d.AppUser.FullName.ToLower().Contains(userName) ||
+                        d.Project.ProjectName.ToLower().Contains(userName) ||
+                        d.Activity.ActivityName.ToLower().Contains(userName) ||
+                        d.BusinessOrIt.BusinessOrItName.ToLower().Contains(userName))
                         .Include(d => d.Section)
                         .Include(d => d.Project)
                         .Include(d => d.Activity)
@@ -938,7 +929,11 @@ namespace EmployeeProject.Application.Services
                     var data = await appUnitOfWork.repository<DataSheetBus>()
                         .AsQueryable()
                         .Where(d => d.StartDate.Year == year || d.EndDate.Year == year)
-                        .Where(d => d.AppUser.FullName.ToLower().Contains(userName) || string.IsNullOrEmpty(name))
+                        .Where(d => string.IsNullOrEmpty(userName) ||
+                        d.AppUser.FullName.ToLower().Contains(userName) ||
+                        d.Project.ProjectName.ToLower().Contains(userName) ||
+                        d.Activity.ActivityName.ToLower().Contains(userName) ||
+                        d.BusinessOrIt.BusinessOrItName.ToLower().Contains(userName))
                         .Include(d => d.Section)
                         .Include(d => d.Project)
                         .Include(d => d.Activity)
@@ -1056,210 +1051,6 @@ namespace EmployeeProject.Application.Services
         }
 
 
-        public async Task<List<UserMonthlyStatistics>> GetUserMonthlyStatisticsSort(int? section, string? name, int year)
-        {
-            var datasheet = await GetAllDataSheet();
-            var holidays = await GetHolidays(year);
-
-            var userID = httpcontext.HttpContext.Session.GetString("UsersId");
-            var user = userManager.Users.FirstOrDefault(a => a.Id == userID);
-
-            var userRoles = await userManager.GetRolesAsync(user);
-            var userRole = userRoles.FirstOrDefault();
-
-            string userName = null;
-
-            if (!string.IsNullOrEmpty(name))
-            {
-                userName = name.ToLower();
-            }
-
-            Section userSection = null;
-
-
-            if (userRole == "Project_Manager")
-            {
-
-                if (section != null)
-                {
-                    userSection = appUnitOfWork.repository<Section>().AsQueryable().Where(a => a.SectionId == section).FirstOrDefault();
-
-                    var userStats = datasheet
-                   .Where(d => d.StartDate.Year == year || d.EndDate.Year == year)
-                   .Where(d => (userName == null || d.AppUser.FullName.ToLower().Contains(userName)) && (userSection == null || d.Section.SectionName == userSection.SectionName))
-                   .GroupBy(d => new { d.AppUserId, d.Section.SectionName })
-                   .Select(g => new UserMonthlyStatistics
-                   {
-                       AppUserId = g.Key.AppUserId,
-                       AppUserName = g.FirstOrDefault().AppUser.FullName,
-                       SectionId = g.FirstOrDefault().SectionId,
-                       SectionName = g.Key.SectionName,
-                       Low = 0,
-                       Med = 0,
-                       Max = 0,
-                       January = CalculateMonthlyHours(g, holidays, year, 1),
-                       February = CalculateMonthlyHours(g, holidays, year, 2),
-                       March = CalculateMonthlyHours(g, holidays, year, 3),
-                       April = CalculateMonthlyHours(g, holidays, year, 4),
-                       May = CalculateMonthlyHours(g, holidays, year, 5),
-                       June = CalculateMonthlyHours(g, holidays, year, 6),
-                       July = CalculateMonthlyHours(g, holidays, year, 7),
-                       August = CalculateMonthlyHours(g, holidays, year, 8),
-                       September = CalculateMonthlyHours(g, holidays, year, 9),
-                       October = CalculateMonthlyHours(g, holidays, year, 10),
-                       November = CalculateMonthlyHours(g, holidays, year, 11),
-                       December = CalculateMonthlyHours(g, holidays, year, 12)
-                   }).ToList();
-
-                    var legends = await appUnitOfWork.repository<Legend>().GetAllAsync();
-
-                    foreach (var stat in userStats)
-                    {
-                        var legend = legends.FirstOrDefault(l => l.SectionId == stat.SectionId);
-                        if (legend != null)
-                        {
-                            stat.Low = legend.LOW ?? 0;
-                            stat.Med = legend.MED ?? 0;
-                            stat.Max = legend.MAX ?? 0;
-                        }
-
-                        stat.TotalHours = (stat.January ?? 0) +
-                           (stat.February ?? 0) +
-                           (stat.March ?? 0) +
-                           (stat.April ?? 0) +
-                           (stat.May ?? 0) +
-                           (stat.June ?? 0) +
-                           (stat.July ?? 0) +
-                           (stat.August ?? 0) +
-                           (stat.September ?? 0) +
-                           (stat.October ?? 0) +
-                           (stat.November ?? 0) +
-                           (stat.December ?? 0);
-                    }
-                    return userStats;
-                }
-                else
-                {
-
-                    var userStats = datasheet
-                    .Where(d => d.StartDate.Year == year || d.EndDate.Year == year)
-                    .Where(d => userName == null || d.AppUser.FullName.ToLower().Contains(userName))
-                    .GroupBy(d => new { d.AppUserId, d.Section.SectionName })
-                    .Select(g => new UserMonthlyStatistics
-                    {
-                       AppUserId = g.Key.AppUserId,
-                       AppUserName = g.FirstOrDefault().AppUser.FullName,
-                       SectionId = g.FirstOrDefault().SectionId,
-                       SectionName = g.Key.SectionName,
-                       Low = 0,
-                       Med = 0,
-                       Max = 0,
-                       January = CalculateMonthlyHours(g, holidays, year, 1),
-                       February = CalculateMonthlyHours(g, holidays, year, 2),
-                       March = CalculateMonthlyHours(g, holidays, year, 3),
-                       April = CalculateMonthlyHours(g, holidays, year, 4),
-                       May = CalculateMonthlyHours(g, holidays, year, 5),
-                       June = CalculateMonthlyHours(g, holidays, year, 6),
-                       July = CalculateMonthlyHours(g, holidays, year, 7),
-                       August = CalculateMonthlyHours(g, holidays, year, 8),
-                       September = CalculateMonthlyHours(g, holidays, year, 9),
-                       October = CalculateMonthlyHours(g, holidays, year, 10),
-                       November = CalculateMonthlyHours(g, holidays, year, 11),
-                       December = CalculateMonthlyHours(g, holidays, year, 12)
-                    }).ToList();
-
-                    var legends = await appUnitOfWork.repository<Legend>().GetAllAsync();
-
-                    foreach (var stat in userStats)
-                    {
-                        var legend = legends.FirstOrDefault(l => l.SectionId == stat.SectionId);
-                        if (legend != null)
-                        {
-                            stat.Low = legend.LOW ?? 0;
-                            stat.Med = legend.MED ?? 0;
-                            stat.Max = legend.MAX ?? 0;
-                        }
-
-                        stat.TotalHours = (stat.January ?? 0) +
-                           (stat.February ?? 0) +
-                           (stat.March ?? 0) +
-                           (stat.April ?? 0) +
-                           (stat.May ?? 0) +
-                           (stat.June ?? 0) +
-                           (stat.July ?? 0) +
-                           (stat.August ?? 0) +
-                           (stat.September ?? 0) +
-                           (stat.October ?? 0) +
-                           (stat.November ?? 0) +
-                           (stat.December ?? 0);
-                    }
-                    return userStats;
-
-                }
-
-
-            }
-            else
-            {
-                var userStats = datasheet
-                .Where(d => d.StartDate.Year == year || d.EndDate.Year == year)
-                .Where(d => (userName == null || d.AppUser.FullName.ToLower().Contains(userName)) && (d.Section.SectionName == user.Section.SectionName))
-                .GroupBy(d => new { d.AppUserId, d.Section.SectionName })
-                .Select(g => new UserMonthlyStatistics
-                {
-                   AppUserId = g.Key.AppUserId,
-                   AppUserName = g.FirstOrDefault().AppUser.FullName,
-                   SectionId = g.FirstOrDefault().SectionId,
-                   SectionName = g.Key.SectionName,
-                   Low = 0,
-                   Med = 0,
-                   Max = 0,
-                   January = CalculateMonthlyHours(g, holidays, year, 1),
-                   February = CalculateMonthlyHours(g, holidays, year, 2),
-                   March = CalculateMonthlyHours(g, holidays, year, 3),
-                   April = CalculateMonthlyHours(g, holidays, year, 4),
-                   May = CalculateMonthlyHours(g, holidays, year, 5),
-                   June = CalculateMonthlyHours(g, holidays, year, 6),
-                   July = CalculateMonthlyHours(g, holidays, year, 7),
-                   August = CalculateMonthlyHours(g, holidays, year, 8),
-                   September = CalculateMonthlyHours(g, holidays, year, 9),
-                   October = CalculateMonthlyHours(g, holidays, year, 10),
-                   November = CalculateMonthlyHours(g, holidays, year, 11),
-                   December = CalculateMonthlyHours(g, holidays, year, 12)
-                }).ToList();
-
-                var legends = await appUnitOfWork.repository<Legend>().GetAllAsync();
-
-                foreach (var stat in userStats)
-                {
-                    var legend = legends.FirstOrDefault(l => l.SectionId == stat.SectionId);
-                    if (legend != null)
-                    {
-                        stat.Low = legend.LOW ?? 0;
-                        stat.Med = legend.MED ?? 0;
-                        stat.Max = legend.MAX ?? 0;
-                    }
-
-                    stat.TotalHours = (stat.January ?? 0) +
-                       (stat.February ?? 0) +
-                       (stat.March ?? 0) +
-                       (stat.April ?? 0) +
-                       (stat.May ?? 0) +
-                       (stat.June ?? 0) +
-                       (stat.July ?? 0) +
-                       (stat.August ?? 0) +
-                       (stat.September ?? 0) +
-                       (stat.October ?? 0) +
-                       (stat.November ?? 0) +
-                       (stat.December ?? 0);
-                }
-                return userStats;
-            }
-
-        }
-
-         
-
         public async Task<List<UserMonthlyStatistics>> GetUserMonthlyStatisticsEmployeeSort(int year)
         {
             var datasheet = await GetAllDataSheet();
@@ -1320,8 +1111,6 @@ namespace EmployeeProject.Application.Services
             }
             return userStats;
         }
-
-
 
         public async Task<List<UserMonthlyStatistics>> GetUserMonthlyStatisticsEmployee()
         {
@@ -1857,13 +1646,16 @@ namespace EmployeeProject.Application.Services
 
 
 
-        public async Task<bool> UpdateProject(int id, string projectName, string status)
+        public async Task<bool> UpdateProject(int id, string projectName, string status, string projectManagerName)
         {
+
+            var statuss = await appUnitOfWork.repository<Projects_ActivitiesStatus>().AsQueryable().FirstOrDefaultAsync(a => a.StatusName == status);
 
             var project = await appUnitOfWork.repository<Project>().AsQueryable().FirstOrDefaultAsync(h => h.ProjectId == id);
 
             project.ProjectName = projectName;
-            project.Status = status;    
+            project.Projects_ActivitiesStatusId = statuss.StatusId;
+            project.AppUserId = projectManagerName;
 
             appUnitOfWork.repository<Project>().Update(project);
 
@@ -1877,10 +1669,13 @@ namespace EmployeeProject.Application.Services
         public async Task<bool> UpdateActivity(int id, string activityName, string status)
         {
 
-            var activity = await appUnitOfWork.repository<Activity>().AsQueryable().FirstOrDefaultAsync(h => h.ActivityId == id);
+            var statuss = await appUnitOfWork.repository<Projects_ActivitiesStatus>().AsQueryable().FirstOrDefaultAsync(a => a.StatusName == status);
+
+
+            var activity = await appUnitOfWork.repository<Activity>().AsQueryable().Include(a => a.Projects_ActivitiesStatus).FirstOrDefaultAsync(h => h.ActivityId == id);
 
             activity.ActivityName = activityName;
-            activity.Status = status;
+            activity.Projects_ActivitiesStatusId = statuss.StatusId;
 
 
             appUnitOfWork.repository<Activity>().Update(activity);
@@ -1961,5 +1756,319 @@ namespace EmployeeProject.Application.Services
             return business;
 
         }
+
+
+
+        public async Task<List<UserMonthlyStatistics>> GetUserMonthlyStatisticsSort(int? section, string? name, int year)
+        {
+            var datasheet = await GetAllDataSheet();
+            var holidays = await GetHolidays(year);
+
+            var userID = httpcontext.HttpContext.Session.GetString("UsersId");
+
+ 
+
+            var user = userManager.Users.FirstOrDefault(a => a.Id == userID);
+
+            var userRoles = await userManager.GetRolesAsync(user);
+            var userRole = userRoles.FirstOrDefault();
+
+            string userName = null;
+
+            if (!string.IsNullOrEmpty(name))
+            {
+                userName = name.ToLower();
+            }
+
+            Section userSection = null;
+
+
+            if (userRole == "Project_Manager" || userRole == "Admin")
+            {
+
+                if (section != null)
+                {
+                    userSection = appUnitOfWork.repository<Section>().AsQueryable().Where(a => a.SectionId == section).FirstOrDefault();
+
+                    var userStats = datasheet
+                   .Where(d => d.StartDate.Year == year || d.EndDate.Year == year)
+                   .Where(d => (userName == null || d.AppUser.FullName.ToLower().Contains(userName)) && (userSection == null || d.Section.SectionName == userSection.SectionName))
+                   .GroupBy(d => new { d.AppUserId, d.Section.SectionName })
+                   .Select(g => new UserMonthlyStatistics
+                   {
+                       AppUserId = g.Key.AppUserId,
+                       AppUserName = g.FirstOrDefault().AppUser.FullName,
+                       SectionId = g.FirstOrDefault().SectionId,
+                       SectionName = g.Key.SectionName,
+                       Low = 0,
+                       Med = 0,
+                       Max = 0,
+                       January = CalculateMonthlyHours(g, holidays, year, 1),
+                       February = CalculateMonthlyHours(g, holidays, year, 2),
+                       March = CalculateMonthlyHours(g, holidays, year, 3),
+                       April = CalculateMonthlyHours(g, holidays, year, 4),
+                       May = CalculateMonthlyHours(g, holidays, year, 5),
+                       June = CalculateMonthlyHours(g, holidays, year, 6),
+                       July = CalculateMonthlyHours(g, holidays, year, 7),
+                       August = CalculateMonthlyHours(g, holidays, year, 8),
+                       September = CalculateMonthlyHours(g, holidays, year, 9),
+                       October = CalculateMonthlyHours(g, holidays, year, 10),
+                       November = CalculateMonthlyHours(g, holidays, year, 11),
+                       December = CalculateMonthlyHours(g, holidays, year, 12)
+                   }).ToList();
+
+                    var legends = await appUnitOfWork.repository<Legend>().GetAllAsync();
+
+                    foreach (var stat in userStats)
+                    {
+                        var legend = legends.FirstOrDefault(l => l.SectionId == stat.SectionId);
+                        if (legend != null)
+                        {
+                            stat.Low = legend.LOW ?? 0;
+                            stat.Med = legend.MED ?? 0;
+                            stat.Max = legend.MAX ?? 0;
+                        }
+
+                        stat.TotalHours = (stat.January ?? 0) +
+                           (stat.February ?? 0) +
+                           (stat.March ?? 0) +
+                           (stat.April ?? 0) +
+                           (stat.May ?? 0) +
+                           (stat.June ?? 0) +
+                           (stat.July ?? 0) +
+                           (stat.August ?? 0) +
+                           (stat.September ?? 0) +
+                           (stat.October ?? 0) +
+                           (stat.November ?? 0) +
+                           (stat.December ?? 0);
+                    }
+                    return userStats;
+                }
+                else
+                {
+
+                    var userStats = datasheet
+                    .Where(d => d.StartDate.Year == year || d.EndDate.Year == year)
+                    .Where(d => userName == null || d.AppUser.FullName.ToLower().Contains(userName))
+                    .GroupBy(d => new { d.AppUserId, d.Section.SectionName })
+                    .Select(g => new UserMonthlyStatistics
+                    {
+                        AppUserId = g.Key.AppUserId,
+                        AppUserName = g.FirstOrDefault().AppUser.FullName,
+                        SectionId = g.FirstOrDefault().SectionId,
+                        SectionName = g.Key.SectionName,
+                        Low = 0,
+                        Med = 0,
+                        Max = 0,
+                        January = CalculateMonthlyHours(g, holidays, year, 1),
+                        February = CalculateMonthlyHours(g, holidays, year, 2),
+                        March = CalculateMonthlyHours(g, holidays, year, 3),
+                        April = CalculateMonthlyHours(g, holidays, year, 4),
+                        May = CalculateMonthlyHours(g, holidays, year, 5),
+                        June = CalculateMonthlyHours(g, holidays, year, 6),
+                        July = CalculateMonthlyHours(g, holidays, year, 7),
+                        August = CalculateMonthlyHours(g, holidays, year, 8),
+                        September = CalculateMonthlyHours(g, holidays, year, 9),
+                        October = CalculateMonthlyHours(g, holidays, year, 10),
+                        November = CalculateMonthlyHours(g, holidays, year, 11),
+                        December = CalculateMonthlyHours(g, holidays, year, 12)
+                    }).ToList();
+
+                    var legends = await appUnitOfWork.repository<Legend>().GetAllAsync();
+
+                    foreach (var stat in userStats)
+                    {
+                        var legend = legends.FirstOrDefault(l => l.SectionId == stat.SectionId);
+                        if (legend != null)
+                        {
+                            stat.Low = legend.LOW ?? 0;
+                            stat.Med = legend.MED ?? 0;
+                            stat.Max = legend.MAX ?? 0;
+                        }
+
+                        stat.TotalHours = (stat.January ?? 0) +
+                           (stat.February ?? 0) +
+                           (stat.March ?? 0) +
+                           (stat.April ?? 0) +
+                           (stat.May ?? 0) +
+                           (stat.June ?? 0) +
+                           (stat.July ?? 0) +
+                           (stat.August ?? 0) +
+                           (stat.September ?? 0) +
+                           (stat.October ?? 0) +
+                           (stat.November ?? 0) +
+                           (stat.December ?? 0);
+                    }
+                    return userStats;
+
+                }
+
+
+            }
+            else
+            {
+                var userStats = datasheet
+                .Where(d => d.StartDate.Year == year || d.EndDate.Year == year)
+                .Where(d => (userName == null || d.AppUser.FullName.ToLower().Contains(userName)) && (d.Section.SectionName == user.Section.SectionName))
+                .GroupBy(d => new { d.AppUserId, d.Section.SectionName })
+                .Select(g => new UserMonthlyStatistics
+                {
+                    AppUserId = g.Key.AppUserId,
+                    AppUserName = g.FirstOrDefault().AppUser.FullName,
+                    SectionId = g.FirstOrDefault().SectionId,
+                    SectionName = g.Key.SectionName,
+                    Low = 0,
+                    Med = 0,
+                    Max = 0,
+                    January = CalculateMonthlyHours(g, holidays, year, 1),
+                    February = CalculateMonthlyHours(g, holidays, year, 2),
+                    March = CalculateMonthlyHours(g, holidays, year, 3),
+                    April = CalculateMonthlyHours(g, holidays, year, 4),
+                    May = CalculateMonthlyHours(g, holidays, year, 5),
+                    June = CalculateMonthlyHours(g, holidays, year, 6),
+                    July = CalculateMonthlyHours(g, holidays, year, 7),
+                    August = CalculateMonthlyHours(g, holidays, year, 8),
+                    September = CalculateMonthlyHours(g, holidays, year, 9),
+                    October = CalculateMonthlyHours(g, holidays, year, 10),
+                    November = CalculateMonthlyHours(g, holidays, year, 11),
+                    December = CalculateMonthlyHours(g, holidays, year, 12)
+                }).ToList();
+
+                var legends = await appUnitOfWork.repository<Legend>().GetAllAsync();
+
+                foreach (var stat in userStats)
+                {
+                    var legend = legends.FirstOrDefault(l => l.SectionId == stat.SectionId);
+                    if (legend != null)
+                    {
+                        stat.Low = legend.LOW ?? 0;
+                        stat.Med = legend.MED ?? 0;
+                        stat.Max = legend.MAX ?? 0;
+                    }
+
+                    stat.TotalHours = (stat.January ?? 0) +
+                       (stat.February ?? 0) +
+                       (stat.March ?? 0) +
+                       (stat.April ?? 0) +
+                       (stat.May ?? 0) +
+                       (stat.June ?? 0) +
+                       (stat.July ?? 0) +
+                       (stat.August ?? 0) +
+                       (stat.September ?? 0) +
+                       (stat.October ?? 0) +
+                       (stat.November ?? 0) +
+                       (stat.December ?? 0);
+                }
+                return userStats;
+            }
+
+        }
+
+
+
+        public async Task<List<UserMonthlyStatistics>> GetUserMonthlyStatisticsSortProjects(int id, int year, int? section, string? name)
+        {
+            var datasheet = await GetAllDataSheet();
+            var holidays = await GetHolidays(year);
+
+            var userID = httpcontext.HttpContext.Session.GetString("UsersId");
+
+
+
+            var user = userManager.Users.FirstOrDefault(a => a.Id == userID);
+
+            var userRoles = await userManager.GetRolesAsync(user);
+            var userRole = userRoles.FirstOrDefault();
+
+            string userName = null;
+
+            if (!string.IsNullOrEmpty(name))
+            {
+                userName = name.ToLower();
+            }
+
+            Section userSection = null;
+
+
+            if (userRole == "Project_Manager")
+            {
+
+                if (id != null)
+                {
+                    userSection = appUnitOfWork.repository<Section>().AsQueryable().Where(a => a.SectionId == section).FirstOrDefault();
+
+                    var userStats = datasheet
+                   .Where(d => d.StartDate.Year == year || d.EndDate.Year == year)
+                   .Where(a => a.ProjectId == id)
+                   .GroupBy(d => new { d.AppUserId, d.Section.SectionName })
+                   .Select(g => new UserMonthlyStatistics
+                   {
+                       AppUserId = g.Key.AppUserId,
+                       AppUserName = g.FirstOrDefault().AppUser.FullName,
+                       SectionId = g.FirstOrDefault().SectionId,
+                       SectionName = g.Key.SectionName,
+                       Low = 0,
+                       Med = 0,
+                       Max = 0,
+                       January = CalculateMonthlyHours(g, holidays, year, 1),
+                       February = CalculateMonthlyHours(g, holidays, year, 2),
+                       March = CalculateMonthlyHours(g, holidays, year, 3),
+                       April = CalculateMonthlyHours(g, holidays, year, 4),
+                       May = CalculateMonthlyHours(g, holidays, year, 5),
+                       June = CalculateMonthlyHours(g, holidays, year, 6),
+                       July = CalculateMonthlyHours(g, holidays, year, 7),
+                       August = CalculateMonthlyHours(g, holidays, year, 8),
+                       September = CalculateMonthlyHours(g, holidays, year, 9),
+                       October = CalculateMonthlyHours(g, holidays, year, 10),
+                       November = CalculateMonthlyHours(g, holidays, year, 11),
+                       December = CalculateMonthlyHours(g, holidays, year, 12)
+                   }).ToList();
+
+                    var legends = await appUnitOfWork.repository<Legend>().GetAllAsync();
+
+                    foreach (var stat in userStats)
+                    {
+                        var legend = legends.FirstOrDefault(l => l.SectionId == stat.SectionId);
+                        if (legend != null)
+                        {
+                            stat.Low = legend.LOW ?? 0;
+                            stat.Med = legend.MED ?? 0;
+                            stat.Max = legend.MAX ?? 0;
+                        }
+
+                        stat.TotalHours = (stat.January ?? 0) +
+                           (stat.February ?? 0) +
+                           (stat.March ?? 0) +
+                           (stat.April ?? 0) +
+                           (stat.May ?? 0) +
+                           (stat.June ?? 0) +
+                           (stat.July ?? 0) +
+                           (stat.August ?? 0) +
+                           (stat.September ?? 0) +
+                           (stat.October ?? 0) +
+                           (stat.November ?? 0) +
+                           (stat.December ?? 0);
+                    }
+                    return userStats;
+                }
+                else
+                {
+
+
+                    return null;
+
+                }
+
+
+            }
+            else
+            {
+                  return null;
+            }
+
+        }
+
+
+
     }
 }

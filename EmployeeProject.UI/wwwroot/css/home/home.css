@@ -69,12 +69,14 @@
 }
 
 
+
+
 .btn {
     background-color: #425833;
-    width:50%;
-    height:13%;
-    border-radius:2rem;
-    color:white;
+    width: 50%;
+    height: 13%;
+    border-radius: 2rem;
+    color: white;
 }
 
 .btn:hover {

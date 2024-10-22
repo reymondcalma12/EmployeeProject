@@ -97,6 +97,10 @@
     justify-content:center;
     align-items:center;
     color:#FFD700;
+
+    white-space: nowrap; 
+    overflow: hidden;
+    text-overflow: clip;
 }
 
 .usersBodyDiv2InnerCardsDiv2Inner2{
@@ -334,10 +338,6 @@
     align-items: center;
     color: black;
 }
-.newEmployeeIcon:before {
-    font-size: 25px;
-    color: white;
-}
 
 .usersBodyDiv1Inner22 {
     height: 100%;
@@ -359,6 +359,19 @@
     display: flex;
     justify-content: space-evenly;
     align-items: center;
+}
+
+button.addUser:hover {
+    background-color: #345F49;
+    color: gold;
+}
+.newEmployeeIcon:before {
+    font-size: 25px;
+    color: white;
+}
+
+button.addUser:hover .newEmployeeIcon:before {
+    color: gold; /* Change icon color on button hover */
 }
 
 .addSectionUsers {

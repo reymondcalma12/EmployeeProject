@@ -11,13 +11,17 @@
     display:flex;
 }
 
-@media only screen and (max-width: 1366px) {
-    .theadDataSheet th{
-        font-size:12px;
+@media only screen and (max-width: 1366px) and (max-width: 1517.78px) {
+    .theadDataSheet th {
+        font-size: 12px;
     }
 }
 
-
+@media only screen and (max-width: 1517.78px) {
+    .theadDataSheet th {
+        font-size: 14px;
+    }
+}
 
 
 
@@ -174,6 +178,12 @@
     margin-right: 2%;
     box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
 }
+
+button.addData:hover {
+    background-color: #345F49;
+    color: gold;
+}
+
 
 .addDataIcon{
     margin-right:8%;

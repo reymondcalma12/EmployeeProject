@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Mvc;
 namespace EmployeeProject.UI.Controllers
 {
 
-    [Authorize]
     [Authorize(Policy = "RequireEmployeeRole")]
     public class EmployeeController : BaseController<EmployeeController>
     {

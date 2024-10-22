@@ -473,3 +473,53 @@ body {
 .modal-content {
     font-family: 'Montserrat', sans-serif;
 }
+
+button#projectmanagerBtn:hover {
+    background-color: #345F49;
+    color:gold;
+}
+
+
+
+
+.projectManagerProjectsTableBody tr:nth-child(even) {
+    background-color: white;
+}
+
+.projectManagerProjectsTableBody tr:hover {
+    background-color: #1E4F3B;
+    color: gold;
+    cursor:pointer;
+}
+
+.projectManagerProjectsTableBody tr:nth-child(even):hover {
+    background-color: #1E4F3B;
+    color: gold;
+    cursor: pointer;
+}
+
+.projectManagerProjectsTableBody td {
+    padding: 15px 0 15px 0;
+}
+
+.projectManagerProjectsTableBody tr td:nth-child(2) {
+ 
+}
+
+.projectManagerProjectsTableBody tr td:last-child {
+
+    font-weight:bold;
+}
+
+.tbodyProjects td {
+    padding: 15px;
+    border-bottom: 1px solid #425833;
+}
+
+    .tbodyProjects td:nth-child(2) {
+        border-right: 1px solid #425833;
+    }
+
+.tbodyProjects] tr:nth-child(even) {
+    background-color: white;
+}

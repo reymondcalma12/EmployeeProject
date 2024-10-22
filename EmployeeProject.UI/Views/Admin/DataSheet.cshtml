@@ -61,7 +61,7 @@
                 <button class="addData" data-bs-toggle="modal" data-bs-target="#addNewDataModal"><i class="fa fa-plus addDataIcon" aria-hidden="true"></i>ADD DATA
                 </button>
             }
-            else if(User.IsInRole("Project_Manager"))
+            else if (User.IsInRole("Project_Manager") || User.IsInRole("Admin"))
             {
 
                 <select class="section" id="dataSheetSectionDropDown" style="width:150px; margin-right: 2%;">

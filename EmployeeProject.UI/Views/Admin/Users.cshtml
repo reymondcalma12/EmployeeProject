@@ -242,7 +242,10 @@ else if (User.IsInRole("Admin"))
                             <span asp-validation-for="RegisterDTO.UserName" class="text-danger"></span>
                         </div>
                         <div class="addNewUserModalBodyDiv5">
-                            <input type="text" class="form-control addNewUserInput" placeholder="Position:" asp-for="RegisterDTO.Position" autocomplete="off" id="addNewEmailUser" />
+
+                            <input type="text" class="form-control addNewUserInput" placeholder="Position:" id="addNewPositionUserDisabled" disabled />
+
+                            <input type="hidden" class="form-control addNewUserInput" placeholder="Position:" asp-for="RegisterDTO.Position" autocomplete="off" id="addNewPositionUser"/>
 
                         </div>
                         <div class="addNewUserModalBodyDiv6">
@@ -257,11 +260,11 @@ else if (User.IsInRole("Admin"))
 
                         <div class="addNewUserModalBodyDiv9" style="height:15%; justify-content:space-evenly;">
 
-                            <select class="addNewUserSelect" asp-for="RegisterDTO.SectionId" id="addNewUserSectionDrop" style="width:120px; display:none">
+                            <select class="addNewUserSelect" asp-for="RegisterDTO.SectionId" id="addNewUserSectionDrop" style="width:120px; ">
                             </select>
 
-                            <select class="addNewUserSelect" asp-for="RegisterDTO.UserRole" id="addNewUserRoles">
-                            </select>
+                            <input type="hidden" class="addNewUserSelect" asp-for="RegisterDTO.UserRole" id="addNewUserRole"/>
+     
 
                         </div>
                         <div class="addNewUserModalBodyDiv10" style="height:10%;">
@@ -373,7 +376,7 @@ else if (User.IsInRole("Admin"))
                             <i class="fa fa-sitemap phoneProfile" aria-hidden="true"></i>
                         </div>
                         <div class="profileModalBodyDiv2Inner2Div2">
-                            <span style="margin-right:15%;" class="usersSection">
+                            <span style="margin-right:25%;" class="usersSection">
 
 
                             </span>

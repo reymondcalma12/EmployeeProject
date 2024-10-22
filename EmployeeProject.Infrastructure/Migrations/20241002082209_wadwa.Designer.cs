@@ -4,6 +4,7 @@ using EmployeeProject.Infrastructure.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EmployeeProject.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241002082209_wadwa")]
+    partial class wadwa
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -33,12 +36,10 @@ namespace EmployeeProject.Infrastructure.Migrations
                     b.Property<string>("ActivityName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("Projects_ActivitiesStatusId")
-                        .HasColumnType("int");
+                    b.Property<string>("Status")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ActivityId");
-
-                    b.HasIndex("Projects_ActivitiesStatusId");
 
                     b.ToTable("Activities");
                 });
@@ -494,49 +495,14 @@ namespace EmployeeProject.Infrastructure.Migrations
                     b.Property<string>("ProjectName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("Projects_ActivitiesStatusId")
-                        .HasColumnType("int");
+                    b.Property<string>("Status")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ProjectId");
 
                     b.HasIndex("AppUserId");
 
-                    b.HasIndex("Projects_ActivitiesStatusId");
-
                     b.ToTable("Projects");
-                });
-
-            modelBuilder.Entity("EmployeeProject.Core.Entities.Model.Projects_ActivitiesStatus", b =>
-                {
-                    b.Property<int>("StatusId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StatusId"));
-
-                    b.Property<string>("StatusName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("StatusId");
-
-                    b.ToTable("Projects_ActivitiesStatus");
-
-                    b.HasData(
-                        new
-                        {
-                            StatusId = 1,
-                            StatusName = "ACTIVE"
-                        },
-                        new
-                        {
-                            StatusId = 2,
-                            StatusName = "INACTIVE"
-                        },
-                        new
-                        {
-                            StatusId = 3,
-                            StatusName = "COMPLETE"
-                        });
                 });
 
             modelBuilder.Entity("EmployeeProject.Core.Entities.Model.Section", b =>
@@ -648,17 +614,17 @@ namespace EmployeeProject.Infrastructure.Migrations
                         {
                             Id = "a18be9c0-aa65-4af8-bd17-00bd9344e575",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "23b76b5c-9f4e-47da-852c-469062f84819",
+                            ConcurrencyStamp = "1e17eb40-e11a-4953-8fb8-d9e7b79fe01e",
                             Email = "jcaso@princeretail.com",
                             EmailConfirmed = false,
                             FullName = "Joselito Caso",
                             LockoutEnabled = false,
                             NormalizedEmail = "JCASO@PRINCERETAIL.COM",
                             NormalizedUserName = "JCASO@PRINCERETAIL.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAELoKgeO+uai0xjc60ceB1G2MptQM7TPj9BlFaX7vSIGSsBv5X1JY+q9kSErwiazwlw==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEOvIVRREUoWCSnY/zD3DD3LhKrdv+Yvb1kNhkGGie9R0mXZiSXTJ07X0XcdChJB8rw==",
                             PhoneNumberConfirmed = false,
                             SectionId = 1,
-                            SecurityStamp = "683b56e7-69d5-43bd-a623-e54cb913e86c",
+                            SecurityStamp = "3cd1deb1-249b-4640-9abd-065f1a9e299f",
                             TwoFactorEnabled = false,
                             UserName = "jcaso@princeretail.com",
                             position = "Manager"
@@ -831,15 +797,6 @@ namespace EmployeeProject.Infrastructure.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("EmployeeProject.Core.Entities.Model.Activity", b =>
-                {
-                    b.HasOne("EmployeeProject.Core.Entities.Model.Projects_ActivitiesStatus", "Projects_ActivitiesStatus")
-                        .WithMany()
-                        .HasForeignKey("Projects_ActivitiesStatusId");
-
-                    b.Navigation("Projects_ActivitiesStatus");
-                });
-
             modelBuilder.Entity("EmployeeProject.Core.Entities.Model.DataSheetBus", b =>
                 {
                     b.HasOne("EmployeeProject.Core.Entities.Model.Activity", "Activity")
@@ -909,13 +866,7 @@ namespace EmployeeProject.Infrastructure.Migrations
                         .WithMany()
                         .HasForeignKey("AppUserId");
 
-                    b.HasOne("EmployeeProject.Core.Entities.Model.Projects_ActivitiesStatus", "Projects_ActivitiesStatus")
-                        .WithMany()
-                        .HasForeignKey("Projects_ActivitiesStatusId");
-
                     b.Navigation("AppUser");
-
-                    b.Navigation("Projects_ActivitiesStatus");
                 });
 
             modelBuilder.Entity("EmployeeProject.Core.Entities.User.AppUser", b =>

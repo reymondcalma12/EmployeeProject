@@ -65,6 +65,11 @@ namespace EmployeeProject.UI
                 options.Cookie.IsEssential = true;
             });
 
+            builder.Services.Configure<SessionOptions>(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromDays(1); // Set as needed
+            });
+
 
             builder.Services.AddAuthorization(options =>
             {

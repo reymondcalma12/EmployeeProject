@@ -1,4 +1,5 @@
 ﻿using EmployeeProject.Application.Interfaces;
+using EmployeeProject.Core.Entities.Model;
 using Microsoft.AspNetCore.SignalR;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
@@ -488,6 +489,58 @@ namespace EmployeeProject.Application.Hubs
                 var legends = await adminServices.GetLegends();
 
                 await Clients.Caller.SendAsync("GetAllLegends", legends);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error occurred in GetAllMovableHolidays: {ex.Message}");
+                await Clients.Others.SendAsync("Error", "An error occurred while fetching GetAllMovableHolidays.");
+            }
+
+        }
+
+        public async Task GetAllProjectManager()
+        {
+            try
+            {
+
+                var pmanagers = await adminServices.GetAllProjectManager();
+
+                await Clients.Caller.SendAsync("AllProjectManager", pmanagers);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error occurred in GetAllMovableHolidays: {ex.Message}");
+                await Clients.Others.SendAsync("Error", "An error occurred while fetching GetAllMovableHolidays.");
+            }
+
+        }
+
+
+        public async Task GetProjectManagerProject()
+        {
+            try
+            {
+
+                var projects = await adminServices.GetProjectManagersProject();
+
+                await Clients.Caller.SendAsync("AllProjectManagersProject", projects);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error occurred in GetAllMovableHolidays: {ex.Message}");
+                await Clients.Others.SendAsync("Error", "An error occurred while fetching GetAllMovableHolidays.");
+            }
+
+        }
+
+        public async Task GetUserMonthlyStatisticsSortProjects(int id, int year, int? section, string? name)
+        {
+            try
+            {
+
+                var data = await adminServices.GetUserMonthlyStatisticsSortProjects(id, year, section, name);
+
+                await Clients.Caller.SendAsync("UserMonthlyStatisticsSortProjects", data);
             }
             catch (Exception ex)
             {

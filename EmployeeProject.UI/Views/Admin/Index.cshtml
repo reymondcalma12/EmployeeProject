@@ -64,78 +64,183 @@
     </div>
 }
 
-<div class="dashboardBody">
-    <div class="dashboardBodyDiv1">
+<div class="modal fade addDataModal" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="staticBackdropLabel" id="projectManagerProjectsBtn" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
 
-        <div class="dashboardBodyDiv1Inner1">
+        <div class="modal-content " style="width:800px; height:520px;  font-family: 'Montserrat', sans-serif; border-radius:1.5rem;">
 
-            @if (User.IsInRole("Project_Manager") || User.IsInRole("Admin"))
-            {
-                <select class="section" id="dashboardSectionDropDown" >
-                    <option>SECTION</option>
-                </select>
-            }
-            else
-            {
-                <select class="section" id="dashboardSectionDropDown" style="background-color: transparent; box-shadow: 0 0px 0px rgba(0, 0, 0, 0.25); color:transparent;" disabled>
-                    <option>SECTION</option>
-                </select>
-            }
+            <div class="modal-header" style="height:60px; background:#1E4F3B; display:flex; border-radius:1rem 1rem 0 0 ;">
 
-
-            <input type="text" list="names" class="dashboardSearch" id="dashboardSearch" style="box-shadow:none;" placeholder="Search..." autocomplete="off"/>
-           
-            <div class="autoFillSearchUsersDashboardBody">
-
-                <div class="autoFillSearchUsersDashboard">
-                    <div class="searchResultDashboard" data-name="Reymond Calma">Reymond Calma</div>
-                    <div class="searchResultDashboard" data-name="Reymond Calma">Reymond Calma</div>
-                    <div class="searchResultDashboard" data-name="Reymond Calma">Reymond Calma</div>
-                    <div class="searchResultDashboard" data-name="Reymond Calma">Reymond Calma</div>
-                    <div class="searchResultDashboard" data-name="Reymond Calma">Reymond Calma</div>
-                    <div class="searchResultDashboard" data-name="Reymond Calma">Reymond Calma</div>
-                    <div class="searchResultDashboard" data-name="Reymond Calma">Reymond Calma</div>
-
+                <div class="modal-headerDiv1" style="width:95%; display:flex;justify-content:center;align-items:center;">
+                    <h4 style="color:gold;">P R O J E C T S</h4>
                 </div>
-            </div>
-
-
-            <div class="dashboardSearchBtn"><i class="fa fa-search" aria-hidden="true"></i></div>
-
-            <div class="dashboardBodyDiv1Inner1Div1">
-
-                <div class="dashboardBodyDiv1Inner1Div1Div1">
-
-                    <div class="dashboardBodyDiv1Inner1Div1Div1Inner1">
-                        <span class="low">LOW</span>
-                        <span class="med">MED</span>
-                        <span class="max">MAX</span>
-                        <span class="above">ABOVE MAX</span>
-                    </div>
-
-                    <div class="dashboardBodyDiv1Inner1Div1Div1Inner2">
-                        <span class="low" style="background-color:white; color:black;" id="legendLow"></span>
-                        <span class="med" style="background-color:white; color:black;" id="legendMed"></span>
-                        <span class="max" style="background-color:white; color:black;" id="legendMax"></span>
-                        <span class="above" style="background-color:white; color:black;"></span>
-                    </div>
-
-                </div>
-                  
-                <div class="dashboardBodyDiv1Inner1Div1Div2">
-                    <h4 style="color:#425833;">LEGEND</h4>
-
-
+                <div class="modal-headerDiv2">
+                    <i class="fa fa-times closeAddNewData" aria-hidden="true" data-bs-dismiss="modal" aria-label="Close"></i>
                 </div>
 
             </div>
-        </div>
-        <div class="dashboardBodyDiv1Inner2">
-            <h4>SELECT YEAR</h4>
-            <select class="year" id="dashboardYear">
-            </select>
+            <div class="modal-body projectsModal justify-content-center align-items-center">
+
+
+                <div class="projectsModalDiv2" style="border-radius:0.1rem; height:400px;">
+                    <table class="projectsModalDiv2Table">
+                        <thead class="activitiesModalDiv2TableHead">
+                            <tr>
+                                <th>P R O J E C T &nbsp N A M E</th>
+                                <th>S T A T U S</th>
+                            </tr>
+                        </thead>
+                        <tbody class="projectManagerProjectsTableBody text-center">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
+</div>
+
+
+<div class="dashboardBody">
+
+    @if (User.IsInRole("Project_Manager"))
+     {
+        <div class="dashboardBodyDiv1">
+
+            <div class="dashboardBodyDiv1Inner1">
+
+        @*         <button class="addData " style="height:50px;" id="projectmanagerBtn">
+                    <a asp-action="Projects" asp-controller="Admin" style="text-decoration:none; color:inherit; padding:.8rem;">
+                        P R O J E C T S
+                    </a>         
+                </button> *@
+
+                <select class="section" id="dashboardSectionDropDown">
+                    <option>SECTION</option>
+                </select>
+
+                <input type="text" list="names" class="dashboardSearch" id="dashboardSearch" style="box-shadow:none;" placeholder="Search..." autocomplete="off" />
+
+                <div class="autoFillSearchUsersDashboardBody">
+
+                    <div class="autoFillSearchUsersDashboard">
+
+
+                    </div>
+                </div>
+
+
+                <div class="dashboardSearchBtn"><i class="fa fa-search" aria-hidden="true"></i></div>
+
+                <div class="dashboardBodyDiv1Inner1Div1">
+
+                    <div class="dashboardBodyDiv1Inner1Div1Div1">
+
+                        <div class="dashboardBodyDiv1Inner1Div1Div1Inner1">
+                            <span class="low">LOW</span>
+                            <span class="med">MED</span>
+                            <span class="max">MAX</span>
+                            <span class="above">ABOVE MAX</span>
+                        </div>
+
+                        <div class="dashboardBodyDiv1Inner1Div1Div1Inner2">
+                            <span class="low" style="background-color:white; color:black;" id="legendLow"></span>
+                            <span class="med" style="background-color:white; color:black;" id="legendMed"></span>
+                            <span class="max" style="background-color:white; color:black;" id="legendMax"></span>
+                            <span class="above" style="background-color:white; color:black;"></span>
+                        </div>
+
+                    </div>
+
+                    <div class="dashboardBodyDiv1Inner1Div1Div2">
+                        <h4 style="color:#425833;">LEGEND</h4>
+                    </div>
+
+                </div>
+            </div>
+            <div class="dashboardBodyDiv1Inner2">
+                <h4 style="color:#425833;">SELECT YEAR</h4>
+
+                <select class="year" id="dashboardYear">
+                </select>
+            </div>
+        </div>
+     }
+    else
+    {
+        <div class="dashboardBodyDiv1">
+
+            <div class="dashboardBodyDiv1Inner1">
+
+                @if (User.IsInRole("Project_Manager") || User.IsInRole("Admin"))
+                {
+                    <select class="section" id="dashboardSectionDropDown">
+                        <option>SECTION</option>
+                    </select>
+                }
+                else
+                {
+                    <select class="section" id="dashboardSectionDropDown" style="background-color: transparent; box-shadow: 0 0px 0px rgba(0, 0, 0, 0.25); color:transparent;" disabled>
+                        <option>SECTION</option>
+                    </select>
+                }
+
+
+                <input type="text" list="names" class="dashboardSearch" id="dashboardSearch" style="box-shadow:none;" placeholder="Search..." autocomplete="off" />
+
+                <div class="autoFillSearchUsersDashboardBody">
+
+                    <div class="autoFillSearchUsersDashboard">
+                        <div class="searchResultDashboard" data-name="Reymond Calma">Reymond Calma</div>
+                        <div class="searchResultDashboard" data-name="Reymond Calma">Reymond Calma</div>
+                        <div class="searchResultDashboard" data-name="Reymond Calma">Reymond Calma</div>
+                        <div class="searchResultDashboard" data-name="Reymond Calma">Reymond Calma</div>
+                        <div class="searchResultDashboard" data-name="Reymond Calma">Reymond Calma</div>
+                        <div class="searchResultDashboard" data-name="Reymond Calma">Reymond Calma</div>
+                        <div class="searchResultDashboard" data-name="Reymond Calma">Reymond Calma</div>
+
+                    </div>
+                </div>
+
+
+                <div class="dashboardSearchBtn"><i class="fa fa-search" aria-hidden="true"></i></div>
+
+                <div class="dashboardBodyDiv1Inner1Div1">
+
+                    <div class="dashboardBodyDiv1Inner1Div1Div1">
+
+                        <div class="dashboardBodyDiv1Inner1Div1Div1Inner1">
+                            <span class="low">LOW</span>
+                            <span class="med">MED</span>
+                            <span class="max">MAX</span>
+                            <span class="above">ABOVE MAX</span>
+                        </div>
+
+                        <div class="dashboardBodyDiv1Inner1Div1Div1Inner2">
+                            <span class="low" style="background-color:white; color:black;" id="legendLow"></span>
+                            <span class="med" style="background-color:white; color:black;" id="legendMed"></span>
+                            <span class="max" style="background-color:white; color:black;" id="legendMax"></span>
+                            <span class="above" style="background-color:white; color:black;"></span>
+                        </div>
+
+                    </div>
+
+                    <div class="dashboardBodyDiv1Inner1Div1Div2">
+                        <h4 style="color:#425833;">LEGEND</h4>
+
+
+                    </div>
+
+                </div>
+            </div>
+            <div class="dashboardBodyDiv1Inner2">
+                <h4>SELECT YEAR</h4>
+                <select class="year" id="dashboardYear">
+                </select>
+            </div>
+        </div>
+    }
+
+
     <div class="dashboardBodyDiv2">
         <div class="dashboardBodyDiv2Inner">
 
@@ -173,166 +278,6 @@
 
 
 
-@* <div class="modal fade addDataModal" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="staticBackdropLabel" id="activitiesModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-
-        <div class="modal-content " style="width:800px; height:520px;  font-family: 'Montserrat', sans-serif; border-radius:1.5rem;">
-
-            <div class="modal-header" style="height:60px; background:#1E4F3B; display:flex; border-radius:1rem 1rem 0 0 ;">
-
-                <div class="modal-headerDiv1" style="width:95%; display:flex;justify-content:center;align-items:center;">
-                    <h4 style="color:gold;">PROJECTS</h4>
-                </div>
-                <div class="modal-headerDiv2">
-                    <i class="fa fa-times closeAddNewData" aria-hidden="true" data-bs-dismiss="modal" aria-label="Close"></i>
-                </div>
-
-            </div>
-            <div class="modal-body addNewDataModalBody">
-
-                <div class="addNewDataModalBodyDiv1" style="flex-direction:column;">
-
-                    <input type="text" class="form-control addNewDataInput" placeholder="Resource Name:" asp-for="DataSheetBusDTO.UserName" id="addDataSheetResourceName" autocomplete="off" />
-
-                    <div class="autoFillSearchDataSheetBody">
-
-                        <div class="autoFillSearchDataSheet">
-
-                        </div>
-                    </div>
-
-                </div>
-
-                <div class="" style="height:10px; width:100%; display:flex; justify-content:space-evenly; align-items:center; ">
-                    <span asp-validation-for="DataSheetBusDTO.UserName" class="text-danger"></span>
-                </div>
-
-                <div class="addNewDataModalBodyDiv2" style="flex-wrap:wrap;">
-                    <input type="text" class="form-control addNewDataInput" placeholder="Project Name:" asp-for="DataSheetBusDTO.ProjectName" />
-                    <input type="text" class="form-control addNewDataInput" placeholder="Activity Name:" asp-for="DataSheetBusDTO.ActivityName" />
-
-                </div>
-
-                <div class="" style="height:10px; width:100%; display:flex; justify-content:space-evenly; align-items:center; ">
-                    <span asp-validation-for="DataSheetBusDTO.ProjectName" class="text-danger"></span>
-                    <span asp-validation-for="DataSheetBusDTO.ActivityName" class="text-danger"></span>
-                </div>
-
-                <div class="addNewDataModalBodyDiv3" style="flex-wrap:wrap;">
-
-                    <select class="form-control addNewDataInput" asp-for="DataSheetBusDTO.BusinessOrIt" id="addDataSheetBusinessDropdown">
-                        <option value="" disabled selected>Business Or IT:</option>
-                    </select>
-
-                    <input type="hidden" id="addDataSheetSection" asp-for="DataSheetBusDTO.SectioName" />
-                    <input type="text" class="form-control addNewDataInput" placeholder="SECTION:" disabled id="addDataSheetSectionDisplay" />
-
-                </div>
-
-                <div class="" style="height:10px; width:100%; display:flex; justify-content:space-evenly; align-items:center; ">
-                    <span asp-validation-for="DataSheetBusDTO.BusinessOrIt" class="text-danger"></span>
-                    <span asp-validation-for="DataSheetBusDTO.SectioName" class="text-danger"></span>
-                </div>
-
-                <div class="addNewDataModalBodyDiv4">
-                    <div class="addNewDataModalBodyDiv4Div1">
-                        <span> Start Date</span>
-                        <input type="date" class="form-control addNewDataStartDate" asp-for="DataSheetBusDTO.StartDate" id="startDate" />
-
-                    </div>
-
-                    <div class="addNewDataModalBodyDiv4Div2">
-                        <input type="date" class="form-control addNewDataEndDate" asp-for="DataSheetBusDTO.EndDate" id="endDate" />
-                        <span> End Date</span>
-                    </div>
-                </div>
-
-                <div class="" style="height:10px; width:100%; display:flex; justify-content:space-evenly; align-items:center; ">
-                    <span asp-validation-for="DataSheetBusDTO.StartDate" class="text-danger"></span>
-                    <span asp-validation-for="DataSheetBusDTO.EndDate" class="text-danger"></span>
-                </div>
-
-                <div class="addNewDataModalBodyDiv5">
-                    <div class="addNewDataModalBodyDiv5Div1">
-
-                        <button class="addNewDataSettingsBtn" onclick="preventFormSubmit(event)" data-bs-toggle="modal" data-bs-target="#addWorkingHoursPerDay"><i class="fa fa-cog addNewDataSettingsIcon" aria-hidden="true"></i></button>
-                        <span>Hours Per Day</span>
-
-                        <select class="addNewDataSelect" asp-for="DataSheetBusDTO.HoursPerDay" id="hoursperday">
-                        </select>
-
-                    </div>
-
-                    <div class="addNewDataModalBodyDiv5Div2">
-                        <input type="hidden" class="form-control addNewDataResult" asp-for="DataSheetBusDTO.HoursPerMonth" id="TotalHoursPerMonth" />
-                        <input type="number" class="form-control addNewDataResult" disabled id="TotalHoursPerMonthDisplay" />
-                        <span>Total Hours</span>
-                    </div>
-                </div>
-
-                <div class="addNewDataModalBodyDiv6">
-                    <button class="addNewDataAddBtn" style="border:none;" type="submit" id="addNewDataButton" disabled>ADD</button>
-                </div>
-
-            </div>
-        </div>
-    </div>
-</div>
- *@
-
-
-
-
-
-
-
-@* @if (!string.IsNullOrEmpty(newUser))
-{
-<script>
-        window.addEventListener('DOMContentLoaded', function () {
-            var changePassModal = document.getElementById('changePass');
-            changePassModal.classList.add('show');
-            changePassModal.style.display = 'block';
-
-            var closeButton = document.querySelector('#changePass .closeAddNewData');
-            closeButton.addEventListener('click', function () {
-                changePassModal.classList.remove('show');
-                changePassModal.style.display = 'none';
-            });
-        });
-</script>
-
-<form asp-controller="Home" asp-action="ChangePassword" method="post">
-    <div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="staticBackdropLabel" id="changePass" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document" style="height:50vh;">
-
-            <div class="modal-content" style="height: 450px; border-radius:1rem;font-family: 'Montserrat', sans-serif;">
-
-            <div class="modal-header" style="height:60px; background:#425833; display:flex; border-radius:1rem 1rem 0 0 ; justify-content:center; align-items:center; color:white; ">
-
-                        <h4>Change Your Password</h4>
-
-                </div>
-                <div class="modal-body " style="border-radius:0 0 1rem 1rem; display:flex; flex-direction:column; align-items:center; ">
-                     <div asp-validation-summary="ModelOnly" style="color:red;"></div>
-                      <br />
-                    <input type="text" class="form-control addNewDataInput" placeholder="Current Password:"  style="width:80%;" asp-for="@Model.CurrentPassword" autocomplete="off" value="12345678"/>
-                        <span asp-validation-for="@Model.CurrentPassword" class="text-danger"></span>
-                    <br />
-                    <input type="text" class="form-control addNewDataInput" placeholder="New Password:" style="width:80%;" asp-for="@Model.NewPassword" autocomplete="off" />
-                        <span asp-validation-for="@Model.NewPassword" class="text-danger"></span>
-                    <br />
-                    <input type="text" class="form-control addNewDataInput" placeholder="Confirm New Password:" style="width:80%;" asp-for="@Model.ConfirmNewPassword" autocomplete="off"/>
-                        <span asp-validation-for="@Model.ConfirmNewPassword" class="text-danger"></span>
-                <button type="submit" class="addNewUserBtn" id="saveChangePass" style="margin-top:20%;"><i class="fa fa-check" aria-hidden="true"></i>Save</button>
-
-                </div>
-            </div>
-
-        </div>
-    </div>
-</form>
-} *@
 
 @section Scripts{
     @{

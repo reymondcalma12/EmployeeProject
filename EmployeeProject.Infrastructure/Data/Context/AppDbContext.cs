@@ -22,6 +22,7 @@ namespace EmployeeProject.Infrastructure.Data.Context
         public DbSet<Section> Sections { get; set; }
         public DbSet<MovableNames> MovableNames { get; set; }
         public DbSet<HolidayStatus> HolidayStatus { get; set; }
+        public DbSet<Projects_ActivitiesStatus> Projects_ActivitiesStatus { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -36,6 +37,12 @@ namespace EmployeeProject.Infrastructure.Data.Context
                 new Section { SectionId = 1, SectionName = "Developer" }
             );
 
+
+            modelBuilder.Entity<Projects_ActivitiesStatus>().HasData(
+                new Projects_ActivitiesStatus { StatusId = 1, StatusName = "ACTIVE" },
+                new Projects_ActivitiesStatus { StatusId = 2, StatusName = "INACTIVE" },
+                new Projects_ActivitiesStatus { StatusId = 3, StatusName = "COMPLETE" }
+            );
 
             modelBuilder.Entity<AllowedHours>().HasData(
                 new AllowedHours { AllowedHoursId = 1, Number = 0.5f },

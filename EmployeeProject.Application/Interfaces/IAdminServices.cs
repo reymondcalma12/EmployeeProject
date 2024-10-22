@@ -12,14 +12,17 @@ namespace EmployeeProject.Application.Interfaces
 {
     public interface IAdminServices
     {
-        Task<bool> AddProject(string name);
+        Task<List<AppUser>> GetAllProjectManager();
+
+        Task<List<Project>> GetProjectManagersProject();
+        Task<bool> AddProject(string name, string projectManagerName);
         Task<bool> AddActivity(string name);
 
         Task<bool> UpdateActivity(int id, string activityName, string status);
 
         Task<bool> UpdateProfile(IFormFile image);
 
-        Task<bool> UpdateProject(int id, string projectName, string status);
+        Task<bool> UpdateProject(int id, string projectName, string status, string projectManagerName);
         Task<IEnumerable<AppUser>> GetAllUsers();
 
         Task<int> CountAllUsers(); 
@@ -61,7 +64,10 @@ namespace EmployeeProject.Application.Interfaces
 
         Task<List<UserMonthlyStatistics>> GetUserMonthlyStatisticsEmployeeSort(int year);
 
-        //Task<bool> AddMovable(MovableHolidaysDTO model);
+        Task<List<UserMonthlyStatistics>> GetUserMonthlyStatisticsSort(int? section, string? name, int year);
+
+        Task<List<UserMonthlyStatistics>> GetUserMonthlyStatisticsSortProjects(int id, int year, int? section, string? name);
+
         Task<bool> AddMovable(MovableHolidaysDTO model);
 
         Task<bool> DeleteMovable(int model);
@@ -87,7 +93,7 @@ namespace EmployeeProject.Application.Interfaces
 
         Task<List<UserMonthlyStatistics>> GetUserMonthlyStatistics();
 
-        Task<List<UserMonthlyStatistics>> GetUserMonthlyStatisticsSort(int? section, string? name, int year);
+
 
         Task<LegendDTO> Legend(int? sectionId);
 
